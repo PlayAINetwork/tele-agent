@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useAppKitAccount } from "@reown/appkit/react";
 import { trimAddress } from "@/lib/utils";
 import { SendHorizontalIcon } from "lucide-react";
-import { ICONS } from "@/assets";
+// import { ICONS } from "@/assets";
 import TippingCard from "./TippingCard";
 import { useAppCtx } from "@/context/app.contex";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const GlobelBox = () => {
-  const { address, isConnected } = useAppKitAccount();
+  const { connected, publicKey } = useWallet();
+const address :any=publicKey?.toString()
+
   const [showTipAgent, setsTipAgent] = useState(false);
   const { disableAction } = useAppCtx();
   const { toast } = useToast();
@@ -77,7 +79,7 @@ const GlobelBox = () => {
         
       </div>
       {showTipAgent ? <TippingCard close={setsTipAgent} /> : null}
-      {isConnected ? (
+      {connected ? (
         <div className="flex gap-2">
           <div className="relative w-full">
             <Input
@@ -98,7 +100,7 @@ const GlobelBox = () => {
               <SendHorizontalIcon />
             </Button>
           </div>
-          {showTipAgent ? null : (
+          {/* {showTipAgent ? null : (
             <Button
               disabled={disableAction}
               onClick={() => setsTipAgent(true)}
@@ -106,7 +108,7 @@ const GlobelBox = () => {
             >
               <img src={ICONS.icon_tip__btn} alt="" />
             </Button>
-          )}
+          )} */}
         </div>
       ) : null}
     </div>

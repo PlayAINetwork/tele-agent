@@ -4,22 +4,29 @@ import { cn } from "@/lib/utils";
 import Tabs from "./Tabs";
 import GlobelBox from "./GlobelBox";
 import TeerminalBox from "./TeerminalBox";
-import ConnectWallet from "../WalletConnect";
 import { Button } from "../ui/button";
-import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 import { ICONS } from "@/assets";
 import Avatar, { genConfig } from "react-nice-avatar";
-import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
-import { X } from "lucide-react";
+import { Twitter, X } from "lucide-react";
+import CustomSolanaButton from "../WalletConnect/solConnectBtn";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Sidebar = () => {
-  const { tokenBalance } = useGetTokenBalance();
-  const { address, isConnected } = useAppKitAccount();
+const {toast} = useToast()
+  const { connected, publicKey } = useWallet();
+  const address: any = publicKey?.toString();
 
   const config = genConfig(address);
-  const { open } = useAppKit();
 
   const { setHideSidebar, hideSidebar, sidebarMenu } = useAppCtx();
+
+  const copy = async()=>{
+    await navigator.clipboard.writeText("27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL");
+    toast({
+      title: "The contract address has been copied to the clipboard.",
+    });
+  }
   return (
     <aside
       className={cn(
@@ -31,11 +38,11 @@ const Sidebar = () => {
     >
       <div
         className={`flex  ${
-          isConnected ? " justify-between" : "justify-end"
+          connected ? " justify-between" : "justify-end"
         }  py-2`}
       >
-        {!hideSidebar && isConnected ? (
-          <div onClick={() => open()}>
+        {!hideSidebar && connected ? (
+          <div onClick={() => ""}>
             <Avatar
               className="cursor-pointer rounded-none"
               style={{ width: "32px", height: "32px" }}
@@ -67,18 +74,29 @@ const Sidebar = () => {
           <div className="flex flex-col gap-5 h-full">
             <Tabs />
             <div className="grow  h-4">
-              {sidebarMenu === "globel" ? <GlobelBox /> : <TeerminalBox />}
+              {sidebarMenu === "globle" ? <GlobelBox /> : <TeerminalBox />}
             </div>
-            {isConnected ? null : (
+            {connected ? null : (
               <div>
-                <ConnectWallet />
+                {/* <SolConnectBtn/> */}
+                <CustomSolanaButton
+                  connectText="Connect Wallet"
+                  disconnectText="Disconnect Wallet"
+                  buttonStyle="primary"
+                  size="medium"
+                />
+                {/* <ConnectWallet /> */}
               </div>
             )}
 
             <div className="flex justify-between items-center">
-              <p className="text-[14px] ">$host: {tokenBalance ?? 0}</p>
+              {/* <p className="text-[14px] ">$host: {tokenBalance ?? 0}</p> */}
+             
+              <Button variant={"ghost"} onClick={()=>open("https://x.com/0xRogueAgent","_brace")}>
+                <Twitter />
+              </Button>
 
-              <Button variant={"ghost"}>Learn more</Button>
+              <Button onClick={()=>copy()} variant={"ghost"}>CA:27yzfJ......t8MZ9mL</Button>
             </div>
           </div>
         )}

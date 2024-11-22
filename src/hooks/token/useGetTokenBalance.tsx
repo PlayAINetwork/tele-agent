@@ -1,19 +1,38 @@
-import { useReadContract } from 'wagmi';
-import { HOST_CONTRACT } from '../../contracts/host.contract.abi';
-import { useAppKitAccount } from '@reown/appkit/react';
-import { convertTokeneformatEther } from '@/lib/utils';
+
 
 const useGetTokenBalance = () => {
-    const { address  } = useAppKitAccount();
 
-    const tokenBalance = useReadContract({
-        abi: HOST_CONTRACT.ABI,
-        address: HOST_CONTRACT.ADDRESS as `0x${string}`,
-        functionName: "balanceOf",
-        args: [address]as any,
-      });
-      const converteValue =convertTokeneformatEther(tokenBalance?.data)
-  return{tokenBalance:converteValue}
+  //   const getTokenBalance = async (tokenAddress, walletAddress) => {
+  //   try {
+  //     setStatus('Fetching balance...');
+      
+  //     const tokenPublicKey = new PublicKey(tokenAddress);
+  //     const walletPublicKey = new PublicKey(walletAddress);
+      
+  //     // Get token account
+  //     const tokenAccounts = await connection.getTokenAccountsByOwner(
+  //       walletPublicKey,
+  //       { programId: TOKEN_PROGRAM_ID }
+  //     );
+
+  //     // Find the token account for our specific token
+  //     const tokenAccount = tokenAccounts.value.find(account => {
+  //       const accountData = Token.getAccountLayout().decode(account.account.data);
+  //       return accountData.mint.toString() === tokenPublicKey.toString();
+  //     });
+
+  //     if (tokenAccount) {
+  //       const accountData = Token.getAccountLayout().decode(tokenAccount.account.data);
+  //       setTokenBalance(accountData.amount.toString());
+  //       setStatus('Balance fetched successfully');
+  //     } else {
+  //       setStatus('No token account found');
+  //     }
+  //   } catch (error) {
+  //     setStatus(`Error: ${error.message}`);
+  //   }
+  // };
+  return{tokenBalance:1223}
 }
 
 export default useGetTokenBalance

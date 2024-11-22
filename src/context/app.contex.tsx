@@ -17,7 +17,7 @@ export const AppContextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [hideSidebar, setHideSidebar] = useState(false);
-  const [sidebarMenu, setSidebarMenu] = useState("globel");
+  const [sidebarMenu, setSidebarMenu] = useState("globle");
   const [disableAction, setDisableAction] = useState(false);
 
   const value = useMemo(

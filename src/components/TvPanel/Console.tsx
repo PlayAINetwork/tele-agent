@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronUp, ChevronDown } from "lucide-react";
+// import { ChevronUp, ChevronDown } from "lucide-react";
 import StaticScreen from "./StaticScreen";
 import { cn } from "@/lib/utils";
 import { IMAGES } from "@/assets";
@@ -9,24 +9,24 @@ import { IMAGES } from "@/assets";
 const channels = {
   1: {
     type: "video",
-    url: "https://www.youtube.com/embed/o2VA9c8Z7FA?autoplay=1&loop=1",
+    url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
     title: "AGENT NEWS",
   },
-  2: {
-    type: "video",
-    url: "https://www.youtube.com/embed/TQllQlElpz8?autoplay=1&loop=1",
-    title: "Family Guy",
-  },
-  3: {
-    type: "video",
-    url: "https://www.youtube.com/embed/SiW5oTl_inA?autoplay=1&loop=1",
-    title: "Sports Channel",
-  },
-  4: {
-    type: "video",
-    url: "https://www.youtube.com/embed/HWsUOUR6c2c?autoplay=1&loop=1",
-    title: "Music Channel",
-  },
+  // 2: {
+  //   type: "video",
+  //   url: "https://www.youtube.com/embed/TQllQlElpz8?autoplay=1&loop=1",
+  //   title: "Family Guy",
+  // },
+  // 3: {
+  //   type: "video",
+  //   url: "https://www.youtube.com/embed/SiW5oTl_inA?autoplay=1&loop=1",
+  //   title: "Sports Channel",
+  // },
+  // 4: {
+  //   type: "video",
+  //   url: "https://www.youtube.com/embed/HWsUOUR6c2c?autoplay=1&loop=1",
+  //   title: "Music Channel",
+  // },
 };
 const TvConsole = () => {
   const [power, setPower] = useState(false);
@@ -35,24 +35,25 @@ const TvConsole = () => {
 
   useEffect(() => {
     if (power) {
+      setChannel(1)
       const timer = setTimeout(() => setStaticEffect(false), 1000);
       return () => clearTimeout(timer);
     }
   }, [channel, power]);
 
-  const handleChannelChange = (direction: "up" | "down") => {
-    if (!power) return;
-    setStaticEffect(true);
-    if (direction === "up") {
-      setChannel((prev) =>
-        prev === Object.keys(channels).length ? 1 : prev + 1
-      );
-    } else {
-      setChannel((prev) =>
-        prev === 1 ? Object.keys(channels).length : prev - 1
-      );
-    }
-  };
+  // const handleChannelChange = (direction: "up" | "down") => {
+  //   if (!power) return;
+  //   setStaticEffect(true);
+  //   if (direction === "up") {
+  //     setChannel((prev) =>
+  //       prev === Object.keys(channels).length ? 1 : prev + 1
+  //     );
+  //   } else {
+  //     setChannel((prev) =>
+  //       prev === 1 ? Object.keys(channels).length : prev - 1
+  //     );
+  //   }
+  // };
   const currentChannel = useMemo(() => {
     //@ts-ignore
     return channels[channel];
@@ -110,7 +111,7 @@ const TvConsole = () => {
           />
         </div>
         <div className="flex justify-center gap-2 items-center">
-          <Button
+          {/* <Button
             variant="outline"
             size="icon"
             className="bg-zinc-500 hover:bg-zinc-400 w-10 h-6 text-white -md:h-4 -md:w-7"
@@ -125,7 +126,7 @@ const TvConsole = () => {
             onClick={() => handleChannelChange("down")}
           >
             <ChevronDown className="h-4 w-4" />
-          </Button>
+          </Button> */}
 
           <Button
             variant="outline"

@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useWriteContract } from "wagmi";
-import { parseEther } from "viem";
-import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
-import { waitForTransactionReceipt } from "wagmi/actions";
-import { evm_config } from "@/providers/EvmWalletProvider";
+
 import { useToast } from "@/hooks/use-toast";
 import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 import { useAppCtx } from "@/context/app.contex";
 
 const TippingCard = ({ close }: { close: any }) => {
   const [amount, setAmount] = useState<string>("");
-  const { writeContractAsync } = useWriteContract();
   const { tokenBalance } = useGetTokenBalance();
   const { toast } = useToast();
   const { disableAction, setDisableAction } = useAppCtx();
@@ -39,35 +34,30 @@ const TippingCard = ({ close }: { close: any }) => {
 
     try {
       setDisableAction(true)
-      const transaction: any = await writeContractAsync({
-        abi: HOST_CONTRACT.ABI,
-        address: HOST_CONTRACT.ADDRESS as `0x${string}`,
-        functionName: "transfer",
-        args: [import.meta.env.VITE_BANK, parseEther(amount.toString())],
-      });
+      // const transaction
 
-      // Get the provider from wagmi
+      // // Get the provider from wagmi
 
-      const res = await transaction;
-      console.log("res", res);
+      // const res = await transaction;
+      // console.log("res", res);
 
-      if (res) {
-      setDisableAction(false)
+      // if (res) {
+      // setDisableAction(false)
 
-        const receipt = await waitForTransactionReceipt(evm_config, {
-          hash: res, // Use the hash from the transaction object
-        });
+      //   const receipt = await waitForTransactionReceipt(evm_config, {
+      //     hash: res, // Use the hash from the transaction object
+      //   });
 
-        if (receipt) {
-          console.log(receipt, "receipt");
-          toast({
-            title: "Transaction Successful! ",
+      //   if (receipt) {
+      //     console.log(receipt, "receipt");
+      //     toast({
+      //       title: "Transaction Successful! ",
     
-            description: "Your tokens have been transferred successfully.",
-          });
-          setAmount('')
-        }
-      }
+      //       description: "Your tokens have been transferred successfully.",
+      //     });
+      //     setAmount('')
+      //   }
+      // }
     } catch (error) {
       setDisableAction(false)
 
