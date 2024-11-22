@@ -16,7 +16,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppContextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [hideSidebar, setHideSidebar] = useState(false);global
+  const [hideSidebar, setHideSidebar] = useState(false);
   const [sidebarMenu, setSidebarMenu] = useState("global");
   const [disableAction, setDisableAction] = useState(false);
 
