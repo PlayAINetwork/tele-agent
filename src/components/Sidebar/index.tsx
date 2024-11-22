@@ -74,7 +74,7 @@ const {toast} = useToast()
           <div className="flex flex-col gap-5 h-full">
             <Tabs />
             <div className="grow  h-4">
-              {sidebarMenu === "globle" ? <GlobelBox /> : <TeerminalBox />}
+              {sidebarMenu === "global" ? <GlobelBox /> : <TeerminalBox />}
             </div>
             {connected ? null : (
               <div>
