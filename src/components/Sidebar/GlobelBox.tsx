@@ -10,17 +10,18 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { ICONS } from "@/assets";
 
 const GlobelBox = () => {
   const { connected, publicKey } = useWallet();
-const address :any=publicKey?.toString()
+  const address: any = publicKey?.toString();
 
   const [showTipAgent, setsTipAgent] = useState(false);
   const { disableAction } = useAppCtx();
   const { toast } = useToast();
   const messages = useQuery(api.functions.chats.getChats);
   const sends = useMutation(api.functions.chats.send);
-  const boxRef: any = useRef(null)
+  const boxRef: any = useRef(null);
   const [message, setChatMessage] = useState("");
   // console.log(messages ? messages :"ddfd","messages")
   const handleSend = () => {
@@ -42,18 +43,21 @@ const address :any=publicKey?.toString()
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     // Scroll to the bottom whenever logs change
     if (boxRef.current) {
       boxRef.current.scrollTo({
         top: boxRef.current.scrollHeight,
-        behavior: 'smooth',
-      })
+        behavior: "smooth",
+      });
     }
-  }, [messages])
+  }, [messages]);
   return (
     <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
-      <div ref={boxRef} className="flex flex-col flex-1   gap-2 overflow-auto h-full bg-muted p-4 ">
+      <div
+        ref={boxRef}
+        className="flex flex-col flex-1   gap-2 overflow-auto h-full bg-muted p-4 "
+      >
         {messages?.map(
           ({
             _id,
@@ -75,8 +79,6 @@ const address :any=publicKey?.toString()
             </div>
           )
         )}
-       
-        
       </div>
       {showTipAgent ? <TippingCard close={setsTipAgent} /> : null}
       {connected ? (
@@ -100,7 +102,7 @@ const address :any=publicKey?.toString()
               <SendHorizontalIcon />
             </Button>
           </div>
-          {/* {showTipAgent ? null : (
+          {showTipAgent ? null : (
             <Button
               disabled={disableAction}
               onClick={() => setsTipAgent(true)}
@@ -108,7 +110,7 @@ const address :any=publicKey?.toString()
             >
               <img src={ICONS.icon_tip__btn} alt="" />
             </Button>
-          )} */}
+          )}
         </div>
       ) : null}
     </div>

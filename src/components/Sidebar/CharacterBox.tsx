@@ -1,10 +1,10 @@
+import { IMAGES } from "@/assets";
 import { useState } from "react";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useAppCtx } from "@/context/app.contex";
 import { useToast } from "@/hooks/use-toast";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
+import { useAppCtx } from "@/context/app.contex";
 import {
   createAssociatedTokenAccountInstruction,
   createTransferInstruction,
@@ -12,25 +12,67 @@ import {
   getAssociatedTokenAddress,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
-const connection = new Connection(import.meta.env.VITE_SOL_RPC);
+import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 
-const TippingCard = ({ close }: { close: any }) => {
-  const [amount, setAmount] = useState<string>("");
+const CharacterBox = () => {
+  const characterList = [
+    {
+      name: "elon",
+      image: IMAGES.img_elon,
+      id: 10001,
+      amount: 100000,
+    },
+    {
+      name: "naval",
+      image: IMAGES.img_naval,
 
-  const { disableAction, setDisableAction } = useAppCtx();
+      id: 10002,
+      amount: 100000,
+    },
+    {
+      name: "trump",
+      image: IMAGES.img_trump,
+
+      id: 10003,
+      amount: 100000,
+    },
+    {
+      name: "kamala",
+      image: IMAGES.img_kamala,
+
+      id: 10004,
+      amount: 100000,
+    },
+    {
+      name: "mike tyson",
+      image: IMAGES.img_mick,
+
+      id: 10005,
+      amount: 100000,
+    },
+    {
+      name: "balaji",
+      image: IMAGES.img_balaji,
+
+      id: 10006,
+      amount: 100000,
+    },
+  ];
+
+  const [selectedCharacter, setSelectedCharacter] = useState<any>(null);
   const { toast } = useToast();
-  const [status, setStatus] = useState("");
-  const { publicKey, signTransaction } = useWallet();
+  const { publicKey, signTransaction, connected } = useWallet();
   const { balance } = useTokenBalance(publicKey);
-
-  const sendTip = async () => {
-    if (amount === "") {
+  const { disableAction, setDisableAction } = useAppCtx();
+  const [status, setStatus] = useState("");
+  const connection = new Connection(import.meta.env.VITE_SOL_RPC);
+  const updateChacter = async () => {
+    if (selectedCharacter == null) {
       toast({
-        title: "Enter your Amount",
+        title: "Select a character",
       });
       return false;
-    } else if (balance < Number(amount)) {
+    } else if (balance < selectedCharacter?.amount) {
       toast({
         title: "Insufficient Balance",
       });
@@ -67,7 +109,7 @@ const TippingCard = ({ close }: { close: any }) => {
           )
         );
       }
-      const value = BigInt(Number(amount) * 10 ** 6);
+      const value = BigInt(Number(selectedCharacter.amount) * 10 ** 6);
       // Add transfer instruction
       transaction.add(
         createTransferInstruction(
@@ -88,8 +130,6 @@ const TippingCard = ({ close }: { close: any }) => {
       const signed = await signTransaction(transaction);
 
       const signature = await connection.sendRawTransaction(signed.serialize());
-      console.log(signature);
-
       // Wait for transaction confirmation
       const confirmation = await connection.confirmTransaction(
         {
@@ -112,61 +152,52 @@ const TippingCard = ({ close }: { close: any }) => {
       if (txInfo?.meta?.err) {
         throw new Error("Transaction failed during execution");
       }
-      console.log(txInfo, "txInfo");
 
-      // setTimeout(() => {
-      // sends({ user: address, text: `message` });
       toast({
         title: "Transaction completed successfully",
       });
-      setAmount("");
+      setSelectedCharacter(null);
       setDisableAction(false);
-      // }, 8000);
     } catch (err: any) {
       setDisableAction(false);
-      toast({
-        title: "Transaction error",
-      });
+
       console.error("Transaction error:", err);
     }
   };
-
   return (
-    <div className="bg-muted flex flex-col gap-4 p-4 py-6">
-      <div className="flex justify-between items-center">
-        <p className="text-sm">
-          <span className="font-bold">$ROGUE: </span>
-          {balance ?? 0}
-        </p>
-      </div>
-      <div className="relative w-full">
-        <Input
-          // className="py-4 px-4"
-          className="pr-[70px] hover:border-[#B5B6B7] hover:bg-[#303030]"
-          value={amount}
-          type="number"
-          placeholder="0.00"
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <div className="absolute right-4 top-0 h-full flex justify-center items-center">
-          <p className="text-[14px] ">$ROGUE</p>
+    <div className="flex flex-col  gap-4 h-full">
+      <div className="flex-1 bg-muted p-4">
+        <div className="grid grid-cols-3 gap-4 ">
+          {characterList?.map((item) => (
+            <div
+              className={`w-full h-[max-content] border border-input cursor-pointer ${selectedCharacter?.id === item.id ? "bg-primary text-primary-foreground" : "bg-[transparant]"} `}
+              onClick={() =>
+                disableAction ? null : setSelectedCharacter(item)
+              }
+            >
+              <img src={item.image} alt="" />
+              <p className="text-sm uppercase py-[3px] text-center">
+                <span className="font-bold">{item?.name} </span>
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
       <div className="flex gap-2">
-        <Button
-          disabled={disableAction}
-          className="bg-[#444746] w-full text-primary"
-          onClick={() => close(false)}
-        >
-          Cancel
-        </Button>
-        <Button disabled={disableAction} className="w-full" onClick={sendTip}>
-          Send
-        </Button>
+        <div className="relative w-full">
+          <Button
+            disabled={disableAction || !connected}
+            onClick={updateChacter}
+            //   variant={"ghost"}
+            className="w-full"
+          >
+            ADD CHARACTER WITH 100K $ROGUE
+          </Button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default TippingCard;
+export default CharacterBox;

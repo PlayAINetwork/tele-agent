@@ -1,38 +1,43 @@
+import { useState, useEffect } from "react";
+import { Connection, PublicKey } from "@solana/web3.js";
+import {
+  getAccount,
+  getAssociatedTokenAddress,
+} from "@solana/spl-token";
 
+export const useTokenBalance = (walletAddress?: any) => {
+  const [balance, setBalance] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const useGetTokenBalance = () => {
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        setLoading(true);
+        const connection = new Connection(import.meta.env.VITE_SOL_RPC);
+        const publicKey = new PublicKey(walletAddress);
+        const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
+        const tokenPublicKey = new PublicKey(TOKEN_ADDRESS);
 
-  //   const getTokenBalance = async (tokenAddress, walletAddress) => {
-  //   try {
-  //     setStatus('Fetching balance...');
-      
-  //     const tokenPublicKey = new PublicKey(tokenAddress);
-  //     const walletPublicKey = new PublicKey(walletAddress);
-      
-  //     // Get token account
-  //     const tokenAccounts = await connection.getTokenAccountsByOwner(
-  //       walletPublicKey,
-  //       { programId: TOKEN_PROGRAM_ID }
-  //     );
+        const associatedAddress = await getAssociatedTokenAddress(
+          tokenPublicKey,
+          publicKey
+        );
+        const account = await getAccount(connection, associatedAddress);
 
-  //     // Find the token account for our specific token
-  //     const tokenAccount = tokenAccounts.value.find(account => {
-  //       const accountData = Token.getAccountLayout().decode(account.account.data);
-  //       return accountData.mint.toString() === tokenPublicKey.toString();
-  //     });
+        setBalance(Number(account.amount) / (10 ** 6));
+        setError(null);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //     if (tokenAccount) {
-  //       const accountData = Token.getAccountLayout().decode(tokenAccount.account.data);
-  //       setTokenBalance(accountData.amount.toString());
-  //       setStatus('Balance fetched successfully');
-  //     } else {
-  //       setStatus('No token account found');
-  //     }
-  //   } catch (error) {
-  //     setStatus(`Error: ${error.message}`);
-  //   }
-  // };
-  return{tokenBalance:1223}
-}
+    if (walletAddress) {
+      fetchBalance();
+    }
+  }, [walletAddress]);
 
-export default useGetTokenBalance
+  return { balance, loading, error };
+};

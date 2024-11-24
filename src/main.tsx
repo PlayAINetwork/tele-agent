@@ -6,7 +6,8 @@ import { AppContextProvider } from "./context/app.contex.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import ConvexServerProvider from "./providers/ConvexProvider.tsx";
 import { SolanaWalletProvider } from "./providers/SolanaWalletProvider.tsx";
-
+import { Buffer } from 'buffer';
+window.Buffer = Buffer;
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ConvexServerProvider>

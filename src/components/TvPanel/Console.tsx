@@ -10,7 +10,7 @@ const channels = {
   1: {
     type: "video",
     url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
-    title: "AGENT NEWS",
+    title: "",
   },
   // 2: {
   //   type: "video",
@@ -76,14 +76,14 @@ const TvConsole = () => {
           allowFullScreen={true}
         />
         <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded -md:text-xs">
-          CH-{channel}: {currentChannel.title}
+          CH-{channel} {currentChannel.title}
         </div>
       </div>
     );
   };
 
   return (
-    <div className="w-10/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0 -md:grid-rows-[1fr_25px]">
+    <div className="w-9/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0 -md:grid-rows-[1fr_25px]">
       <div
         className={cn(
           "w-full h-full border-4 border-zinc-900 overflow-hidden transition-all",

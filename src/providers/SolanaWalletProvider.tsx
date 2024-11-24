@@ -12,6 +12,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import { WalletConnectWalletAdapter } from "@walletconnect/solana-adapter";
 import { PhantomWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter } from "@solana/wallet-adapter-wallets";
 
+
 export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
   const endpoint = useMemo(
     () => clusterApiUrl(WalletAdapterNetwork.Mainnet),
