@@ -35,7 +35,7 @@ const TvConsole = () => {
 
   useEffect(() => {
     if (power) {
-      setChannel(1)
+      setChannel(1);
       const timer = setTimeout(() => setStaticEffect(false), 1000);
       return () => clearTimeout(timer);
     }
@@ -83,7 +83,7 @@ const TvConsole = () => {
   };
 
   return (
-    <div className="w-9/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0 -md:grid-rows-[1fr_25px]">
+    <div className="w-11/12  md:w-9/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0 -md:grid-rows-[1fr_25px]">
       <div
         className={cn(
           "w-full h-full border-4 border-zinc-900 overflow-hidden transition-all",
@@ -101,7 +101,7 @@ const TvConsole = () => {
       {/* TV Brand */}
       <div className="flex p-2 justify-between items-center">
         <span className="text-zinc-500 font-bold  text-lg -md:text-xs">
-          RETRO-90
+          RETRO-AGENT-90
         </span>
         <div className="w-[30%] h-[20px] rounded-2xl overflow-hidden -md:h-[10px]">
           <img

@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Connection,
   PublicKey,
@@ -20,18 +20,28 @@ import { Textarea } from "../ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { useAppCtx } from "@/context/app.contex";
+import { api } from "../../../convex/_generated/api";
+
+import { useMutation, useQuery } from "convex/react";
+import { trimAddress } from "@/lib/utils";
 
 const recipientAddress = import.meta.env.VITE_BANK;
 
 const TeerminalBox = () => {
+  const sendInject = useMutation(api.functions.inject.sendInject);
+  const messages = useQuery(api.functions.inject.getAllInject);
+
   const { connected, publicKey, signTransaction } = useWallet();
   const { balance } = useTokenBalance(publicKey);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState(""); // Default amount
   const connection = new Connection(import.meta.env.VITE_SOL_RPC);
+  const address: any = publicKey?.toString();
+  const boxRef: any = useRef(null);
 
-  const amount = BigInt(20000 * 10 ** 6);
+  const injectAmount = 2;
+  const amount = BigInt(injectAmount * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
   const { disableAction, setDisableAction } = useAppCtx();
@@ -40,16 +50,14 @@ const TeerminalBox = () => {
     if (topic === "") {
       toast({
         title: "Enter your Topic",
-      })
+      });
+      return false;
+    } else if (balance < injectAmount) {
+      toast({
+        title: "Insufficient Balance",
+      });
       return false;
     }
-    else if(balance < 20000){
-      toast({
-          title: "Insufficient Balance",
-        });
-    return false;
-
-  }
     if (!publicKey || !signTransaction) return;
 
     try {
@@ -111,8 +119,8 @@ const TeerminalBox = () => {
       //   lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
       // };
 
-       // Wait for transaction confirmation
-       const confirmation = await connection.confirmTransaction(
+      // Wait for transaction confirmation
+      const confirmation = await connection.confirmTransaction(
         {
           signature,
           blockhash: latestBlockhash.blockhash,
@@ -133,40 +141,40 @@ const TeerminalBox = () => {
       if (txInfo?.meta?.err) {
         throw new Error("Transaction failed during execution");
       }
-        const response = await axios.post(
-          "https://agent-paywall.up.railway.app/submit-topic",
-          { topic: topic, hash: signature },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-    
-        if (response.status == 500) {
-          toast({
-            title: " Faild to inject topic ",
-          });
+      const response = await axios.post(
+        "https://agent-paywall.up.railway.app/submit-topic",
+        { topic: topic, hash: signature },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-        if (response.status == 200) {
-          toast({
-            title: " Topic injection is successufll",
-          });
+      );
 
-          // console.log(confirmation);
+      if (response.status == 500) {
+        toast({
+          title: " Faild to inject topic ",
+        });
+      }
+      if (response.status == 200) {
+        sendInject({ user: address, text: topic });
 
-          setStatus("Transfer successful! Signature: " + signature);
-          setLoading(false);
-          setTopic("")
+        toast({
+          title: " Topic injection is successufll",
+        });
+
+        // console.log(confirmation);
+
+        setStatus("Transfer successful! Signature: " + signature);
+        setLoading(false);
+        setTopic("");
         setDisableAction(false);
+      }
 
-        }
-
-        // toast({
-        //   title: "Transaction completed successfully",
-        // });
-        setDisableAction(false);
-    
+      // toast({
+      //   title: "Transaction completed successfully",
+      // });
+      setDisableAction(false);
     } catch (err: any) {
       // setStatus("Error: " + err.message);
       setLoading(false);
@@ -178,17 +186,52 @@ const TeerminalBox = () => {
       });
     }
   };
+  useEffect(() => {
+    // Scroll to the bottom whenever logs change
+    if (boxRef.current) {
+      boxRef.current.scrollTo({
+        top: boxRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [messages]);
 
   return (
-    <div className="flex flex-col gap-4 bg-muted h-full p-4">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col gap-4  h-full ">
+      <div
+        ref={boxRef}
+        className="flex flex-col flex-1   gap-2 overflow-auto h-full bg-muted p-4 "
+      >
+        {messages?.map(
+          ({
+            _id,
+            text,
+            user,
+          }: {
+            _id: string;
+            text: string;
+            user: string;
+          }) => (
+            <div key={_id} className="flex gap-2 items-center">
+              <p className="text-[14px] font-semibold">{trimAddress(user)}:</p>
+              <p
+                className="text-sm 
+            text-wrap "
+              >
+                {text}
+              </p>
+            </div>
+          )
+        )}
+      </div>
+      {/* <div className="flex justify-between items-center">
         {balance && (
           <p className="text-sm">
             <span className="font-bold">$ROGUE: </span>
             {balance}
           </p>
         )}
-      </div>
+      </div> */}
       <div className="flex flex-col gap-2">
         <Textarea
           className="h-[100px] uppercase"
@@ -199,9 +242,15 @@ const TeerminalBox = () => {
         <Button
           className="w-full uppercase"
           onClick={transferTokens}
-          disabled={loading || !connected || disableAction} 
+          disabled={
+            loading || !connected || disableAction || balance < injectAmount
+          }
         >
-          {loading ? status : `Add with 20k $ROGUE`}
+          {loading
+            ? status
+            : balance < injectAmount
+              ? "Insufficient Balance"
+              : `Add with 20k $ROGUE`}
         </Button>
         <p className="text-sm text-wrap font-thin leading-6">
           <span className="font-semibold">Disclaimer:</span> Topic injection

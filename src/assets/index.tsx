@@ -8,6 +8,10 @@ import img_kamala from "./images/kamala.jpg";
 import img_mick from "./images/mick tysen.jpg";
 import img_naval from "./images/naval.jpg";
 import img_trump from "./images/trump.jpg";
+import img_bg from "./images/_Clip Group_.png";
+import logo from "./images/Group 427318195.svg";
+
+
 
 export const IMAGES = {
   img_balaji,
@@ -19,6 +23,7 @@ export const IMAGES = {
   img_static,
   img_speaker,
   img_power_btn,
+  img_bg,logo
 };
 
 import icon_tip__btn from "./icons/tip.svg";

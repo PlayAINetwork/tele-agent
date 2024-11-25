@@ -161,8 +161,14 @@ const TippingCard = ({ close }: { close: any }) => {
         >
           Cancel
         </Button>
-        <Button disabled={disableAction} className="w-full" onClick={sendTip}>
-          Send
+        <Button disabled={disableAction ||
+balance < Number(amount) 
+
+        } className="w-full" onClick={sendTip}>
+          {
+            balance < Number(amount)  ? "Insufficient Balance" :"Send"
+          }
+          
         </Button>
       </div>
     </div>

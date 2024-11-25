@@ -1,5 +1,5 @@
 import { useAppCtx } from "@/context/app.contex";
-import { cn } from "@/lib/utils";
+import { cn, trimAddress } from "@/lib/utils";
 
 import Tabs from "./Tabs";
 import GlobelBox from "./GlobelBox";
@@ -14,26 +14,29 @@ import { useToast } from "@/hooks/use-toast";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
 import CharacterBox from "./CharacterBox";
 import MainTerminal from "./MainTerminal";
-// import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const Sidebar = () => {
   const { toast } = useToast();
-  const { connected, publicKey } = useWallet();
+  const { connected, publicKey, disconnect } = useWallet();
   const { balance } = useTokenBalance(publicKey);
 
   const address: any = publicKey?.toString();
-
   const config = genConfig(address);
 
   const { setHideSidebar, hideSidebar, sidebarMenu } = useAppCtx();
 
-  const copy = async () => {
+  const copy = async (address: string) => {
     console.log(balance);
-    await navigator.clipboard.writeText(
-      "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL"
-    );
+    await navigator.clipboard.writeText(address);
     toast({
-      title: "The contract address has been copied to the clipboard.",
+      title: "Address has been copied to the clipboard.",
     });
   };
   return (
@@ -52,12 +55,43 @@ const Sidebar = () => {
       >
         {!hideSidebar && connected ? (
           <div onClick={() => ""}>
-            <Avatar
-              className="cursor-pointer rounded-none"
-              style={{ width: "32px", height: "32px" }}
-              {...config}
-              shape="square"
-            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                  <Avatar
+                    className="cursor-pointer rounded-none px-0 "
+                    style={{ width: "32px", height: "32px" }}
+                    {...config}
+                    shape="square"
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-[#000] text-primary absolute left-[-20px]">
+                <DropdownMenuLabel>Profile</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+
+               <div className="flex text-sm flex-col gap-2 p-2" >
+               <div className="flex gap-2">
+                  <p>Address:</p>
+                  <Button
+                    onClick={() => copy(address)}
+                    variant={"ghost"}
+                    className="p-0 h-auto"
+                  >
+                    {trimAddress(address)}
+                  </Button>
+                </div>
+                <div className="flex gap-2">
+                  <p >$ROGUE:</p>
+                  <p> {balance}</p>
+                 
+                </div>
+                <Button onClick={disconnect} className="w-full">
+                  Disconnect
+                </Button>
+               </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ) : null}
 
@@ -87,11 +121,9 @@ const Sidebar = () => {
                 <GlobelBox />
               ) : sidebarMenu === "inject" ? (
                 <TeerminalBox />
-              ) :
-              
-              sidebarMenu === "terminal" ? (
+              ) : sidebarMenu === "terminal" ? (
                 <MainTerminal />
-              ) :(
+              ) : (
                 <CharacterBox />
               )}
             </div>
@@ -118,7 +150,12 @@ const Sidebar = () => {
                 <Twitter />
               </Button>
 
-              <Button onClick={() => copy()} variant={"ghost"}>
+              <Button
+                onClick={() =>
+                  copy("27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL")
+                }
+                variant={"ghost"}
+              >
                 CA:27yzfJ......t8MZ9mL
               </Button>
             </div>

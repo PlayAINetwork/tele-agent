@@ -1,3 +1,4 @@
+import { IMAGES } from "./assets";
 import Sidebar from "./components/Sidebar";
 import TvPanel from "./components/TvPanel";
 import { useAppCtx } from "./context/app.contex";
@@ -12,6 +13,9 @@ function App() {
         hideSidebar ? "grid-cols-[1fr_50px]" : "grid-cols-[1fr_300px]"
       )}
     >
+      <div className="absolute bottom-0 w-full">
+        <img src={IMAGES.img_bg} alt="" className="w-full" />
+      </div>
       <TvPanel />
       <Sidebar />
     </main>
