@@ -40,7 +40,7 @@ const TeerminalBox = () => {
   const address: any = publicKey?.toString();
   const boxRef: any = useRef(null);
 
-  const injectAmount = 2;
+  const injectAmount = 20000;
   const amount = BigInt(injectAmount * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
