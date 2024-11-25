@@ -22,3 +22,22 @@ export const convertTokeneformatEther= (amount:any, desimal=18)=>{
  return (BigInt(amount) / BigInt(10 ** desimal)).toString();
 
 }
+
+export const parseDataString = (dataString:string) => {
+  // Replace square brackets with curly braces
+  // const formattedString = dataString.replace(/\[/g, '{').replace(/\]/g, '}');
+
+  // Parse the string to JSON
+  try {
+    const parsedData = JSON.parse(dataString);
+    return parsedData;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+};
+
+export function removeTimestamp(text:string) {
+  // Use regex to remove the initial text within square brackets
+  return text.replace(/^\[.*?\]\s*/, '');
+}

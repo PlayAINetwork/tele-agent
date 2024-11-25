@@ -100,8 +100,8 @@ const TvConsole = () => {
       </div>
       {/* TV Brand */}
       <div className="flex p-2 justify-between items-center">
-        <span className="text-zinc-500 font-bold  text-lg -md:text-xs">
-          RETRO-AGENT-90
+        <span className="text-zinc-500 font-bold  text-lg -md:text-xs invisible" >
+          RETRO
         </span>
         <div className="w-[30%] h-[20px] rounded-2xl overflow-hidden -md:h-[10px]">
           <img
