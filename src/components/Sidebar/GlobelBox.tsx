@@ -106,8 +106,9 @@ const GlobelBox = () => {
             <Button
               disabled={disableAction}
               onClick={() => setsTipAgent(true)}
-              className="bg-[#0842A0] border-[2px] border-[#B5B6B7] hover:bg-[#0842A0] "
+              className="bg-[#0842A0] text-xs text-primay border-[2px] border-[#B5B6B7] hover:bg-[#0842A0] "
             >
+              TIP
               <img src={ICONS.icon_tip__btn} alt="" />
             </Button>
           )}

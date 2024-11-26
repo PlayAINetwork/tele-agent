@@ -1,110 +1,185 @@
-// import React, { useEffect, useState } from "react";
+import { extractDate, LocalDateTimeDisplay } from "@/lib/utils";
+import React, { useEffect, useRef, useState } from "react";
 
 const MainTerminal = () => {
-  // const [fullContentLoaded, setFullContentLoaded] = useState(false);
-  // const [logs, setLogs] = useState<any>([]);
+  const [fullContentLoaded, setFullContentLoaded] = useState(false);
+  const [logs, setLogs] = useState<any>([]);
+  // const [displayedLogs, setDisplayedLogs] = useState<any>([]);
+  // const [loading, setLoading] = useState(false);
+  const terminalRef = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   const worker = new Worker(
-  //     new URL("../worker/eventSourceWorker.ts", import.meta.url),
-  //     { type: "module" }
-  //   );
+  useEffect(() => {
+    const worker = new Worker(
+      new URL("../../worker/eventSourceWorker.ts", import.meta.url),
+      { type: "module" }
+    );
 
-  //   worker.onmessage = (e) => {
-  //     const outerData = e.data;
+    worker.onmessage = (e) => {
+      const outerData = e.data;
+      if (outerData?.data !== "thinking... analyzing") {
+        setLogs((prevLogs: any) => {
+          const newLogs = [ ...prevLogs,outerData];
+          // setDisplayedLogs(newLogs.slice(0, 10));
+          return newLogs;
+        });
+      }
+    };
 
-  //     if (outerData?.data !== "thinking... analyzing") {
-  //       setLogs((prevLogs: any) => [...prevLogs, outerData]);
-  //     }
-  //   };
+    worker.postMessage({
+      url: `https://rogue-api.playai.network/logs`,
+    });
 
-  //   worker.postMessage({
-  //     url: `https://rogue-api.playai.network/logs?page=${1}&limit=${10}`,
-  //   });
+    return () => {
+      worker.terminate();
+      setFullContentLoaded(false);
+    };
+  }, []);
 
-  //   return () => {
-  //     worker.terminate();
-  //     // setFullContentLoaded(false);
-  //   };
-  // }, []);
+  // const loadMore = () => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setDisplayedLogs(logs.slice(0, displayedLogs.length + 10));
+  //     setLoading(false);
+  //   }, 500);
+  // };
+
+  const scrollToBottom = () => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTo({
+        top: terminalRef.current.scrollHeight,
+        behavior: 'instant',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+    const handleScroll = () => {
+      if (terminalRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = terminalRef.current;
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
+        if (isAtBottom && !fullContentLoaded) {
+          setFullContentLoaded(true);
+        }
+      }
+    };
+
+    const currentRef = terminalRef.current;
+    currentRef?.addEventListener('scroll', handleScroll);
+    return () => currentRef?.removeEventListener('scroll', handleScroll);
+  }, [logs, fullContentLoaded]);
+
+
+    if (logs.length < 1 ) {
+      return (
+        <div className="grid place-items-center gap-2 uppercase text-[#EE4B4B]">
+          <div className="height-fit grid gap-2">
+            <p className="text-lg font-medium">Loading Terminal . . .</p>
+            <div className="grid w-[300px] animate-pulse gap-2">
+              <div className="h-4 w-3/4 rounded bg-foreground"></div>
+              <div className="h-4 w-1/2 rounded bg-foreground"></div>
+              <div className="h-4 w-2/3 rounded bg-foreground"></div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  
   return (
-    <></>
-    // <div className="flex flex-col  gap-4 h-full">
-    //   <div className="flex-1 bg-muted p-4">
-    //     {logs?.map((log: any, index: number) => (
-    //       <div
-    //         key={index + log?.taskId}
-    //         className="grid grid-cols-[235px_1fr] gap-1"
-    //       >
-       
-    //         <div
-    //           style={{ whiteSpace: "pre-line" }}
-    //           className="h-auto break-all px-4 pb-10"
-    //         >
-    //           <strong style={{ color: "#000" }}>
-    //             <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "}
-    //             {log?.taskName}
-    //           </strong>
-    //           <br />
-    //           <strong style={{ color: "#000" }}>
-    //             <span style={{ color: "rgb(248 134 88)" }}>TaskID :</span>{" "}
-    //             {/* {trimWords(log?.taskId, 4)} */}
-    //           </strong>
-    //           <br />
-    //           {log?.dataObj?.user ? (
-    //             <>
-    //               <strong style={{ color: "#000" }}>
-    //                 <span style={{ color: "rgb(134 217 97)" }}>user :</span>{" "}
-    //                 {log?.dataObj?.user}
-    //               </strong>
-    //               <br />
+    <div className="flex flex-col  gap-4 h-full">
+      <div className="flex-1 relative bg-muted p-4 overflow-auto h-full " ref={terminalRef}>
+      {!fullContentLoaded ? (
+        <p className="fixed bottom-0 right-8 rounded-lg bg-[#EE4B4B] p-2 px-4 text-white">
+          Loading logs . . .
+        </p>
+      ) : null}
+      {/* {displayedLogs.length < logs.length && (
+        <button
+          onClick={loadMore}
+          disabled={loading}
+          className="mx-auto mb-4 px-6 py-2 bg-[#EE4B4B] text-white rounded-lg hover:bg-[#D43B3B] disabled:opacity-50"
+        >
+          {loading ? "Loading..." : "Load More"}
+        </button>
+      )} */}
+        {logs?.map((log: any, index: number) => (
+          <div
+            key={index + log?.taskId}
+            // className="grid grid-cols-[235px_1fr] gap-1"
+          >
+            <div
+              style={{ whiteSpace: "pre-line" }}
+              className="h-auto break-all  pb-10 text-xs font-thin "
+            >
+                <strong >
+                {/* <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "} */}
+                {LocalDateTimeDisplay(extractDate(log?.dataunCut))}
+              </strong>
+              <br />
+              <strong >
+                <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "}
+                {log?.taskName}
+              </strong>
+              <br />
+              <strong >
+                <span style={{ color: "rgb(248 134 88)" }}>TaskID :</span>{" "}
+                {log?.taskId}
+              </strong>
+              <br />
+              {log?.dataObj?.user ? (
+                <>
+                  <strong >
+                    <span style={{ color: "rgb(134 217 97)" }}>user :</span>{" "}
+                    {log?.dataObj?.user}
+                  </strong>
+                  <br />
 
-    //               <strong style={{ color: "#000" }}>
-    //                 <span style={{ color: "rgb(134 217 97)" }}>action :</span>{" "}
-    //                 {log?.dataObj?.action}
-    //               </strong>
-    //               <br />
-    //               <strong style={{ color: "#000" }}>
-    //                 <span style={{ color: "rgb(255 240 153)" }}>
-    //                   inReplyTo :
-    //                 </span>{" "}
-    //                 {log?.dataObj?.inReplyTo}
-    //               </strong>
-    //               <br />
-    //               <span style={{ color: "#000" }}>
-    //                 <strong style={{ color: "rgb(134 217 97)" }}>text :</strong>{" "}
-    //                 {log?.dataObj?.text}
-    //               </span>
-    //               <br />
-    //             </>
-    //           ) : null}
+                  <strong>
+                    <span style={{ color: "rgb(134 217 97)" }}>action :</span>{" "}
+                    {log?.dataObj?.action}
+                  </strong>
+                  <br />
+                  <strong>
+                    <span style={{ color: "rgb(255 240 153)" }}>
+                      inReplyTo :
+                    </span>{" "}
+                    {log?.dataObj?.inReplyTo}
+                  </strong>
+                  <br />
+                  <span>
+                    <strong style={{ color: "rgb(134 217 97)" }}>text :</strong>{" "}
+                    {log?.dataObj?.text}
+                  </span>
+                  <br />
+                </>
+              ) : null}
 
-    //           {log?.dataObj?.user
-    //             ? null
-    //             : log?.data.split("\n").map((line: any, lineIndex: any) => (
-    //                 <React.Fragment key={lineIndex}>
-    //                   {line.split(" ").map((word: any, wordIndex: any) => (
-    //                     <React.Fragment key={wordIndex}>
-    //                       {word.endsWith(":") ? (
-    //                         <strong
-    //                           className="font-700"
-    //                           style={{ color: "rgb(134, 217, 97)" }}
-    //                         >
-    //                           {word}
-    //                         </strong>
-    //                       ) : (
-    //                         <span style={{ color: "#000" }}>{word}</span>
-    //                       )}{" "}
-    //                     </React.Fragment>
-    //                   ))}
-    //                   <br />
-    //                 </React.Fragment>
-    //               ))}
-    //         </div>
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
+              {log?.dataObj?.user
+                ? null
+                : log?.data.split("\n").map((line: any, lineIndex: any) => (
+                    <React.Fragment key={lineIndex}>
+                      {line.split(" ").map((word: any, wordIndex: any) => (
+                        <React.Fragment key={wordIndex}>
+                          {word.endsWith(":") ? (
+                            <strong
+                              className="font-700"
+                              style={{ color: "rgb(134, 217, 97)" }}
+                            >
+                              {word}
+                            </strong>
+                          ) : (
+                            <span>{word}</span>
+                          )}{" "}
+                        </React.Fragment>
+                      ))}
+                      <br />
+                    </React.Fragment>
+                  ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

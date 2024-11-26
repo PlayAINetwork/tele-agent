@@ -41,3 +41,31 @@ export function removeTimestamp(text:string) {
   // Use regex to remove the initial text within square brackets
   return text.replace(/^\[.*?\]\s*/, '');
 }
+
+export function trimWords(address: string | undefined, number: number) {
+  // Check if the address is a valid string
+  if (typeof address !== 'string') {
+    return ''
+  }
+  if (address.length <= number + 8) {
+    return address
+  }
+}
+
+export const LocalDateTimeDisplay = (utcDate: string) => {
+  // Create a Date object from the UTC date string
+  const localDate = new Date(utcDate)
+
+  // Format the date to a locale string
+  const localDateTimeString = localDate.toLocaleString()
+
+  if(localDateTimeString === "Invalid Date")
+  return  ""
+    
+  return localDateTimeString 
+}
+
+export const extractDate = (text: string) => {
+  const match = text.match(/\[(.*?)\]/)
+  return match ? match[1] : ''
+}
