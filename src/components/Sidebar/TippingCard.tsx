@@ -119,7 +119,7 @@ const TippingCard = ({ close }: { close: any }) => {
       console.log(txInfo, "txInfo");
 
       // setTimeout(() => {
-      sends({ user: address, text: `tipped${amount} $ROGUE` });
+      sends({ user: address, text: `Tipped ${amount} $ROGUE` });
       toast({
         title: "Transaction completed successfully",
       });
