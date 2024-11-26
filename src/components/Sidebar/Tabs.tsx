@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 
 const Tabs = () => {
   // 'add character'
-  const types = ["global", "inject", 'terminal'];
+  const types = ["global", "inject"];
   const { setSidebarMenu ,sidebarMenu} = useAppCtx();
 
   return (

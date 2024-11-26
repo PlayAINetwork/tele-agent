@@ -13,16 +13,20 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
 const TippingCard = ({ close }: { close: any }) => {
   const [amount, setAmount] = useState<string>("");
+  const sends = useMutation(api.functions.chats.send);
 
   const { disableAction, setDisableAction } = useAppCtx();
   const { toast } = useToast();
   const [status, setStatus] = useState("");
   const { publicKey, signTransaction } = useWallet();
   const { balance } = useTokenBalance(publicKey);
+  const address: any = publicKey?.toString();
 
   const sendTip = async () => {
     if (amount === "") {
@@ -115,7 +119,7 @@ const TippingCard = ({ close }: { close: any }) => {
       console.log(txInfo, "txInfo");
 
       // setTimeout(() => {
-      // sends({ user: address, text: `message` });
+      sends({ user: address, text: `tipped${amount} $ROGUE` });
       toast({
         title: "Transaction completed successfully",
       });
