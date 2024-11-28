@@ -23,19 +23,69 @@ export const convertTokeneformatEther= (amount:any, desimal=18)=>{
 
 }
 
-export const parseDataString = (dataString:string) => {
-  // Replace square brackets with curly braces
-  // const formattedString = dataString.replace(/\[/g, '{').replace(/\]/g, '}');
+// export const parseDataString = (dataString:string) => {
+//   // Replace square brackets with curly braces
+//   // const formattedString = dataString.replace(/\[/g, '{').replace(/\]/g, '}');
 
-  // Parse the string to JSON
+//   // Parse the string to JSON
+//   try {
+//     const parsedData = JSON.parse(dataString);
+//     return parsedData;
+//   } catch (error) {
+//     console.error("Error parsing JSON:", error);
+//     return null;
+//   }
+// };
+
+export const parseDataString = (dataString: string) => {
+  // First check if the string starts with a policy override
+  if (dataString.startsWith('<POLICY_OVERRIDE>')) {
+  // console.log(dataString)
+
+    // Find the first occurrence of a JSON-like string
+    const jsonStart = dataString.indexOf('{"');
+    if (jsonStart === -1) return null;
+    
+    // Extract the JSON portion
+    // const jsonPortion = dataString.slice(jsonStart);
+    
+    try {
+      return dataString;
+    } catch (error) {
+      console.log("Error parsing JSON portion:", error);
+      return null;
+    }
+  }
+  
+  // If no policy override, try parsing the whole string
   try {
-    const parsedData = JSON.parse(dataString);
-    return parsedData;
+    return JSON.parse(dataString);
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    // If parsing fails, try to find any JSON object in the string
+    const match = dataString.match(/(\{.*\})/);
+    if (match) {
+      try {
+        return JSON.parse(match[0]);
+      } catch (innerError) {
+        console.log("Error parsing matched JSON:", innerError);
+        return null;
+      }
+    }
+    
+    console.log("Error parsing JSON:", error);
     return null;
   }
 };
+
+// Helper function to check if a string is valid JSON
+export function isValidJSON(str: string) {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 export function removeTimestamp(text:string) {
   // Use regex to remove the initial text within square brackets
