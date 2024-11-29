@@ -9,7 +9,7 @@ const Tabs = () => {
   return (
     <div className="gap-2 flex">
       {types.map((tab) => (
-        <Button className="uppercase min-w-[100px] rounded-none" variant={sidebarMenu === tab ? "active":"outline" } onClick={()=>setSidebarMenu(tab)}>
+        <Button className="uppercase min-w-[100px] rounded-[40px]" variant={sidebarMenu === tab ? "active":"outline" } onClick={()=>setSidebarMenu(tab)}>
           {tab}
         </Button>
       ))}
