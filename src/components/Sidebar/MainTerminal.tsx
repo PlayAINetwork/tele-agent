@@ -134,7 +134,7 @@ const MainTerminal = () => {
         className="flex-1  leading-5 relative bg-[#111111] p-4 overflow-auto h-full "
         ref={terminalRef}
         style={{
-          fontFamily: "Terminal",
+          fontFamily: "'VT323', monospace",
         }}
       >
         {/* {!fullContentLoaded ? (
@@ -158,7 +158,7 @@ const MainTerminal = () => {
           >
             <div
               style={{ whiteSpace: "pre-line" }}
-              className="h-auto break-all  pb-10 text-xs font-thin leading-6 "
+              className="h-auto break-all  pb-10 text-sm font-thin leading-5 "
             >
               <strong>
                 {/* <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "} */}

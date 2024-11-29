@@ -200,7 +200,7 @@ const TeerminalBox = () => {
     <div className="flex flex-col gap-4  h-full ">
       <div
         ref={boxRef}
-        className="flex flex-col flex-1   gap-2 overflow-auto h-full bg-muted p-4 "
+        className="flex flex-col flex-1   gap-4 overflow-auto h-full bg-muted p-4 "
       >
         {messages?.map(
           ({
@@ -212,10 +212,10 @@ const TeerminalBox = () => {
             text: string;
             user: string;
           }) => (
-            <div key={_id} className="flex gap-2 items-center">
-              <p className="text-[14px] font-semibold">{trimAddress(user)}:</p>
+            <div key={_id} className="flex gap-2 ">
+              <p className="text-[14px] ">{trimAddress(user)}:</p>
               <p
-                className="text-sm 
+                className="text-sm font-thin
             text-wrap "
               >
                 {text}
