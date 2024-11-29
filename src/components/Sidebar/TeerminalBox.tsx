@@ -200,7 +200,7 @@ const TeerminalBox = () => {
     <div className="flex flex-col gap-4  h-full ">
       <div
         ref={boxRef}
-        className="flex flex-col flex-1   gap-4 overflow-auto h-full bg-muted p-4 "
+        className="flex flex-col flex-1 rounded-md    gap-4 overflow-auto h-full rounded-md bg-[#131314] p-4 "
       >
         {messages?.map(
           ({
@@ -234,13 +234,13 @@ const TeerminalBox = () => {
       </div> */}
       <div className="flex flex-col gap-2">
         <Textarea
-          className="h-[100px] uppercase"
+          className="h-[100px] rounded-lg uppercase placeholder-white"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder="Inject your topic here"
         />
         <Button
-          className="w-full uppercase"
+          className="w-full uppercase rounded-[40px]"
           onClick={transferTokens}
           disabled={
             loading || !connected || disableAction || balance < injectAmount
@@ -252,10 +252,11 @@ const TeerminalBox = () => {
               ? "Insufficient Balance"
               : `Add with 20k $ROGUE`}
         </Button>
-        <p className="text-sm text-wrap font-thin leading-6">
-          <span className="font-semibold">Disclaimer:</span> Topic injection
+        <p className="text-sm text-wrap font-thin leading-5">
+          <span className="font-semibold">Disclaimer:</span> <span style={{color:"rgb(248 134 88)"}} className="text-[rgb(248 134 88)]">Topic injection
           isn’t instantaneous due to the high volume of requests, which may
           result in a queue.
+          </span>
         </p>
         {/* <p className="text-sm text-green-600 font-medium">{status}</p> */}
       </div>

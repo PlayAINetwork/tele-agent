@@ -1,5 +1,5 @@
-@import url('https://fonts.cdnfonts.com/css/terminal');
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url("https://fonts.cdnfonts.com/css/terminal");
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -121,7 +121,6 @@
 }
 .wallet-adapter-dropdown {
   width: 100% !important;
-
 }
 
 .wallet-adapter-button-trigger {
@@ -129,4 +128,15 @@
   background-color: transparent !important;
   color: #000 !important;
   justify-content: center !important;
+}
+
+::placeholder {
+  color: hsl(0 0% 98%) !important;  
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder {
+  /* Edge 12 -18 */
+  color: hsl(0 0% 98%) !important;  
+
 }

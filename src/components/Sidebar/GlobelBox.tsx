@@ -56,7 +56,7 @@ const GlobelBox = () => {
     <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
       <div
         ref={boxRef}
-        className="flex flex-col flex-1   gap-4 overflow-auto h-full bg-muted p-4 "
+        className="flex flex-col flex-1   gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] "
       >
         {messages?.map(
           ({
@@ -85,7 +85,7 @@ const GlobelBox = () => {
         <div className="flex gap-2">
           <div className="relative w-full">
             <Input
-              className="pr-[40px] hover:border-[#B5B6B7] hover:bg-[#303030]"
+              className="pr-[40px] rounded-[40px] hover:border-[#B5B6B7] hover:bg-[#303030]"
               value={message}
               type="text"
               placeholder="Start typing…"
@@ -97,7 +97,7 @@ const GlobelBox = () => {
               disabled={disableAction}
               onClick={handleSend}
               variant={"ghost"}
-              className="absolute right-0 top-0"
+              className="absolute right-0  top-0"
             >
               <SendHorizontalIcon />
             </Button>
@@ -106,7 +106,7 @@ const GlobelBox = () => {
             <Button
               disabled={disableAction}
               onClick={() => setsTipAgent(true)}
-              className="bg-[#0842A0] text-xs text-primay border-[2px] border-[#B5B6B7] hover:bg-[#0842A0] "
+              className="bg-[#0842A0] rounded-[40px]  text-xs text-primay border-[2px] border-[#B5B6B7] hover:bg-[#0842A0] "
             >
               TIP
               <img src={ICONS.icon_tip__btn} alt="" />

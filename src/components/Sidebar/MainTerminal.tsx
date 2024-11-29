@@ -115,7 +115,7 @@ const MainTerminal = () => {
 
   if (logs.length < 1) {
     return (
-      <div className="grid place-items-center gap-2 uppercase text-[rgb(248 134 88)]">
+      <div className="grid place-items-center gap-2 rounded-md  uppercase text-[rgb(248 134 88)] bg-[#2F3636] h-full">
         <div className="height-fit grid gap-2">
           <p className="text-lg font-medium">Loading Terminal . . .</p>
           <div className="grid w-[300px] animate-pulse gap-2">
@@ -131,7 +131,7 @@ const MainTerminal = () => {
   return (
     <div className="flex flex-col  gap-4 h-full ">
       <div
-        className="flex-1  leading-5 relative bg-[#2F3636] p-4 overflow-auto h-full "
+        className="flex-1  leading-5 relative bg-[#2F3636] rounded-md p-4 overflow-auto h-full "
         ref={terminalRef}
         style={{
           fontFamily: "'VT323', monospace",
