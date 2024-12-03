@@ -102,6 +102,9 @@ export function trimWords(address: string | undefined, number: number) {
   }
 }
 
+export const truncateText = (input:string) => {
+  return input.length > 20 ? input.slice(0, 20) : input;
+};
 export const LocalDateTimeDisplay = (utcDate: string) => {
   // Create a Date object from the UTC date string
   const localDate = new Date(utcDate)

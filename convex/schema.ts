@@ -10,5 +10,11 @@ export default defineSchema({
     user: v.string(),
     text: v.string(),
     timestamp: v.any(),
+  }),
+  createVedio: defineTable({
+    user: v.string(),
+    url: v.string(),
+    prompt: v.string(),
+    timestamp: v.any(),
   })
 });

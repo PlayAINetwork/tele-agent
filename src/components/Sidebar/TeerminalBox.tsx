@@ -253,9 +253,13 @@ const TeerminalBox = () => {
               : `Add with 20k $ROGUE`}
         </Button>
         <p className="text-sm text-wrap font-thin leading-5">
-          <span className="font-semibold">Disclaimer:</span> <span style={{color:"rgb(248 134 88)"}} className="text-[rgb(248 134 88)]">Topic injection
-          isn’t instantaneous due to the high volume of requests, which may
-          result in a queue.
+          <span className="font-semibold">Disclaimer:</span>{" "}
+          <span
+            style={{ color: "rgb(248 134 88)" }}
+            className="text-[rgb(248 134 88)]"
+          >
+            Topic injection isn’t instantaneous due to the high volume of
+            requests, which may result in a queue.
           </span>
         </p>
         {/* <p className="text-sm text-green-600 font-medium">{status}</p> */}

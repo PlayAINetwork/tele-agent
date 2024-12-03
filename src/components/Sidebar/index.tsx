@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import GenerateVedio from "./GenerateVedio";
 
 const Sidebar = () => {
   const { toast } = useToast();
@@ -122,7 +123,11 @@ const Sidebar = () => {
                 <TeerminalBox />
               ) : sidebarMenu === "terminal" ? (
                 <MainTerminal />
-              ) : (
+              ) 
+              : sidebarMenu === "create" ? (
+                <GenerateVedio/>
+              ):
+              (
                 <CharacterBox />
               )}
             </div>
