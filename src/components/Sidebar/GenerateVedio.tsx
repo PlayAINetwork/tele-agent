@@ -46,7 +46,7 @@ const GenerateVedio = () => {
   useEffect(() => {
     (async () => {
       const response = await axios.get(
-        "https://render.dhanush29.me/get-all-files-in-bucket"
+        "http://render-video-1057835706.us-east-2.elb.amazonaws.com:5001/get-all-files-in-bucket"
       );
 
       setRecentlist(response?.data.reverse());
@@ -157,7 +157,7 @@ const GenerateVedio = () => {
       console.log("response");
 
       const response = await axios.post(
-        "https://render.dhanush29.me/generate",
+        "http://render-video-1057835706.us-east-2.elb.amazonaws.com:5001/generate",
         // "http://localhost:5001/generate",
         { prompt: prompt, signature: signature },
         {
