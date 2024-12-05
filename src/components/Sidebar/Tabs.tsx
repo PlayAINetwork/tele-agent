@@ -3,13 +3,13 @@ import { Button } from "../ui/button";
 
 const Tabs = () => {
   // 'add character'
-  const types = ["global", "inject"];
+  const types = ["global", "inject",'terminal', 'create'];
   const { setSidebarMenu ,sidebarMenu} = useAppCtx();
 
   return (
-    <div className="gap-2 flex">
+    <div className="gap-2 flex overflow-auto horizontalBar">
       {types.map((tab) => (
-        <Button className="uppercase min-w-[100px] rounded-none" variant={sidebarMenu === tab ? "active":"outline" } onClick={()=>setSidebarMenu(tab)}>
+        <Button className="uppercase min-w-[100px] rounded-[40px]" variant={sidebarMenu === tab ? "active":"outline" } onClick={()=>setSidebarMenu(tab)}>
           {tab}
         </Button>
       ))}

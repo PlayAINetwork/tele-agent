@@ -52,7 +52,7 @@ const CustomSolanaButton = ({
     : connectText;
 
   return (
-   <Button className="w-full px-0">
+   <Button className="w-full px-0 rounded-[40px]">
 
       <WalletMultiButton
         className={`${baseStyle} bg-transparent ${loading ? "opacity-75 cursor-not-allowed w-full" : "min-w-full "}`}

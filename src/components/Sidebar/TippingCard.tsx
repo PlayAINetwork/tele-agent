@@ -136,7 +136,7 @@ const TippingCard = ({ close }: { close: any }) => {
   };
 
   return (
-    <div className="bg-muted flex flex-col gap-4 p-4 py-6">
+    <div className="rounded-md bg-[#131314] flex flex-col gap-4 p-4 py-6">
       <div className="flex justify-between items-center">
         <p className="text-sm">
           <span className="font-bold">$ROGUE: </span>
@@ -146,7 +146,7 @@ const TippingCard = ({ close }: { close: any }) => {
       <div className="relative w-full">
         <Input
           // className="py-4 px-4"
-          className="pr-[70px] hover:border-[#B5B6B7] hover:bg-[#303030]"
+          className="pr-[70px] hover:border-[#B5B6B7] rounded-[40px] bg-[#131314] hover:bg-[#303030]"
           value={amount}
           type="number"
           placeholder="0.00"
@@ -160,19 +160,17 @@ const TippingCard = ({ close }: { close: any }) => {
       <div className="flex gap-2">
         <Button
           disabled={disableAction}
-          className="bg-[#444746] w-full text-primary"
+          className="bg-[#444746] rounded-[40px] w-full text-primary"
           onClick={() => close(false)}
         >
           Cancel
         </Button>
-        <Button disabled={disableAction ||
-balance < Number(amount) 
-
-        } className="w-full" onClick={sendTip}>
-          {
-            balance < Number(amount)  ? "Insufficient Balance" :"Send"
-          }
-          
+        <Button
+          disabled={disableAction || balance < Number(amount)}
+          className="w-full rounded-[40px]"
+          onClick={sendTip}
+        >
+          {balance < Number(amount) ? "Insufficient Balance" : "Send"}
         </Button>
       </div>
     </div>

@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { Connection, PublicKey } from "@solana/web3.js";
-import {
-  getAccount,
-  getAssociatedTokenAddress,
-} from "@solana/spl-token";
+import { getAccount, getAssociatedTokenAddress } from "@solana/spl-token";
 
 export const useTokenBalance = (walletAddress?: any) => {
   const [balance, setBalance] = useState<any>(null);
@@ -25,7 +22,7 @@ export const useTokenBalance = (walletAddress?: any) => {
         );
         const account = await getAccount(connection, associatedAddress);
 
-        setBalance(Number(account.amount) / (10 ** 6));
+        setBalance(Number(account.amount) / 10 ** 6);
         setError(null);
       } catch (err: any) {
         setError(err.message);
