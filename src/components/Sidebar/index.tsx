@@ -43,10 +43,10 @@ const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "h-full gap-4 px-4 py-2 flex bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col border-l",
+        "h-full gap-4  px-4  py-2 flex md:bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col md:border-l",
         "transition-all duration-300 ease-in-out",
-        hideSidebar ? "w-[auto]" : "w-[400px]",
-        "-md:hidden"
+        hideSidebar ? "w-[auto]" : "w-[100%] md:w-[400px]  bg-card",
+        // "-md:hidden"
       )}
     >
       <div
