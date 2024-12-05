@@ -26,20 +26,21 @@ import {
 import { truncateText } from "@/lib/utils";
 
 const GenerateVedio = () => {
-  const { disableAction, setDisableAction } = useAppCtx();
+  const { disableAction, setDisableAction, videoGeneraing, setVideoGeneraing } =
+    useAppCtx();
   const { connected, publicKey, signTransaction } = useWallet();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>(null);
 
   const [prompt, setPrompt] = useState("");
   const { balance } = useTokenBalance(publicKey);
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<any>(null);
+  // const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const createVedio = useMutation(api.functions.createVedio.create);
   const [recentlist, setRecentlist] = useState<any>(null);
 
-  const injectAmount = 20000;
+  const injectAmount = 30000;
 
   const amount = BigInt(injectAmount * 10 ** 6);
 
@@ -75,7 +76,7 @@ const GenerateVedio = () => {
 
     try {
       setStatus("Processing transfer...");
-      setLoading(true);
+      setVideoGeneraing(true);
       setDisableAction(true);
 
       const mintPubkey = new PublicKey(import.meta.env.VITE_SPL_TOKEN_ADDRESS);
@@ -155,10 +156,12 @@ const GenerateVedio = () => {
         throw new Error("Transaction failed during execution");
       }
       console.log("response");
+      setStatus("Generating Video...");
 
       const response = await axios.post(
         "https://render-video.agentexperience.live/generate",
-        // "http://localhost:5001/generate",
+
+        // "https://render.dhanush29.me/generate",
         { prompt: prompt, signature: signature },
         {
           headers: {
@@ -189,7 +192,7 @@ const GenerateVedio = () => {
         // console.log(confirmation);
 
         //   setStatus("Transfer successful! Signature: " + signature);
-        setLoading(false);
+        setVideoGeneraing(false);
         setPrompt("");
         setDisableAction(false);
       }
@@ -197,7 +200,7 @@ const GenerateVedio = () => {
       setDisableAction(false);
     } catch (err: any) {
       // setStatus("Error: " + err.message);
-      setLoading(false);
+      setVideoGeneraing(false);
       setDisableAction(false);
 
       toast({
@@ -252,47 +255,53 @@ const GenerateVedio = () => {
           </div>
         )}
 
-        <div className="flex gap-2 flex-wrap w-[100%]">
-          {recentlist?.map((recent: any) => (
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <div
-                  className="w-[48%] max-h-[100px] cursor-pointer   relative rounded-md overflow-hidden"
-                  onClick={() => setSelectedFile(recent)}
-                >
-                  <img
-                    width={"100%"}
-                    height={"100%"}
-                    className="object-contain"
-                    src="https://pbs.twimg.com/profile_images/1859652186025885696/cPRtjjm9_400x400.jpg"
-                    alt=""
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/50  group-hover:opacity-100 transition-opacity flex justify-center gap-4">
-                    <p className="text-[12px] ">
-                      {truncateText(recent[2]?.toString())}{" "}
-                    </p>
-                  </div>
-                </div>
-              </DialogTrigger>
+        <div className="flex gap-2 flex-wrap w-[100%] animate-pulse">
+          {videoGeneraing ? (
+            <div className="h-[100px] rounded w-[48%]  bg-foreground"></div>
+          ) : null}
 
-              <DialogContent className="sm:max-w-md md:max-w-2xl">
-                <DialogHeader>
-                  {/* <DialogTitle className="text-xl font-semibold">
-                    {"recent?.title"}
-                  </DialogTitle> */}
-                  {selectedFile !== null ? (
-                    <DialogDescription className=" text-md text-gray-200">
-                      {selectedFile[2]}
-                    </DialogDescription>
-                  ) : null}
-                </DialogHeader>
-                {selectedFile !== null ? (
-                  <div className="py-4">
-                    <VideoPlayer videoUrl={selectedFile[1]} />
+          {recentlist?.map((recent: any) => (
+            <>
+              <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogTrigger asChild>
+                  <div
+                    className="w-[48%] max-h-[100px] cursor-pointer   relative rounded-md overflow-hidden"
+                    onClick={() => setSelectedFile(recent)}
+                  >
+                    <img
+                      width={"100%"}
+                      height={"100%"}
+                      className="object-contain"
+                      src="https://pbs.twimg.com/profile_images/1859652186025885696/cPRtjjm9_400x400.jpg"
+                      alt=""
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/50  group-hover:opacity-100 transition-opacity flex justify-center gap-4">
+                      <p className="text-[12px] ">
+                        {truncateText(recent[2]?.toString())}{" "}
+                      </p>
+                    </div>
                   </div>
-                ) : null}
-              </DialogContent>
-            </Dialog>
+                </DialogTrigger>
+
+                <DialogContent className="sm:max-w-md md:max-w-2xl">
+                  <DialogHeader>
+                    {/* <DialogTitle className="text-xl font-semibold">
+                    {"recent?.title"}
+                    </DialogTitle> */}
+                    {selectedFile !== null ? (
+                      <DialogDescription className=" text-md text-gray-200">
+                        {selectedFile[2]}
+                      </DialogDescription>
+                    ) : null}
+                  </DialogHeader>
+                  {selectedFile !== null ? (
+                    <div className="py-4">
+                      <VideoPlayer videoUrl={selectedFile[1]} />
+                    </div>
+                  ) : null}
+                </DialogContent>
+              </Dialog>
+            </>
           ))}
         </div>
         <div className="flex gap-3 flex-wrap"></div>
@@ -311,14 +320,17 @@ const GenerateVedio = () => {
             className="w-full uppercase rounded-[40px]"
             onClick={transferTokens}
             disabled={
-              loading || !connected || disableAction || balance < injectAmount
+              videoGeneraing ||
+              !connected ||
+              disableAction ||
+              balance < injectAmount
             }
           >
-            {loading
-              ? status
+            {videoGeneraing
+              ? status || "Generating Video..."
               : balance < injectAmount
                 ? "Insufficient Balance"
-                : `Create with 20k $ROGUE`}
+                : `Create with 30k $ROGUE`}
           </Button>
         ) : null}
       </div>
