@@ -322,8 +322,7 @@ const GenerateVedio = () => {
             disabled={
               videoGeneraing ||
               !connected ||
-              disableAction ||
-              balance < injectAmount
+              disableAction 
             }
           >
             {videoGeneraing
