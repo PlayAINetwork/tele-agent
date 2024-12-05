@@ -328,9 +328,7 @@ const GenerateVedio = () => {
           >
             {videoGeneraing
               ? status || "Generating Video..."
-              : balance < injectAmount
-                ? "Insufficient Balance"
-                : `Create with 30k $ROGUE`}
+              : `Create with 30k $ROGUE`}
           </Button>
         ) : null}
       </div>
