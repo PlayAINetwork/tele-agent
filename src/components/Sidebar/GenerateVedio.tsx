@@ -162,7 +162,7 @@ const GenerateVedio = () => {
         "https://render-video.agentexperience.live/generate",
 
         // "https://render.dhanush29.me/generate",
-        { prompt: prompt, signature: signature },
+        { prompt: prompt, signature: signature, wallet: publicKey?.toString() },
         {
           headers: {
             "Content-Type": "application/json",
@@ -255,9 +255,9 @@ const GenerateVedio = () => {
           </div>
         )}
 
-        <div className="flex gap-2 flex-wrap w-[100%] animate-pulse">
+        <div className="flex gap-2 flex-wrap w-[100%] ">
           {videoGeneraing ? (
-            <div className="h-[100px] rounded w-[48%]  bg-foreground"></div>
+            <div className="h-[100px] rounded w-[48%]  bg-foreground animate-pulse"></div>
           ) : null}
 
           {recentlist?.map((recent: any) => (
@@ -265,7 +265,7 @@ const GenerateVedio = () => {
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
                   <div
-                    className="w-[48%] max-h-[100px] cursor-pointer   relative rounded-md overflow-hidden"
+                    className={`w-[48%]  max-h-[100px] cursor-pointer   relative rounded-md overflow-hidden ${recent[3] === publicKey?.toString() ? "border-4" : null}`}
                     onClick={() => setSelectedFile(recent)}
                   >
                     <img
