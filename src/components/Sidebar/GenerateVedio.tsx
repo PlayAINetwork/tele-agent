@@ -286,7 +286,7 @@ const GenerateVedio = () => {
                 </DialogTrigger>
 
                 <DialogContent className="sm:max-w-md md:max-w-2xl">
-                  <DialogHeader>
+                  <DialogHeader className="z-10" >
                     {/* <DialogTitle className="text-xl font-semibold">
                     {"recent?.title"}
                     </DialogTitle> */}
@@ -295,12 +295,13 @@ const GenerateVedio = () => {
                         {selectedFile[2]}
                       </DialogDescription>
                     ) : null}
-                  </DialogHeader>
-                  {selectedFile !== null ? (
+                    {selectedFile !== null ? (
                     <div className="py-4">
                       <VideoPlayer videoUrl={selectedFile[1]} />
                     </div>
                   ) : null}
+                  </DialogHeader>
+                  
                 </DialogContent>
               </Dialog>
             </>
