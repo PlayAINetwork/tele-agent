@@ -49,8 +49,10 @@ const GenerateVedio = () => {
       const response = await axios.get(
         "https://render-video.agentexperience.live/get-all-files-in-bucket"
       );
-
-      setRecentlist(response?.data.reverse());
+      const filteredData = response?.data.filter(
+        (item: any) => item[3] != "0x"
+      );
+      setRecentlist(filteredData.reverse());
     })();
   }, [disableAction]);
 
@@ -319,11 +321,7 @@ const GenerateVedio = () => {
           <Button
             className="w-full uppercase rounded-[40px]"
             onClick={transferTokens}
-            disabled={
-              videoGeneraing ||
-              !connected ||
-              disableAction 
-            }
+            disabled={videoGeneraing || !connected || disableAction}
           >
             {videoGeneraing
               ? status || "Generating Video..."
@@ -337,7 +335,7 @@ const GenerateVedio = () => {
 
 export default GenerateVedio;
 
-const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
+export const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
   // const [isPlaying, setIsPlaying] = useState(false);
   const videoRef: any = React.useRef(null);
   // const [muted, setMuted] = useState(false);
