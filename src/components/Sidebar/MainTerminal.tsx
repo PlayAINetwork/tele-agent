@@ -8,6 +8,9 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 
 const MainTerminal = () => {
+  const textToRemove = 'Response format should be formatted in a JSON block like this:\n```json\n{ \"user\": \"rogue\", \"text\": string, \"action\": string }\n```';
+  
+  
   const [fullContentLoaded, setFullContentLoaded] = useState(false);
   const [logs, setLogs] = useState<any>([]);
   // const [oldLogs, setOldlLogs] = useState<any>([]);
@@ -28,6 +31,7 @@ const MainTerminal = () => {
         response?.data?.map((item: any) => {
           // console.log(item);
           let outerData = item;
+          outerData.data =  outerData.data.replace(textToRemove, '').trim()
           const dataTrimmed = removeTimestamp(outerData?.data);
           outerData.dataunCut = outerData?.data;
           console.log(dataTrimmed);
@@ -71,6 +75,7 @@ const MainTerminal = () => {
       let outerData = e.data;
       // if (outerData?.data !== "thinking... analyzing") {
         // if (oldLogs.length > 0) {
+          outerData.data =  outerData.data.replace(textToRemove, '').trim()
       
           const dataTrimmed = removeTimestamp(outerData?.data);
           outerData.dataunCut = outerData?.data;
