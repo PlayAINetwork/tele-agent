@@ -10,37 +10,10 @@ import React, { useEffect, useRef, useState } from "react";
 const MainTerminal = () => {
   const [fullContentLoaded, setFullContentLoaded] = useState(false);
   const [logs, setLogs] = useState<any>([]);
-  const [oldLogs, setOldlLogs] = useState<any>([]);
+  // const [oldLogs, setOldlLogs] = useState<any>([]);
   // const [streamingLogs, setStreamingLogs] = useState<any>([]);
-
+  const [hasReachedBottom, setHasReachedBottom] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const worker = new Worker(
-      new URL("../../worker/eventSourceWorker.ts", import.meta.url),
-      { type: "module" }
-    );
-
-    worker.onmessage = (e) => {
-      console.log(e, "dsfd");
-      const outerData = e.data;
-      if (outerData?.data !== "thinking... analyzing") {
-        if (oldLogs.length > 0) {
-          // setStreamingLogs((pre: any) => [...pre, outerData]);
-          setLogs((pre: any) => [...pre, outerData]);
-        }
-      }
-    };
-
-    worker.postMessage({
-      url: `https://rogue-api.playai.network/logs`,
-    });
-
-    return () => {
-      worker.terminate();
-      setFullContentLoaded(false);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchOldLoges = async () => {
@@ -64,7 +37,7 @@ const MainTerminal = () => {
           outerData.dataObj = parseDataString(dataTrimmed);
           // const newLogs = [...logs, outerData];
 
-          setOldlLogs((pre: any) => [...pre, outerData]);
+          // setOldlLogs((pre: any) => [...pre, outerData]);
           setLogs((pre: any) => [...pre, outerData]);
 
           // }
@@ -80,12 +53,49 @@ const MainTerminal = () => {
     fetchOldLoges();
   }, []);
 
+  // useEffect(() => {
+  //   if (oldLogs.length > 0) {
+  //     // setOldLogs();
+  //     console.log(logs);
+  //   }
+  // }, [oldLogs]);
+
   useEffect(() => {
-    if (oldLogs.length > 0) {
-      // setOldLogs();
-      console.log(logs);
-    }
-  }, [oldLogs]);
+    const worker = new Worker(
+      new URL("../../worker/eventSourceWorker.ts", import.meta.url),
+      { type: "module" }
+    );
+
+    worker.onmessage = (e) => {
+      console.log( "dsfd");
+      let outerData = e.data;
+      // if (outerData?.data !== "thinking... analyzing") {
+        // if (oldLogs.length > 0) {
+      
+          const dataTrimmed = removeTimestamp(outerData?.data);
+          outerData.dataunCut = outerData?.data;
+
+          // if (outerData?.data !== "thinking... analyzing") {
+          outerData.data = dataTrimmed;
+          outerData.dataObj = parseDataString(dataTrimmed);
+
+          // setStreamingLogs((pre: any) => [...pre, outerData]);
+
+          // console.log(outerData,"dsfdsfdsfds")
+          setLogs((pre: any) => [...pre, outerData]);
+        // }
+      // }
+    };
+
+    worker.postMessage({
+      url: `https://rogue-api.playai.network/logs`,
+    });
+
+    return () => {
+      worker.terminate();
+      setFullContentLoaded(false);
+    };
+  }, []);
 
   const scrollToBottom = () => {
     if (terminalRef.current) {
@@ -97,13 +107,55 @@ const MainTerminal = () => {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    const shouldAutoScroll = () => {
+      if (terminalRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = terminalRef.current;
+        const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+        const distanceFromTop = scrollTop;
+        
+        // If user has reached bottom before, only check bottom distance
+
+        if (!hasReachedBottom) {
+          return distanceFromBottom >= 0;
+        }
+        if (hasReachedBottom) {
+          return distanceFromBottom <= 40;
+        }
+        
+        // Otherwise check both conditions
+        return distanceFromBottom <= 40 || distanceFromTop <= 100;
+      }
+      return false;
+    };
+
+    if (shouldAutoScroll()) {
+      scrollToBottom();
+    }
     const handleScroll = () => {
       if (terminalRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = terminalRef.current;
-        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
-        if (isAtBottom && !fullContentLoaded) {
-          setFullContentLoaded(true);
+        const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+        
+        // Check if user has reached bottom
+       setTimeout(() => {
+        if (distanceFromBottom <= 40) {
+          setHasReachedBottom(true);
+        }
+
+       }, 10000);
+        if (!fullContentLoaded) {
+          if (hasReachedBottom) {
+            // Only check bottom condition if user has reached bottom before
+            if (distanceFromBottom <= 40) {
+              setFullContentLoaded(true);
+            }
+          } else {
+            // Check both conditions before first bottom reach
+            const distanceFromTop = scrollTop;
+            if (distanceFromBottom <= 40 || distanceFromTop <= 100) {
+              setFullContentLoaded(true);
+            }
+          }
         }
       }
     };
