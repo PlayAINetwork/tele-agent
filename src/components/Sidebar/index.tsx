@@ -13,7 +13,6 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
 import CharacterBox from "./CharacterBox";
-import MainTerminal from "./MainTerminal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import GenerateVedio from "./GenerateVedio";
+import TerminalLogs from "./TerminalLogs";
 
 const Sidebar = () => {
   const { toast } = useToast();
@@ -122,7 +122,7 @@ const Sidebar = () => {
               ) : sidebarMenu === "inject" ? (
                 <TeerminalBox />
               ) : sidebarMenu === "terminal" ? (
-                <MainTerminal />
+                <TerminalLogs />
               ) 
               : sidebarMenu === "create" ? (
                 <GenerateVedio/>

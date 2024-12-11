@@ -8,61 +8,72 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 
 const MainTerminal = () => {
-  const textToRemove = 'Response format should be formatted in a JSON block like this:\n```json\n{ \"user\": \"rogue\", \"text\": string, \"action\": string }\n```';
-  
-  
-  const [fullContentLoaded, setFullContentLoaded] = useState(false);
+  const textToRemove =
+    'Response format should be formatted in a JSON block like this:\n```json\n{ "user": "rogue", "text": string, "action": string }\n```';
+
   const [logs, setLogs] = useState<any>([]);
-  // const [oldLogs, setOldlLogs] = useState<any>([]);
-  // const [streamingLogs, setStreamingLogs] = useState<any>([]);
-  const [hasReachedBottom, setHasReachedBottom] = useState(false);
+  // const [hasReachedBottom, setHasReachedBottom] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
+  // const [currentTypingText, setCurrentTypingText] = useState("");
+  // const [isTyping, setIsTyping] = useState(false);
+  const [stringInQueue, setStringInQueue] = useState<any>([]);
+  // Maximum time to complete typing (in milliseconds)
+  // const MAX_TYPING_DURATION = 20000;
+
+  // Calculate dynamic typing speed based on text length
+  // const calculateTypingSpeed = (text: string): number => {
+  //   const baseSpeed = 10; // Minimum speed for very short texts
+  //   const textLength = text.length;
+
+  //   // Calculate speed to complete within MAX_TYPING_DURATION
+  //   let speed = MAX_TYPING_DURATION / textLength;
+
+  //   // Add variation to make it feel more natural
+  //   const variation = 0.5; // 50% variation
+  //   const randomFactor = 1 - variation + Math.random() * variation * 2;
+  //   speed *= randomFactor;
+
+  //   // Ensure speed doesn't go below baseSpeed
+  //   return Math.max(speed, baseSpeed);
+  // };
+
+  // Add natural pauses for punctuation and special characters
+  // const getCharacterDelay = (char: string, baseSpeed: number): number => {
+  //   const delays = {
+  //     ".": 4,
+  //     "!": 4,
+  //     "?": 4,
+  //     ",": 2,
+  //     ":": 2,
+  //     ";": 2,
+  //     "\n": 3,
+  //   };
+  //   return baseSpeed * (delays[char as keyof typeof delays] || 1);
+  // };
 
   useEffect(() => {
-    const fetchOldLoges = async () => {
+    const fetchOldLogs = async () => {
       try {
-        // setLoading(true);
-        // setError(null);
-
-        // Replace with your API endpoint
         const response = await axios.get(
-          "https://rogue-api.playai.network/olderlogs"
+          "https://rogue-api.playai.network/olderlogs?page=1&limit=10"
         );
         response?.data?.map((item: any) => {
-          // console.log(item);
           let outerData = item;
-          outerData.data =  outerData.data.replace(textToRemove, '').trim()
+          outerData.data = outerData.data.replace(textToRemove, "").trim();
           const dataTrimmed = removeTimestamp(outerData?.data);
           outerData.dataunCut = outerData?.data;
-          console.log(dataTrimmed);
-
-          // if (outerData?.data !== "thinking... analyzing") {
           outerData.data = dataTrimmed;
           outerData.dataObj = parseDataString(dataTrimmed);
-          // const newLogs = [...logs, outerData];
-
-          // setOldlLogs((pre: any) => [...pre, outerData]);
           setLogs((pre: any) => [...pre, outerData]);
-
-          // }
+          setStringInQueue((pre: any) => [...pre, outerData]);
         });
-        // setOldlLogs(response?.data);
       } catch (err) {
-        // setError(err.message || 'An error occurred while fetching data');
-      } finally {
-        // setLoading(false);
+        console.error("Error fetching logs:", err);
       }
     };
 
-    fetchOldLoges();
+    fetchOldLogs();
   }, []);
-
-  // useEffect(() => {
-  //   if (oldLogs.length > 0) {
-  //     // setOldLogs();
-  //     console.log(logs);
-  //   }
-  // }, [oldLogs]);
 
   useEffect(() => {
     const worker = new Worker(
@@ -71,25 +82,13 @@ const MainTerminal = () => {
     );
 
     worker.onmessage = (e) => {
-      console.log( "dsfd");
       let outerData = e.data;
-      // if (outerData?.data !== "thinking... analyzing") {
-        // if (oldLogs.length > 0) {
-          outerData.data =  outerData.data.replace(textToRemove, '').trim()
-      
-          const dataTrimmed = removeTimestamp(outerData?.data);
-          outerData.dataunCut = outerData?.data;
-
-          // if (outerData?.data !== "thinking... analyzing") {
-          outerData.data = dataTrimmed;
-          outerData.dataObj = parseDataString(dataTrimmed);
-
-          // setStreamingLogs((pre: any) => [...pre, outerData]);
-
-          // console.log(outerData,"dsfdsfdsfds")
-          setLogs((pre: any) => [...pre, outerData]);
-        // }
-      // }
+      outerData.data = outerData.data.replace(textToRemove, "").trim();
+      const dataTrimmed = removeTimestamp(outerData?.data);
+      outerData.dataunCut = outerData?.data;
+      outerData.data = dataTrimmed;
+      outerData.dataObj = parseDataString(dataTrimmed);
+      setLogs((pre: any) => [...pre, outerData]);
     };
 
     worker.postMessage({
@@ -98,81 +97,191 @@ const MainTerminal = () => {
 
     return () => {
       worker.terminate();
-      setFullContentLoaded(false);
     };
   }, []);
 
-  const scrollToBottom = () => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTo({
-        top: terminalRef.current.scrollHeight,
-        behavior: "instant",
-      });
-    }
-  };
+  // Enhanced typing effect with dynamic speed
+  // useEffect(() => {
+  //   if (logs.length > 0) {
+  //     const lastLog = logs[logs.length - 1];
+  //     const text = lastLog?.data || "";
+
+  //     if (text && !isTyping) {
+  //       setIsTyping(true);
+  //       setCurrentTypingText("");
+
+  //       let currentIndex = 0;
+  //       const baseSpeed = calculateTypingSpeed(text);
+  //       let startTime = Date.now();
+
+  //       const typeNextCharacter = () => {
+  //         if (currentIndex < text.length) {
+  //           setCurrentTypingText((prev) => prev + text[currentIndex]);
+  //           currentIndex++;
+
+  //           // Calculate remaining time and adjust speed if needed
+  //           const elapsedTime = Date.now() - startTime;
+  //           const remainingChars = text.length - currentIndex;
+  //           const remainingTime = MAX_TYPING_DURATION - elapsedTime;
+  //           const adjustedSpeed = remainingTime / remainingChars;
+
+  //           // Get delay for current character
+  //           const currentChar = text[currentIndex] || "";
+  //           const delay = getCharacterDelay(
+  //             currentChar,
+  //             Math.min(baseSpeed, adjustedSpeed)
+  //           );
+
+  //           setTimeout(typeNextCharacter, delay);
+  //         } else {
+  //           setIsTyping(false);
+  //           if (terminalRef.current) {
+  //             terminalRef.current.scrollTo({
+  //               top: terminalRef.current.scrollHeight,
+  //               behavior: "smooth",
+  //             });
+  //           }
+  //         }
+  //       };
+
+  //       typeNextCharacter();
+  //     }
+  //   }
+  // }, [logs]);
+
+  const [currentText, setCurrentText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+  // Example text to type
+  const currentObj = stringInQueue[0] || "";
+  const currentString = currentObj?.data || "";
 
   useEffect(() => {
-    const shouldAutoScroll = () => {
-      if (terminalRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = terminalRef.current;
-        const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-        const distanceFromTop = scrollTop;
-        
-        // If user has reached bottom before, only check bottom distance
+    // If no strings in queue or typing is complete, return
+    if (stringInQueue.length === 0 || isTypingComplete) return;
 
-        if (!hasReachedBottom) {
-          return distanceFromBottom >= 0;
-        }
-        if (hasReachedBottom) {
-          return distanceFromBottom <= 40;
-        }
-        
-        // Otherwise check both conditions
-        return distanceFromBottom <= 40 || distanceFromTop <= 100;
-      }
-      return false;
-    };
+    // Type the current character
+    if (currentIndex < currentString.length) {
+      const timeout = setTimeout(() => {
+        setCurrentText((prev) => prev + currentString[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, 50); // Adjust typing speed here
 
-    if (shouldAutoScroll()) {
-      scrollToBottom();
+      return () => clearTimeout(timeout);
+    } else {
+      // Typing is complete for current string
+      setIsTypingComplete(true);
+
+      // Move string from queue to logs
+      setTimeout(() => {
+        // setLogs(prevLogs => ({
+        //   data: [...prevLogs.data, currentString]
+        // }));
+        setLogs((pre: any) => [...pre, currentObj]);
+        // Remove the processed string from queue
+        setStringInQueue((prev: any) => prev.slice(1));
+
+        // Reset for next string
+        setCurrentText("");
+        setCurrentIndex(0);
+        setIsTypingComplete(false);
+      }, 500); // Delay before processing next string
     }
-    const handleScroll = () => {
-      if (terminalRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = terminalRef.current;
-        const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-        
-        // Check if user has reached bottom
-       setTimeout(() => {
-        if (distanceFromBottom <= 40) {
-          setHasReachedBottom(true);
-        }
+  }, [currentIndex, currentString, stringInQueue, isTypingComplete]);
 
-       }, 10000);
-        if (!fullContentLoaded) {
-          if (hasReachedBottom) {
-            // Only check bottom condition if user has reached bottom before
-            if (distanceFromBottom <= 40) {
-              setFullContentLoaded(true);
-            }
-          } else {
-            // Check both conditions before first bottom reach
-            const distanceFromTop = scrollTop;
-            if (distanceFromBottom <= 40 || distanceFromTop <= 100) {
-              setFullContentLoaded(true);
-            }
-          }
-        }
-      }
-    };
+  // const addToQueue = (newLog) => {
+  //   setStringInQueue(prev => [...prev, newLog]);
+  // };
 
-    const currentRef = terminalRef.current;
-    currentRef?.addEventListener("scroll", handleScroll);
-    return () => currentRef?.removeEventListener("scroll", handleScroll);
-  }, [logs, fullContentLoaded]);
+  const LogEntry = ({ log }: { log: any; index?: number }) => (
+    <div
+      style={{ whiteSpace: "pre-line" }}
+      className="h-auto break-all pb-10 text-sm font-thin leading-5"
+    >
+      <strong>{LocalDateTimeDisplay(extractDate(log?.dataunCut))}</strong>
+      <br />
+      <strong>
+        <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "}
+        {log?.taskName}
+      </strong>
+      <br />
+      <strong>
+        <span style={{ color: "rgb(248 134 88)" }}>TaskID :</span> {log?.taskId}
+      </strong>
+      <br />
+      {log?.dataObj?.user ? (
+        <>
+          <br />
+          <span>
+            <strong className="uppercase" style={{ color: "rgb(134 217 97)" }}>
+              text :
+            </strong>{" "}
+            {log?.dataObj?.text}
+          </span>
+          <br />
+        </>
+      ) : (
+        // : index === logs.length - 1 ? (
+        //   currentTypingText.split("\n").map((line: any, lineIndex: any) => (
+        //     <React.Fragment key={lineIndex}>
+        //       {line.split(" ").map((word: any, wordIndex: any) => (
+        //         <React.Fragment key={wordIndex}>
+        //           {word?.endsWith(":") ? (
+        //             <strong
+        //               className="leading-4 font-700 uppercase"
+        //               style={{ color: "rgb(134, 217, 97)" }}
+        //             >
+        //               {word}
+        //             </strong>
+        //           ) : word?.startsWith("@") ? (
+        //             <span
+        //               className="font-700 leading-4"
+        //               style={{ color: "#8AC1B1" }}
+        //             >
+        //               {word}
+        //             </span>
+        //           ) : (
+        //             <span className="leading-4">{word}</span>
+        //           )}{" "}
+        //         </React.Fragment>
+        //       ))}
+        //       <br />
+        //     </React.Fragment>
+        //   ))
+        // )
+        log.data?.split("\n").map((line: any, lineIndex: any) => (
+          <React.Fragment key={lineIndex}>
+            {line.split(" ").map((word: any, wordIndex: any) => (
+              <React.Fragment key={wordIndex}>
+                {word?.endsWith(":") ? (
+                  <strong
+                    className="leading-4 font-700 uppercase"
+                    style={{ color: "rgb(134, 217, 97)" }}
+                  >
+                    {word}
+                  </strong>
+                ) : word?.startsWith("@") ? (
+                  <span
+                    className="font-700 leading-4"
+                    style={{ color: "#8AC1B1" }}
+                  >
+                    {word}
+                  </span>
+                ) : (
+                  <span className="leading-4">{word}</span>
+                )}{" "}
+              </React.Fragment>
+            ))}
+            <br />
+          </React.Fragment>
+        ))
+      )}
+    </div>
+  );
 
-  if (logs.length < 1) {
+  if (logs?.length < 1) {
     return (
-      <div className="grid place-items-center gap-2 rounded-md  uppercase text-[rgb(248 134 88)] bg-[#2F3636] h-full">
+      <div className="grid place-items-center gap-2 rounded-md uppercase text-[rgb(248 134 88)] bg-[#2F3636] h-full">
         <div className="height-fit grid gap-2">
           <p className="text-lg font-medium">Loading Terminal . . .</p>
           <div className="grid w-[300px] animate-pulse gap-2">
@@ -186,144 +295,31 @@ const MainTerminal = () => {
   }
 
   return (
-    <div className="flex flex-col  gap-4 h-full ">
+    <div className="flex flex-col gap-4 h-full">
       <div
-        className="flex-1  leading-5 relative bg-[#2F3636] rounded-md p-4 overflow-auto h-full "
+        className="flex-1 leading-5 relative bg-[#2F3636] rounded-md p-4 overflow-auto h-full"
         ref={terminalRef}
         style={{
           fontFamily: "'VT323', monospace",
         }}
       >
-        {/* {!fullContentLoaded ? (
-          <p className="fixed bottom-[-100px] right-0 rounded-lg bg-[#EE4B4B] p-2 px-4 text-white z-10">
-            Loading logs . . .
-          </p>
-        ) : null} */}
-        {/* {displayedLogs.length < logs.length && (
-        <button
-          onClick={loadMore}
-          disabled={loading}
-          className="mx-auto mb-4 px-6 py-2 bg-[#EE4B4B] text-white rounded-lg hover:bg-[#D43B3B] disabled:opacity-50"
-        >
-          {loading ? "Loading..." : "Load More"}
-        </button>
-      )} */}
         {logs?.map((log: any, index: number) => (
-          <div
-            key={index + log?.taskId}
-            // className="grid grid-cols-[235px_1fr] gap-1"
-          >
-            <div
-              style={{ whiteSpace: "pre-line" }}
-              className="h-auto break-all  pb-10 text-sm font-thin leading-5 "
-            >
-              <strong>
-                {/* <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "} */}
-                {LocalDateTimeDisplay(extractDate(log?.dataunCut))}
-              </strong>
-              <br />
-              <strong>
-                <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "}
-                {log?.taskName}
-              </strong>
-              <br />
-              <strong>
-                <span style={{ color: "rgb(248 134 88)" }}>TaskID :</span>{" "}
-                {log?.taskId}
-              </strong>
-              <br />
-              {log?.dataObj?.user ? (
-                <>
-                  <strong>
-                    <span
-                      className="uppercase"
-                      style={{ color: "rgb(134 217 97)" }}
-                    >
-                      user :
-                    </span>{" "}
-                    {log?.dataObj?.user}
-                  </strong>
-                  <br />
-
-                  <strong>
-                    <span
-                      className="uppercase"
-                      style={{ color: "rgb(134 217 97)" }}
-                    >
-                      action :
-                    </span>{" "}
-                    {log?.dataObj?.action}
-                  </strong>
-                  <br />
-                  <strong>
-                    <span
-                      className="uppercase"
-                      style={{ color: "rgb(255 240 153)" }}
-                    >
-                      inReplyTo :
-                    </span>{" "}
-                    {log?.dataObj?.inReplyTo}
-                  </strong>
-                  <br />
-                  <span>
-                    <strong
-                      className="uppercase"
-                      style={{ color: "rgb(134 217 97)" }}
-                    >
-                      text :
-                    </strong>{" "}
-                    {log?.dataObj?.text}
-                  </span>
-                  <br />
-                </>
-              ) : null}
-
-              {log?.dataObj?.user
-                ? null
-                : log?.data?.split("\n").map((line: any, lineIndex: any) => (
-                    <React.Fragment key={lineIndex}>
-                      {line.split(" ").map((word: any, wordIndex: any) => (
-                        <React.Fragment key={wordIndex}>
-                          {word?.endsWith(":") ? (
-                            <strong
-                              className=" leading-4 font-700 uppercase"
-                              style={{ color: "rgb(134, 217, 97)" }}
-                            >
-                              {word}
-                            </strong>
-                          ) : word?.startsWith("@") ? (
-                            <span
-                              className="font-700 leading-4"
-                              style={{ color: "#8AC1B1" }}
-                            >
-                              {word}
-                            </span>
-                          ) : (
-                            <span className="leading-4">{word}</span>
-                          )}{" "}
-                        </React.Fragment>
-                      ))}
-                      <br />
-                    </React.Fragment>
-                  ))}
-              {/* { <div>{log.data}</div>} */}
-            </div>
-          </div>
+          <LogEntry key={index + log?.taskId} log={log} />
         ))}
-
+        {stringInQueue.length > 0 && (
+          <pre className="whitespace-pre-wrap">
+            {currentText}
+            <span className="animate-pulse">▋</span>
+          </pre>
+        )}
         <div className="flex">
-          <div className=" pb-8  text-xs">
+          <div className="pb-8 text-xs">
             {"</>"}
             <span className="ml-2 w-1 min-w-1 animate-[pulse_400ms_cubic-bezier(0.4,_0,_0.6,_1)_infinite] bg-white duration-1000">
               |
             </span>
           </div>
         </div>
-        {/* last element
-        <div className="flex h-full">
-          <p className="w-[115px] min-w-[115px] whitespace-nowrap border-r pl-4 text-center text-[#FAFAFA66] lg:w-[196px] lg:min-w-[196px]"></p>
-          <div className="h-[200px] min-h-[200px]"></div>
-        </div> */}
       </div>
     </div>
   );
