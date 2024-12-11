@@ -65,8 +65,7 @@ const MainTerminal = () => {
           outerData.data = dataTrimmed;
           outerData.dataObj = parseDataString(dataTrimmed);
           setLogs((pre: any) => [...pre, outerData]);
-      setStringInQueue((pre: any) => [...pre, outerData]);
-
+          setStringInQueue((pre: any) => [...pre, outerData]);
         });
       } catch (err) {
         console.error("Error fetching logs:", err);
@@ -89,7 +88,7 @@ const MainTerminal = () => {
       outerData.dataunCut = outerData?.data;
       outerData.data = dataTrimmed;
       outerData.dataObj = parseDataString(dataTrimmed);
-      setStringInQueue((pre: any) => [...pre, outerData]);
+      setLogs((pre: any) => [...pre, outerData]);
     };
 
     worker.postMessage({
