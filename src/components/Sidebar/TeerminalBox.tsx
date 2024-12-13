@@ -200,7 +200,7 @@ const TeerminalBox = () => {
     <div className="flex flex-col gap-4  h-full ">
       <div
         ref={boxRef}
-        className="flex flex-col flex-1 rounded-md    gap-4 overflow-auto h-full rounded-md bg-[#131314] p-4 "
+        className="flex flex-col flex-1 rounded-md  border-primary border-[1px]   gap-4 overflow-auto h-full rounded-md bg-[#131314] p-4 "
       >
         {messages?.map(
           ({

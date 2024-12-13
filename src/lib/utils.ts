@@ -11,7 +11,7 @@ export function trimAddress(address: string) {
   }
 
   // Trim the address and add ellipses in the middle
-  const trimmedAddress = address.substring(0, 5) + "..." + address.slice(-4);
+  const trimmedAddress = address.substring(0, 7) + "..." + address.slice(-6);
 
   return trimmedAddress;
 }

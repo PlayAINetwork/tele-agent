@@ -27,9 +27,11 @@
     --background: 214.29, 18.92%, 7.25%;
 
 
+
     --foreground: 0, 0%, 100%, 1;
 
     --card: 114, 21.74%, 9.02%;
+    
 
     --card-foreground: 0, 0%, 5%, 1;
 
@@ -37,7 +39,7 @@
 
     --popover-foreground: 0 0% 3.9%;
 
-    --primary: 83.13, 69.75%, 23.33%;
+    --primary: 8.32, 100%, 80.2%;
 
     --primary-foreground: 0, 0%, 0%, 1;
 
@@ -143,7 +145,7 @@
 }
 .wallet-adapter-dropdown {
   width: 100% !important;
-  
+
 }
 
 .wallet-adapter-button-trigger {
@@ -207,4 +209,15 @@
   font-family: "DIGITALIZE", serif;
   font-weight: 400;
   font-style: normal;
+}
+.sp_hero-neon-strip-wrapper {
+  /* z-index: 5; */
+  /* border-radius: 1rem; */
+  width: 100%;
+  position: absolute;
+  inset: 0% 0% auto;
+  /* will-change: transform; */
+  /* transform: translate3d(0px, -87.0084px, 0px) scale3d(1.14501, 1.14501, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); */
+  transform-style: preserve-3d;
+  box-shadow: 0 0 20px #ffebe826, 0 0 50px #ffc8c180, 0 0 100px #ffa89a;
 }

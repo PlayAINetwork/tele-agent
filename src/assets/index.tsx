@@ -12,6 +12,8 @@ import img_bg from "./images/_Clip Group_.png";
 import logo from "./images/Group 427318195.svg";
 import line from "./images/line.svg";
 import bg from "./images/bg.svg";
+import net from "./images/net-box.webp";
+
 
 
 export const IMAGES = {
@@ -27,7 +29,8 @@ export const IMAGES = {
   img_bg,
   logo,
   bg,
-  line
+  line,
+  net
 };
 
 import icon_tip__btn from "./icons/tip.svg";

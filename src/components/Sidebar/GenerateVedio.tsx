@@ -234,7 +234,7 @@ const GenerateVedio = () => {
       {/* </div> */}
       <div
         //   ref={boxRef}
-        className="flex flex-col flex-1    gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] "
+        className="flex flex-col flex-1   border-primary border-[1px]  gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] "
       >
         {recentlist?.length > 0 ? (
           <p className="text-[15px] font-600 ">Recent</p>

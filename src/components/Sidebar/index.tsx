@@ -1,5 +1,5 @@
 import { useAppCtx } from "@/context/app.contex";
-import {  trimAddress } from "@/lib/utils";
+import { trimAddress } from "@/lib/utils";
 
 import Tabs from "./Tabs";
 import GlobelBox from "./GlobelBox";
@@ -20,6 +20,7 @@ import {
 } from "../ui/dropdown-menu";
 import GenerateVedio from "./GenerateVedio";
 import TerminalLogs from "./TerminalLogs";
+import { IMAGES } from "@/assets";
 
 const Sidebar = () => {
   const { toast } = useToast();
@@ -29,7 +30,7 @@ const Sidebar = () => {
   const address: any = publicKey?.toString();
   const config = genConfig(address);
 
-  const {  hideSidebar, sidebarMenu } = useAppCtx();
+  const { hideSidebar, sidebarMenu } = useAppCtx();
 
   const copy = async (address: string) => {
     console.log(balance);
@@ -40,7 +41,7 @@ const Sidebar = () => {
   };
   return (
     <aside
-      className="h-full border-4 border-primary bg-card rounded-lg max-w-[450px] "
+      className="relative overflow-hidden h-full border-[1px] border-primary bg-card rounded-2xl max-w-[400px] min-w-[400px] "
       // className={cn(
       //   "m-10 h-full gap-4  px-4  py-2 flex md:bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col md:border-l",
       //   "transition-all duration-300 ease-in-out",
@@ -67,12 +68,14 @@ const Sidebar = () => {
           />
         )} */}
       </div>
-
-      <div className="h-full py-4">
+      <div className="absolute h-full w-[1800px] top-0 z-[1] opacity-[.4]">
+        <img src={IMAGES.bg} alt="" className="h-full" />
+      </div>
+      <div className="h-full py-4 relative z-[10]">
         {!hideSidebar && (
           <div className="flex flex-col gap-5 h-full">
             <Tabs />
-            <div className="grow  h-4 px-4 ">
+            <div className="grow  h-4 px-4 DIGITALIZE ">
               {sidebarMenu === "global" ? (
                 <GlobelBox />
               ) : sidebarMenu === "inject" ? (
@@ -87,19 +90,24 @@ const Sidebar = () => {
             </div>
             {connected ? (
               !hideSidebar && connected ? (
-                <div onClick={() => ""}>
+                <div onClick={() => ""} className="px-4 w-full">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost">
+                      <Button  className="w-full rounded-[40px] gap-2">
                         <Avatar
-                          className="cursor-pointer rounded-none px-0 "
+                          className="cursor-pointer ] px-0 "
                           style={{ width: "32px", height: "32px" }}
                           {...config}
-                          shape="square"
+                          // shape="square"
                         />
+                        <div className="pt-1">
+                         {trimAddress(address)}
+
+                        </div>
                       </Button>
+                      
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 bg-[#000] text-primary absolute top-[-220px] left-[-20px]">
+                    <DropdownMenuContent className="w-[370px] bg-[#000] text-[#fff]  ">
                       <DropdownMenuLabel>Profile</DropdownMenuLabel>
                       <DropdownMenuSeparator />
 
@@ -111,6 +119,7 @@ const Sidebar = () => {
                             variant={"ghost"}
                             className="p-0 h-auto"
                           >
+                            
                             {trimAddress(address)}
                           </Button>
                         </div>
@@ -144,6 +153,7 @@ const Sidebar = () => {
           </div>
         )}
       </div>
+     
     </aside>
   );
 };

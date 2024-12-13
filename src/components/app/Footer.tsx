@@ -20,11 +20,13 @@ const Footer = () => {
                 }
                 variant={"ghost"}
               >
-                CA: 27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL
+               <span className="text-primary">CA:</span>27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL
               </Button>
         </div>
       <div>
-        <Button className="w-full uppercase rounded-[40px]">BUY</Button>
+        <Button className="w-full py-1 px-6 h-auto uppercase rounded-[40px]">
+          <div className="mt-1">BUY</div>
+        </Button>
       </div>{" "}
     </div>
   );

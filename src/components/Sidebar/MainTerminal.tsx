@@ -297,7 +297,7 @@ const MainTerminal = () => {
   return (
     <div className="flex flex-col gap-4 h-full">
       <div
-        className="flex-1 leading-5 relative bg-[#2F3636] rounded-md p-4 overflow-auto h-full"
+        className="flex-1 leading-5 relative bg-[#2F3636] border-primary border-[1px] rounded-md p-4 overflow-auto h-full"
         ref={terminalRef}
         style={{
           fontFamily: "'VT323', monospace",

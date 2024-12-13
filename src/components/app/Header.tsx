@@ -44,7 +44,7 @@ const Header = () => {
         <p className="sixtyfour text-xl">
           {" "}
           THE AGENT <br />
-          Experience
+    <span className="text-primary">      Experience</span>
         </p>
 
         {/* <Button
@@ -60,7 +60,7 @@ const Header = () => {
       </div>
       <div className="flex items-center gap-4">
         <div className="flex  gap-2 text-md pt-1">
-          <p className="">$ROGUE:</p>
+          <p className="text-primary">$ROGUE:</p>
           <p>
             {" "}
             {tokenData?.priceUsd
