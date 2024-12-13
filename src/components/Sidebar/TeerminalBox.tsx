@@ -232,6 +232,8 @@ const TeerminalBox = () => {
           </p>
         )}
       </div> */}
+        {connected ? (
+
       <div className="flex flex-col gap-2">
         <Textarea
           className="h-[100px] rounded-lg uppercase placeholder-white"
@@ -264,6 +266,9 @@ const TeerminalBox = () => {
         </p>
         {/* <p className="text-sm text-green-600 font-medium">{status}</p> */}
       </div>
+        )
+
+      :null}
     </div>
   );
 };

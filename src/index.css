@@ -1,15 +1,35 @@
 @import url("https://fonts.cdnfonts.com/css/terminal");
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+
+@import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Sixtyfour&display=swap');
+
+@font-face {
+  font-family: "DIGITALIZE";
+  font-weight: 400;
+  src: url("./assets/fonts/DIGITALIZE.ttf");
+}
+
+@font-face {
+  font-family: "Pixelyze";
+  font-weight: 700;
+  src: url("./assets/fonts/Pixelyze.ttf");
+}
+@font-face {
+  font-family: "WLDotMatrixGlitch";
+  font-weight: 700;
+  src: url("./assets/fonts/WLDotMatrixGlitch-Regular.ttf");
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
   :root {
-    --background: 0, 0%, 5%, 1;
+    --background: 214.29, 18.92%, 7.25%;
+
 
     --foreground: 0, 0%, 100%, 1;
 
-    --card: 0, 0%, 5%, 1;
+    --card: 114, 21.74%, 9.02%;
 
     --card-foreground: 0, 0%, 5%, 1;
 
@@ -17,7 +37,7 @@
 
     --popover-foreground: 0 0% 3.9%;
 
-    --primary: 0, 0%, 100%, 1;
+    --primary: 83.13, 69.75%, 23.33%;
 
     --primary-foreground: 0, 0%, 0%, 1;
 
@@ -56,8 +76,7 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 0 0% 3.9%;
-
+    --background: 214.29, 18.92%, 7.25%;
     --foreground: 0 0% 98%;
 
     --card: 0 0% 3.9%;
@@ -117,17 +136,24 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Pixelyze", serif;
+    font-weight: 400;
+    font-style: normal;
   }
 }
 .wallet-adapter-dropdown {
   width: 100% !important;
+  
 }
 
 .wallet-adapter-button-trigger {
   width: 100% !important;
   background-color: transparent !important;
-  color: #000 !important;
+  /* color: #000 !important; */
   justify-content: center !important;
+  font-family: "Pixelyze", serif !important;
+  font-weight: 400;
+  font-style: normal;
 }
 
 ::placeholder {
@@ -149,4 +175,36 @@
 .horizontalBar {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+
+
+.racing-sans-one-regular {
+  font-family: "Racing Sans One", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.sixtyfour {
+  font-family: "Sixtyfour", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "BLED" 0,
+    "SCAN" 0;
+}
+.pixelyze{
+  font-family: "Pixelyze", serif !important;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.DIGITALIZE{
+  font-family: "DIGITALIZE", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.WLDotMatrixGlitch{
+  font-family: "DIGITALIZE", serif;
+  font-weight: 400;
+  font-style: normal;
 }

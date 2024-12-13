@@ -1,13 +1,8 @@
-import { IMAGES } from "@/assets";
 import TvConsole from "./Console";
 
 const TvPanel = () => {
-  
   return (
-    <div className="grid place-items-center p-2">
-      <div className="absolute  z-1 top-4 left-4 md:top-6 md:left-8">
-        <img src={IMAGES.logo} alt=""  className="w-[100px] lg:w-[200px]"/>
-      </div>
+    <div className=" border-4 border-primary bg-card rounded-lg place-content-center  w-full place-items-center  ">
       <TvConsole />
     </div>
   );

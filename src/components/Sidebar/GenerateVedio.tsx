@@ -309,6 +309,7 @@ const GenerateVedio = () => {
         </div>
         <div className="flex gap-3 flex-wrap"></div>
       </div>
+      {connected ? (
 
       <div className="flex flex-col gap-2">
         <Textarea
@@ -318,7 +319,6 @@ const GenerateVedio = () => {
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Enter your prompt to create video"
         />
-        {connected ? (
           <Button
             className="w-full uppercase rounded-[40px]"
             onClick={transferTokens}
@@ -328,8 +328,9 @@ const GenerateVedio = () => {
               ? status || "Generating Video..."
               : `Create with 30k $ROGUE`}
           </Button>
-        ) : null}
       </div>
+        ) : null}
+
     </div>
   );
 };
