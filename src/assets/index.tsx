@@ -14,11 +14,17 @@ import line from "./images/line.svg";
 import bg from "./images/bgnew.png";
 import net from "./images/net-box.webp";
 import notshow from "./images/noshow.png";
+import disbg from "./images/bg-dis.png";
+import mobile from "./images/mobile.png";
+
+
 
 
 
 
 export const IMAGES = {
+  mobile,
+  disbg,
   img_balaji,
   img_elon,
   img_naval,
