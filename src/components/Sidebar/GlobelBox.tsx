@@ -88,23 +88,22 @@ const GlobelBox = () => {
           )
         )}
       </div>
-      
+
       {connected ? (
         <>
-        <div className="flex gap-0">
-          <div className="relative w-full  border-t-[1px] border-primary">
-            <Input
-              className="pr-[40px] binaria border-none  hover:bg-[#303030]"
-              value={message}
-              type="text"
-              placeholder="Start typing…"
-              disabled={disableAction}
-              onChange={(e) => setChatMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-           
-          </div>
-          <Button
+          <div className="flex gap-0">
+            <div className="relative w-full  border-t-[1px] border-primary">
+              <Input
+                className="pr-[40px] binaria border-none  hover:bg-[#303030]"
+                value={message}
+                type="text"
+                placeholder="Start typing…"
+                disabled={disableAction}
+                onChange={(e) => setChatMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+              />
+            </div>
+            <Button
               disabled={disableAction}
               onClick={handleSend}
               // variant={"ghost"}
@@ -113,13 +112,9 @@ const GlobelBox = () => {
               <SendHorizontalIcon />
               send_msg
             </Button>
-          
-        </div>
-     {/* <TippingCard close={setsTipAgent} />  */}
-
+          </div>
+          {/* <TippingCard close={setsTipAgent} />  */}
         </>
-
-
       ) : null}
     </div>
   );

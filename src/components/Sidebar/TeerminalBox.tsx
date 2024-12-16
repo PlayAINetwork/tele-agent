@@ -209,7 +209,7 @@ const TeerminalBox = () => {
       </div>
       <div
         ref={boxRef}
-        className="flex flex-col relative flex-1 h-full realtive  gap-0 overflow-auto h-full bg-[#131314] "
+        className="flex flex-col relative flex-1 h-full realtive  gap-0 overflow-hidden h-full bg-[#131314] "
       >
         {isInjext ? (
           messages?.map(
@@ -246,7 +246,7 @@ const TeerminalBox = () => {
         ) : (
           <>
             <div className="absolute w-full h-full">
-              <img src={IMAGES.notshow} alt="" className="h-full " />
+              <img src={IMAGES.notshow} alt="" className="h-full w-full  " />
               <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
                 <div className="bg-primary py-6 w-full">
                   <p className="text-md uppercase py-[3px] text-center  text-[#010101]">

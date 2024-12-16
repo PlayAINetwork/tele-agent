@@ -133,7 +133,7 @@ const TvConsole = () => {
       {/* Main Container */}
 
       <div className="relative w-full h-full ">
-        <div className="h-full grid grid-rows-[40px_1fr_40px] gap-0">
+        <div className="h-full grid grid-rows-[30px_1fr_40px] gap-0">
           <div className="w-full  uppercase top-0 ">
             <div className="w-full px-2 py-1 gap-2 text-[#000000]  bg-primary  flex   items-center ">
               <DYNAMICICONS.Arrow w={10} />
@@ -151,13 +151,13 @@ const TvConsole = () => {
             >
               {/* Screen Effects */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent opacity-50" />
-              <div className="absolute inset-0 rounded-lg overflow-hidden">
+              <div className="absolute inset-0  overflow-hidden">
                 {staticEffect ? <StaticNoiseEffect /> : renderContent()}
               </div>
 
               {/* CRT curve effect */}
               <div
-                className="absolute inset-0 rounded-lg"
+                className="absolute inset-0 "
                 style={{
                   background:
                     "radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,0.3) 100%)",
@@ -172,18 +172,18 @@ const TvConsole = () => {
           {/* Control Panel */}
           <div className="flex font-[500]  items-center justify-between py-0   border-t border-primary">
             {/* Controls */}
-            <div className="flex gap-0 h-full">
+            <div className="flex gap-0 h-full text-sm">
               <div className="bg-primary px-3 gap-3 flex items-center">
               {
                     currentChannel?.type === "live" ?
                     <div className="flex text-black gap-1 items-center">
-                    <img src={ICONS.icon_live} alt="" />
+                    <img src={ICONS.icon_live} alt="" className="w-[16px]"/>
                     LIVE
                   </div>
                     :
                     <div className="flex text-black gap-1 items-center">
                   
-                    <img src={ICONS.icon_reco} alt="" />
+                    <img src={ICONS.icon_reco} alt="" className="w-[16px]"/>
                     REC
                   </div>
                   }
@@ -195,7 +195,7 @@ const TvConsole = () => {
                 onClick={handleNextChannel}
                 disabled={!power || channel === Object.keys(channels).length}
               >
-                <img src={ICONS.icon_next} alt="" />
+                <img src={ICONS.icon_next} alt=""  className="w-[16px]"/>
               </button>
               <button
                 className="border-primary border-r px-3"
@@ -204,12 +204,12 @@ const TvConsole = () => {
               >
                 {isPlaying ? (
                   <div className="flex gap-2 items-center text-primary">
-                    <img src={ICONS.icon_play} alt="" />
+                    <img src={ICONS.icon_play} alt="" className="w-[16px]"/>
                     PLAY
                   </div>
                 ) : (
                   <div className="flex gap-2 items-center text-primary">
-                    <img src={ICONS.icon_stop} alt="" />
+                    <img src={ICONS.icon_stop} alt="" className="w-[16px]"/>
                     STOP
                   </div>
                 )}
@@ -219,7 +219,7 @@ const TvConsole = () => {
                 onClick={handlePrevChannel}
                 disabled={!power || channel === 1}
               >
-                <img src={ICONS.icon_pre} alt="" />
+                <img src={ICONS.icon_pre} alt="" className="w-[16px]" />
               </button>
 
               <button
@@ -228,9 +228,9 @@ const TvConsole = () => {
                 disabled={!power}
               >
                 {isMuted ? (
-                  <img src={ICONS.icon_mute} alt="" />
+                  <img src={ICONS.icon_mute} alt="" className="w-[20px]" />
                 ) : (
-                  <img src={ICONS.icon_sound} alt="" />
+                  <img src={ICONS.icon_sound} alt="" className="w-[20px]"/>
                 )}
               </button>
             </div>
@@ -238,7 +238,7 @@ const TvConsole = () => {
             {/* Power Button */}
             <div className="h-full flex">
               <div className=" h-full flex items-center gap-2 text-primary uppercase px-3 border-l border-primary">
-                <DYNAMICICONS.Arrow color="#89FC96" />
+                <DYNAMICICONS.Arrow color="#89FC96" w={15}/>
                 not live right now
               </div>
             </div>

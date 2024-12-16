@@ -202,7 +202,7 @@ const CharacterBox = () => {
       </div>
       <div className="relative flex-1 bg-muted overflow-auto h-full ">
         <div className="absolute w-full h-full">
-          <img src={IMAGES.notshow} alt="" className="h-full " />
+          <img src={IMAGES.notshow} alt="" className="h-full  w-full " />
           <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
             <div className="bg-primary py-6 w-full">
               <p className="text-md uppercase py-[3px] text-center  text-[#010101]">
