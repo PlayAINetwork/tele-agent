@@ -4,46 +4,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Sixtyfour&display=swap');
 
 @font-face {
-  font-family: "DIGITALIZE";
+  font-family: "agent-sans";
   font-weight: 400;
-  src: url("./assets/fonts/DIGITALIZE.ttf");
+  src: url("./assets/fonts/agent-sans-regular.otf");
 }
 
 @font-face {
-  font-family: "Pixelyze";
-  font-weight: 700;
-  src: url("./assets/fonts/Pixelyze.ttf");
+  font-family: "binaria";
+  font-weight: 500;
+  src: url("./assets/fonts/Binaria-Medium.ttf");
 }
 @font-face {
-  font-family: "WLDotMatrixGlitch";
-  font-weight: 700;
-  src: url("./assets/fonts/WLDotMatrixGlitch-Regular.ttf");
+  font-family: "binaria";
+  font-weight: 400;
+  src: url("./assets/fonts/Binaria-Regular.ttf");
+}
+@font-face {
+  font-family: "binaria";
+  font-weight: 800;
+  src: url("./assets/fonts/Binaria-Bold.ttf");
+}
+@font-face {
+  font-family: "Ticketing";
+  /* font-weight: 700; */
+  src: url("./assets/fonts/Ticketing.otf");
+}
+@font-face {
+  font-family: "Pexico";
+  /* font-weight: 700; */
+  src: url("./assets/fonts/Urtd\ -\ Pexico-Regular.otf");
 }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
   :root {
-    --background: 214.29, 18.92%, 7.25%;
-
+    --background: 153, 100%, 4%, 1;
 
 
     --foreground: 0, 0%, 100%, 1;
 
-    --card: 114, 21.74%, 9.02%;
+    --card: 0, 0%, 9%, 1;
     
 
-    --card-foreground: 0, 0%, 5%, 1;
+    --card-foreground: 132, 22%, 95%, 1;
+
 
     --popover: 0 0% 100%;
 
     --popover-foreground: 0 0% 3.9%;
 
-    --primary: 8.32, 100%, 80.2%;
+    --primary:127, 95%, 76%, 1;
 
     --primary-foreground: 0, 0%, 0%, 1;
 
-    --secondary: 0, 0%, 69%, 1;
+    --secondary:190, 10%, 11%, 1;
 
     --secondary-foreground: 0 0% 9%;
 
@@ -83,7 +98,7 @@
 
     --card: 0 0% 3.9%;
 
-    --card-foreground: 0 0% 98%;
+    --card-foreground: 132, 22%, 95%, 1;
 
     --popover: 0 0% 3.9%;
 
@@ -138,7 +153,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Pixelyze", serif;
+    font-family: "binaria", serif;
     font-weight: 400;
     font-style: normal;
   }
@@ -151,9 +166,9 @@
 .wallet-adapter-button-trigger {
   width: 100% !important;
   background-color: transparent !important;
-  /* color: #000 !important; */
+  color:#010101 !important;
   justify-content: center !important;
-  font-family: "Pixelyze", serif !important;
+  font-family: "binaria", serif !important;
   font-weight: 400;
   font-style: normal;
 }
@@ -194,22 +209,20 @@
     "BLED" 0,
     "SCAN" 0;
 }
-.pixelyze{
-  font-family: "Pixelyze", serif !important;
-  font-weight: 400;
+
+
+
+
+.agent-sans{
+  font-family: "agent-sans", serif;
   font-style: normal;
+}
+.binaria{
+  font-family: "binaria", serif;
+  font-style: normal;
+  font-weight: 500;
 }
 
-.DIGITALIZE{
-  font-family: "DIGITALIZE", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-.WLDotMatrixGlitch{
-  font-family: "DIGITALIZE", serif;
-  font-weight: 400;
-  font-style: normal;
-}
 .sp_hero-neon-strip-wrapper {
   /* z-index: 5; */
   /* border-radius: 1rem; */
@@ -220,4 +233,17 @@
   /* transform: translate3d(0px, -87.0084px, 0px) scale3d(1.14501, 1.14501, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); */
   transform-style: preserve-3d;
   box-shadow: 0 0 20px #ffebe826, 0 0 50px #ffc8c180, 0 0 100px #ffa89a;
+}
+
+/* Remove the default border */
+input:focus-visible {
+  border: none;
+  outline: none;
+  box-shadow: none !important;
+}
+
+textarea:focus-visible {
+  border: none;
+  outline: none;
+  box-shadow: none !important;
 }

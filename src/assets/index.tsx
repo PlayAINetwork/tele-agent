@@ -9,10 +9,12 @@ import img_mick from "./images/mick tysen.jpg";
 import img_naval from "./images/naval.jpg";
 import img_trump from "./images/trump.jpg";
 import img_bg from "./images/_Clip Group_.png";
-import logo from "./images/Group 427318195.svg";
+import logo from "./images/textlogo.svg";
 import line from "./images/line.svg";
-import bg from "./images/bg.svg";
+import bg from "./images/bgnew.png";
 import net from "./images/net-box.webp";
+import notshow from "./images/noshow.png";
+
 
 
 
@@ -30,10 +32,13 @@ export const IMAGES = {
   logo,
   bg,
   line,
-  net
+  net,
+  notshow
 };
 
 import icon_tip__btn from "./icons/tip.svg";
+import icon_textarrow from "./icons/textarrow.svg";
+
 import icon_trailing__btn from "./icons/Trailing Icon.svg";
 import icon_sidebarView__btn from "./icons/View sidebar.svg";
 
@@ -51,8 +56,31 @@ import icon_PIXELS_coingecko from "./Social/MID SIZED PIXELS_coingecko.svg";
 import icon_PIXELS_decscrenner from "./Social/MID SIZED PIXELS_decscrenner.svg";
 import icon_PIXELS_twitter from "./Social/MID SIZED PIXELS_twitter.svg";
 
+import icon_coingecko from "./icons/coinki.svg";
+import icon_cooki from"./icons/cooki.svg";
+import icon_reco from"./icons/reco.svg";
+import icon_live from"./icons/live.svg";
+import icon_play from"./icons/play.svg";
+import icon_stop from"./icons/stop.svg";
+import icon_next from"./icons/next.svg";
+import icon_pre from"./icons/pre.svg";
+import icon_sound from"./icons/sound.svg";
+import icon_mute from"./icons/mute.svg";
+
+
 
 export const ICONS = {
+  icon_coingecko,
+  icon_cooki,
+  icon_reco,
+  icon_live,
+  icon_play,
+  icon_stop,
+  icon_next,
+  icon_pre,
+  icon_sound,
+  icon_mute,
+  icon_textarrow,
   icon_PIXELS_send,
   icon_PIXELS_cancel,
   icon_tip__btn,

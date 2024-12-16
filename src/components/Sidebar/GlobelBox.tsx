@@ -4,7 +4,6 @@ import { Button } from "../ui/button";
 import { trimAddress } from "@/lib/utils";
 import { SendHorizontalIcon } from "lucide-react";
 // import { ICONS } from "@/assets";
-import TippingCard from "./TippingCard";
 import { useAppCtx } from "@/context/app.contex";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "convex/react";
@@ -16,7 +15,6 @@ const GlobelBox = () => {
   const { connected, publicKey } = useWallet();
   const address: any = publicKey?.toString();
 
-  const [showTipAgent, setsTipAgent] = useState(false);
   const { disableAction } = useAppCtx();
   const { toast } = useToast();
   const messages = useQuery(api.functions.chats.getChats);
@@ -56,7 +54,7 @@ const GlobelBox = () => {
     <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
       <div
         ref={boxRef}
-        className="flex flex-col flex-1 border-primary border-[1px]  gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] "
+        className="flex flex-col flex-1   gap-4 overflow-auto h-full  p-4 bg-[#131314] "
       >
         {messages?.map(
           ({
@@ -68,10 +66,20 @@ const GlobelBox = () => {
             text: string;
             user: string;
           }) => (
-            <div key={_id} className="flex gap-3 ">
-              <p className="text-[14px] ">{trimAddress(user)}:</p>
+            <div key={_id} className="flex gap-2 uppercase items-start binaria">
+              <div className="flex items-center gap-1">
+                <img
+                  src={ICONS.icon_textarrow}
+                  alt=""
+                  className="max-h-[13px]"
+                  height={13}
+                />
+                <p className="text-[14px] text-[#B6B6B6]">
+                  {trimAddress(user, 3)}:
+                </p>
+              </div>
               <p
-                className="text-sm font-thin
+                className="text-sm font-thin text-card-foreground
             text-wrap "
               >
                 {text}
@@ -80,12 +88,13 @@ const GlobelBox = () => {
           )
         )}
       </div>
-      {showTipAgent ? <TippingCard close={setsTipAgent} /> : null}
+      
       {connected ? (
-        <div className="flex gap-2">
-          <div className="relative w-full">
+        <>
+        <div className="flex gap-0">
+          <div className="relative w-full  border-t-[1px] border-primary">
             <Input
-              className="pr-[40px] rounded-[40px] hover:border-[#B5B6B7] hover:bg-[#303030]"
+              className="pr-[40px] binaria border-none  hover:bg-[#303030]"
               value={message}
               type="text"
               placeholder="Start typing…"
@@ -93,26 +102,24 @@ const GlobelBox = () => {
               onChange={(e) => setChatMessage(e.target.value)}
               onKeyPress={handleKeyPress}
             />
-            <Button
+           
+          </div>
+          <Button
               disabled={disableAction}
               onClick={handleSend}
-              variant={"ghost"}
-              className="absolute right-0  top-0"
+              // variant={"ghost"}
+              className="bg-primary text-md items-center text-[#010101]"
             >
               <SendHorizontalIcon />
+              send_msg
             </Button>
-          </div>
-          {showTipAgent ? null : (
-            <Button
-              disabled={disableAction}
-              onClick={() => setsTipAgent(true)}
-              className="bg-[#0842A0] rounded-[40px]  text-xs text-primay border-[2px] border-[#B5B6B7] hover:bg-[#0842A0] "
-            >
-              TIP
-              <img src={ICONS.icon_tip__btn} alt="" />
-            </Button>
-          )}
+          
         </div>
+     {/* <TippingCard close={setsTipAgent} />  */}
+
+        </>
+
+
       ) : null}
     </div>
   );

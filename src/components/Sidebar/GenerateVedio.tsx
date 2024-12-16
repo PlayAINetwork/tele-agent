@@ -161,8 +161,8 @@ const GenerateVedio = () => {
       setStatus("Generating Video...");
 
       const response = await axios.post(
-        "https://render-video.agentexperience.live/generate",
-
+        // "https://render-video.agentexperience.live/generate",
+        "https://aaac-2a01-4f8-c012-6c7-00-1.ngrok-free.app/generate",
         // "https://render.dhanush29.me/generate",
         { prompt: prompt, signature: signature, wallet: publicKey?.toString() },
         {
@@ -286,7 +286,7 @@ const GenerateVedio = () => {
                 </DialogTrigger>
 
                 <DialogContent className="sm:max-w-md md:max-w-2xl">
-                  <DialogHeader className="z-10" >
+                  <DialogHeader className="z-10">
                     {/* <DialogTitle className="text-xl font-semibold">
                     {"recent?.title"}
                     </DialogTitle> */}
@@ -296,12 +296,11 @@ const GenerateVedio = () => {
                       </DialogDescription>
                     ) : null}
                     {selectedFile !== null ? (
-                    <div className="py-4">
-                      <VideoPlayer videoUrl={selectedFile[1]} />
-                    </div>
-                  ) : null}
+                      <div className="py-4">
+                        <VideoPlayer videoUrl={selectedFile[1]} />
+                      </div>
+                    ) : null}
                   </DialogHeader>
-                  
                 </DialogContent>
               </Dialog>
             </>
@@ -310,15 +309,14 @@ const GenerateVedio = () => {
         <div className="flex gap-3 flex-wrap"></div>
       </div>
       {connected ? (
-
-      <div className="flex flex-col gap-2">
-        <Textarea
-          disabled={disableAction}
-          className="h-[100px] rounded-lg  placeholder-white"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Enter your prompt to create video"
-        />
+        <div className="flex flex-col gap-2">
+          <Textarea
+            disabled={disableAction}
+            className="h-[100px] rounded-lg  placeholder-white"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Enter your prompt to create video"
+          />
           <Button
             className="w-full uppercase rounded-[40px]"
             onClick={transferTokens}
@@ -328,9 +326,8 @@ const GenerateVedio = () => {
               ? status || "Generating Video..."
               : `Create with 30k $ROGUE`}
           </Button>
-      </div>
-        ) : null}
-
+        </div>
+      ) : null}
     </div>
   );
 };
