@@ -1,5 +1,6 @@
 import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
+import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
@@ -50,39 +51,37 @@ const Header = () => {
               <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
             </div>
             <div
-      className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-      style={{
-        clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)"
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <span className="text-white relative transition-transform duration-300 ease-in-out">
-        <span 
-          className={`block transition-all duration-300 ${
-            isHovered ? 'opacity-0 translate-y-full' : 'opacity-100 translate-y-0'
-          }`}
-        >
-          {"> Learn more <"}
-        </span>
-        <span 
-          className={`block absolute text-nowrap top-0 left-0  transition-all duration-300 ${
-            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'
-          }`}
-        >
-              {"> Coming soon <"}
-       
-        </span>
-      </span>
-    </div>
-            <div
-              className="w-full  px-12 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
+              className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
               style={{
-                clipPath: "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
+                clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
               }}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
             >
-              {"> Create w/ Rogue <"}
+              <span className="text-white relative transition-transform duration-300 ease-in-out">
+                <span
+                  className={`block transition-all duration-300 ${
+                    isHovered
+                      ? "opacity-0 translate-y-full"
+                      : "opacity-100 translate-y-0"
+                  }`}
+                >
+                  {"> Learn more <"}
+                </span>
+                <span
+                  className={`block absolute text-nowrap top-0 left-0  transition-all duration-300 ${
+                    isHovered
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 -translate-y-full"
+                  }`}
+                >
+                  {"> Coming soon <"}
+                </span>
+              </span>
             </div>
+
+           <VideoGenertionPopup/>
+           
           </div>
         </div>
 
@@ -108,40 +107,32 @@ const Header = () => {
           </p>
         </div>
         <div className="h-full flex uppercase">
-          <div 
-             onClick={() =>
+          <div
+            onClick={() =>
               open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
             }
-          className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center">
-            <img
-              src={ICONS.icon_coingecko}
-              alt=""
-              className="w-[37px]"
-            />
+            className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center"
+          >
+            <img src={ICONS.icon_coingecko} alt="" className="w-[37px]" />
           </div>
-          <div 
+          <div
             onClick={() =>
               open("https://www.cookie.fun/en/agent/agent-rogue", "_brace")
             }
-          className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center">
-            <img
-              src={ICONS.icon_cooki}
-              alt=""
-              className="w-[41px]"
-            />
+            className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center"
+          >
+            <img src={ICONS.icon_cooki} alt="" className="w-[41px]" />
           </div>
           <div
-            onClick={() =>
-              open("https://t.me/AgentRogue_Official", "_brace")
-            }
-          className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center">
+            onClick={() => open("https://t.me/AgentRogue_Official", "_brace")}
+            className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center"
+          >
             telegram
           </div>
           <div
-            onClick={() =>
-              open("https://x.com/0xRogueAgent", "_brace")
-            }
-          className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center">
+            onClick={() => open("https://x.com/0xRogueAgent", "_brace")}
+            className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center"
+          >
             Twitter
           </div>
         </div>

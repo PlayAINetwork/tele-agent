@@ -62,7 +62,12 @@ const TvConsole = () => {
     },
     2: {
       type: "rec",
-      url: "https://www.dropbox.com/scl/fi/qosd84rv16a5qh33qyeoe/Rogue-Live-with-CZ-and-Saylor.mkv?rlkey=50ec7cedqewivyi138k1wrbos&st=8c5mpph1&dl=0",
+      url: "https://playai-botcast.s3.us-east-2.amazonaws.com/Rogue+Live+with+CZ+and+Saylor.mkv",
+      title: "rogue recording",
+    },
+    3: {
+      type: "rec",
+      url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
       title: "rogue recording",
     },
   };

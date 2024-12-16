@@ -233,7 +233,7 @@ const GenerateVedio = () => {
         </div> */}
       {/* </div> */}
       <div
-        //   ref={boxRef}
+    
         className="flex flex-col flex-1   border-primary border-[1px]  gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] "
       >
         {recentlist?.length > 0 ? (
@@ -390,7 +390,7 @@ export const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
   // };
 
   return (
-    <div className="relative group">
+    <div className="relative group w-full">
       <video
         ref={videoRef}
         controls
