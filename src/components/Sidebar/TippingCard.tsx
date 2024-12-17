@@ -17,7 +17,7 @@ import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
-const TippingCard = ({ close }: { close: any }) => {
+const TippingCard = () => {
   const [amount, setAmount] = useState<string>("");
   const sends = useMutation(api.functions.chats.send);
 
@@ -27,6 +27,16 @@ const TippingCard = ({ close }: { close: any }) => {
   const { publicKey, signTransaction } = useWallet();
   const { balance } = useTokenBalance(publicKey);
   const address: any = publicKey?.toString();
+  const pricelist = [{
+    title: '1k ROGUE',
+    amount: 1000
+  },{
+    title: '5k ROGUE',
+    amount: 5000
+  },{
+    title: '10k ROGUE',
+    amount: 10000
+  }]
 
   const sendTip = async () => {
     if (amount === "") {
@@ -157,21 +167,39 @@ const TippingCard = ({ close }: { close: any }) => {
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <Button
-          disabled={disableAction}
-          className="bg-[#444746] rounded-[40px] w-full text-primary"
-          onClick={() => close(false)}
-        >
-          Cancel
-        </Button>
+      <div className="flex gap-0">
         <Button
           disabled={disableAction || balance < Number(amount)}
-          className="w-full rounded-[40px]"
+          className=""
           onClick={sendTip}
         >
-          {balance < Number(amount) ? "Insufficient Balance" : "Send"}
+          {"Send_Tip"}
         </Button>
+        <div className="relative w-full  ">
+          <Input
+            className=" binaria border-none  hover:bg-[#303030]"
+            type="number"
+            placeholder="CUSTOM"
+            disabled={disableAction}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+        {
+          pricelist?.map((amount)=>(
+            <Button
+            disabled={disableAction || balance < Number(amount)}
+            className=""
+            variant={'outline'}
+            onClick={sendTip}
+          >
+            {amount?.title}
+          </Button>
+          ))
+        }
+       
+
+     
       </div>
     </div>
   );
