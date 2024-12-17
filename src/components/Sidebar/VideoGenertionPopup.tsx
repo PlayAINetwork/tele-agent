@@ -1,6 +1,7 @@
 import  { useEffect, useState } from "react";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTrigger,
@@ -22,7 +23,9 @@ import { trimAddress, truncateText } from "@/lib/utils";
 import { VideoPlayer } from "./GenerateVedio";
 import { ICONS } from "@/assets";
 import { Button } from "../ui/button";
-
+import {
+  X
+} from "lucide-react";
 import { Input } from "../ui/input";
 
 const VideoGenertionPopup = () => {
@@ -225,9 +228,13 @@ const VideoGenertionPopup = () => {
 
       <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[70%] gap-0 h-[70vh] border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
         <div className="flex justify-between">
-          <DialogDescription className=" px-4 text-md text-gray-200 py-2   bg-primary text-[#010101]">
+          <DialogDescription className=" px-4 uppercase text-md text-gray-200 py-2   bg-primary text-[#010101]">
             {">> create_video_with_rogue"}
           </DialogDescription>
+
+          <DialogClose className="w-[40px] flex justify-center items-center bg-primary z-10">
+            <X className="text-black"/>
+          </DialogClose>
         </div>
         <div className=" flex-1 h-full overflow-auto ">
           <div className="flex flex-col  h-full  border-primary border-[1px]  gap-4     bg-[#131314] ">
