@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -23,9 +23,7 @@ import { trimAddress, truncateText } from "@/lib/utils";
 import { VideoPlayer } from "./GenerateVedio";
 import { ICONS } from "@/assets";
 import { Button } from "../ui/button";
-import {
-  X
-} from "lucide-react";
+import { X } from "lucide-react";
 import { Input } from "../ui/input";
 
 const VideoGenertionPopup = () => {
@@ -233,7 +231,7 @@ const VideoGenertionPopup = () => {
           </DialogDescription>
 
           <DialogClose className="w-[40px] flex justify-center items-center bg-primary z-10">
-            <X className="text-black"/>
+            <X className="text-black" />
           </DialogClose>
         </div>
         <div className=" flex-1 h-full overflow-auto ">
@@ -306,9 +304,23 @@ const VideoGenertionPopup = () => {
                     </DialogTrigger>
 
                     <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[55%] gap-0  border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
+                      <div className="flex justify-between  border-b-[1px] border-primary">
+                       <div className="flex items-center">
+                       <DialogDescription className=" px-4 uppercase text-sm text-gray-200 py-2   text-[#fff]">
+                          {">> create_video_with_rogue"}
+                        </DialogDescription>
+                        <DialogDescription className=" px-4 uppercase text-sm text-gray-200 py-2   bg-primary text-[#010101]">
+                          {">> video_player"}
+                        </DialogDescription>
+                       </div>
+
+                        <DialogClose className="w-[40px] flex justify-center items-center bg-primary z-10">
+                          <X className="text-black" />
+                        </DialogClose>
+                      </div>
                       <div className="flex justify-between">
                         {selectedFile !== null ? (
-                          <DialogDescription className=" px-4 text-md text-gray-200 py-2   bg-primary text-[#010101]">
+                          <DialogDescription className=" px-4 text-md text-gray-200 py-2   border-b-[1px] w-full  border-primary text-[#fff] text-xs">
                             {">> " + selectedFile[2]}
                           </DialogDescription>
                         ) : null}
@@ -316,7 +328,11 @@ const VideoGenertionPopup = () => {
                       <div className="  h-full w-full  ">
                         {selectedFile !== null ? (
                           <div className="py-0 h-full w-full">
-                            <VideoPlayer videoUrl={selectedFile[1]} />
+                            <VideoPlayer
+                              videoUrl={selectedFile[1]}
+                              user={selectedFile[3]}
+                              text={selectedFile[2]}
+                            />
                           </div>
                         ) : null}
                       </div>

@@ -5,7 +5,8 @@ import {
   Square,
   Volume2,
   VolumeX,
- 
+  SkipForward,
+  SkipBack,
   Radio,
   Video,
   Rewind,
@@ -38,12 +39,12 @@ declare global {
 }
 
 const cn = (...classes: string[]) => classes.filter(Boolean).join(" ");
-// const formatTime = (seconds: number): string => {
-//   const hours = Math.floor(seconds / 3600);
-//   const minutes = Math.floor((seconds % 3600) / 60);
-//   const remainingSeconds = Math.floor(seconds % 60);
-//   return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
-// };
+const formatTime = (seconds: number): string => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+};
 
 const Scanlines = () => (
   <div className="absolute inset-0 pointer-events-none">
@@ -100,7 +101,7 @@ const TvConsole = () => {
   const [duration, setDuration] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-  // const progressRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const [hlsInstance, setHlsInstance] = useState<Hls | null>(null);
 
   const channels: any = {
@@ -116,20 +117,11 @@ const TvConsole = () => {
       // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
       title: "Rogue in conversation with CZ and Saylor.",
     },
-    // 3: {
-    //   type: "rec",
-    //   url: "https://assets.podcast.playai.network/master.m3u8",
-
-    //   // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
-    //   title: "rogue recording",
-    // },
+  
   };
 
   const initializeHLS = (videoElement: HTMLVideoElement) => {
     setPower(true)
-        setStaticEffect(false);
-        console.log(currentTime)
-
     if (hlsInstance) {
       hlsInstance.destroy();
     }
@@ -179,13 +171,12 @@ const TvConsole = () => {
     }
   };
 
-
-   const cleanupCurrentChannel = () => {
+  const cleanupCurrentChannel = () => {
     if (hlsInstance) {
       hlsInstance.destroy();
       setHlsInstance(null);
     }
-    
+
     const video = videoRef.current;
     if (video) {
       video.pause();
@@ -195,12 +186,15 @@ const TvConsole = () => {
   };
   useEffect(() => {
     if (channel !== 1) {
+      const initTimeout = setTimeout(() => {
       const video = videoRef.current;
+
+      console.log(video,"videovideovideo")
       if (!video) return;
 
       // Cleanup previous channel
       cleanupCurrentChannel();
-      
+
       // Initialize new channel
       initializeHLS(video);
 
@@ -223,6 +217,10 @@ const TvConsole = () => {
         video.removeEventListener("play", playHandler);
         video.removeEventListener("pause", pauseHandler);
       };
+
+    }, 1000);
+
+    return () => clearTimeout(initTimeout);
     }
   }, [channel]);
 
@@ -356,35 +354,35 @@ const TvConsole = () => {
     }
   };
 
-  // const handleNextChannel = () => {
-  //   const nextChannel = channel + 1;
-  //   if (nextChannel <= Object.keys(channels).length) {
-  //     // Cleanup current channel before switching
-  //     cleanupCurrentChannel();
-      
-  //     setChannel(nextChannel);
-  //     setStaticEffect(true);
-      
-  //     setTimeout(() => {
-  //       setStaticEffect(false);
-  //     }, 1000);
-  //   }
-  // };
+  const handleNextChannel = () => {
+    const nextChannel = channel + 1;
+    if (nextChannel <= Object.keys(channels).length) {
+      // Cleanup current channel before switching
+      cleanupCurrentChannel();
 
-  // const handlePrevChannel = () => {
-  //   const prevChannel = channel - 1;
-  //   if (prevChannel >= 1) {
-  //     // Cleanup current channel before switching
-  //     cleanupCurrentChannel();
-      
-  //     setChannel(prevChannel);
-  //     setStaticEffect(true);
-      
-  //     setTimeout(() => {
-  //       setStaticEffect(false);
-  //     }, 1000);
-  //   }
-  // };
+      setChannel(nextChannel);
+      setStaticEffect(true);
+
+      setTimeout(() => {
+        setStaticEffect(false);
+      }, 1000);
+    }
+  };
+
+  const handlePrevChannel = () => {
+    const prevChannel = channel - 1;
+    if (prevChannel >= 1) {
+      // Cleanup current channel before switching
+      cleanupCurrentChannel();
+
+      setChannel(prevChannel);
+      setStaticEffect(true);
+
+      setTimeout(() => {
+        setStaticEffect(false);
+      }, 1000);
+    }
+  };
   const handleTimeSkip = (seconds: number) => {
     if (videoRef.current) {
       const newTime = videoRef.current.currentTime + seconds;
@@ -392,15 +390,15 @@ const TvConsole = () => {
     }
   };
 
-  // const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
-  //   if (progressRef.current && videoRef.current) {
-  //     const rect = progressRef.current.getBoundingClientRect();
-  //     const pos = (event.clientX - rect.left) / rect.width;
-  //     const seekTime = pos * duration;
-  //     videoRef.current.currentTime = seekTime;
-  //     setCurrentTime(seekTime);
-  //   }
-  // };
+  const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (progressRef.current && videoRef.current) {
+      const rect = progressRef.current.getBoundingClientRect();
+      const pos = (event.clientX - rect.left) / rect.width;
+      const seekTime = pos * duration;
+      videoRef.current.currentTime = seekTime;
+      setCurrentTime(seekTime);
+    }
+  };
 
   const currentChannel = useMemo(() => channels[channel], [channel]);
 
@@ -454,11 +452,11 @@ const TvConsole = () => {
             playsInline
             className="h-full w-full"
             src={currentChannel.url}
-            controls={true}
+            // controls={true}
             autoPlay={isPlaying}
             muted={isMuted}
           />
-          {/* <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
+          <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
             <div
               ref={progressRef}
               className="w-full h-1 bg-gray-600 cursor-pointer mb-2"
@@ -473,7 +471,7 @@ const TvConsole = () => {
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
-          </div> */}
+          </div>
           <Scanlines />
         </div>
       );
@@ -521,13 +519,13 @@ const TvConsole = () => {
                 )}
               </div>
 
-              {/* <button
+              <button
                 className="border-primary border-r px-3"
                 onClick={handleNextChannel}
                 disabled={!power || channel === Object.keys(channels).length}
               >
                 <SkipForward className="w-4 h-4 text-primary" />
-              </button> */}
+              </button>
               {channel == 2 && (
                 <button
                   className="border-primary border-r px-3"
@@ -563,13 +561,13 @@ const TvConsole = () => {
                 </button>
               )}
 
-              {/* <button
+              <button
                 className="border-primary border-r px-3"
                 onClick={handlePrevChannel}
                 disabled={!power || channel === 1}
               >
                 <SkipBack className="w-4 h-4 text-primary" />
-              </button> */}
+              </button>
 
               <button
                 className="border-primary border-r px-3"

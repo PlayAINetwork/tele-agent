@@ -47,6 +47,27 @@ const TeerminalBox = () => {
   // const { connection } = useConnection();
   const { toast } = useToast();
   const { disableAction, setDisableAction } = useAppCtx();
+  // const [recentlist, setRecentlist] = useState<any>(null);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://botcast-backend-production-bb45.up.railway.app/injection_history"
+  //       );
+  //       const filteredData = response?.data;
+  //       console.log(filteredData);
+  //       setRecentlist(filteredData.reverse());
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //       // Handle the error appropriately, e.g.:
+  //       // setError(error.message);
+  //     }
+  //   })();
+  // }, [disableAction]);
+
+;
+
 
   const transferTokens = async () => {
     if (topic === "") {
