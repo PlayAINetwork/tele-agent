@@ -5,8 +5,7 @@ import {
   Square,
   Volume2,
   VolumeX,
-  SkipForward,
-  SkipBack,
+ 
   Radio,
   Video,
   Rewind,
@@ -115,11 +114,21 @@ const TvConsole = () => {
       url: "https://assets.podcast.playai.network/master.m3u8",
 
       // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
-      title: "rogue recording",
+      title: "Rogue in conversation with CZ and Saylor.",
     },
+    // 3: {
+    //   type: "rec",
+    //   url: "https://assets.podcast.playai.network/master.m3u8",
+
+    //   // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
+    //   title: "rogue recording",
+    // },
   };
 
   const initializeHLS = (videoElement: HTMLVideoElement) => {
+    setPower(true)
+        setStaticEffect(false);
+
     if (hlsInstance) {
       hlsInstance.destroy();
     }
@@ -131,7 +140,7 @@ const TvConsole = () => {
         lowLatencyMode: true,
       });
 
-      hls.loadSource(channels[2].url);
+      hls.loadSource(channels[channel].url);
       hls.attachMedia(videoElement);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -159,7 +168,7 @@ const TvConsole = () => {
 
       setHlsInstance(hls);
     } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-      videoElement.src = channels[2].url;
+      videoElement.src = channels[channel].url;
       videoElement.addEventListener("loadedmetadata", () => {
         setIsLoading(false);
         if (isPlaying) {
@@ -169,12 +178,29 @@ const TvConsole = () => {
     }
   };
 
+
+   const cleanupCurrentChannel = () => {
+    if (hlsInstance) {
+      hlsInstance.destroy();
+      setHlsInstance(null);
+    }
+    
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+    }
+  };
   useEffect(() => {
-    setPower(true);
-    if (channel === 2) {
-      const video = document.querySelector("video");
+    if (channel !== 1) {
+      const video = videoRef.current;
       if (!video) return;
 
+      // Cleanup previous channel
+      cleanupCurrentChannel();
+      
+      // Initialize new channel
       initializeHLS(video);
 
       const timeUpdate = () => setCurrentTime(video.currentTime);
@@ -190,10 +216,6 @@ const TvConsole = () => {
       video.addEventListener("pause", pauseHandler);
 
       return () => {
-        if (hlsInstance) {
-          hlsInstance.destroy();
-          setHlsInstance(null);
-        }
         video.removeEventListener("timeupdate", timeUpdate);
         video.removeEventListener("durationchange", durationChange);
         video.removeEventListener("loadedmetadata", loadedMetadata);
@@ -202,8 +224,6 @@ const TvConsole = () => {
       };
     }
   }, [channel]);
-
-  
 
   // Initialize Twitch player
   useEffect(() => {
@@ -232,6 +252,7 @@ const TvConsole = () => {
       }
     }
   }, [channel]);
+
   useEffect(() => {
     if (videoRef.current) {
       const video = videoRef.current;
@@ -250,7 +271,7 @@ const TvConsole = () => {
         video.removeEventListener("loadedmetadata", loadedMetadata);
       };
     }
-  }, []);
+  }, [channel]);
 
   // Initialize video element for recorded content
   useEffect(() => {
@@ -334,23 +355,35 @@ const TvConsole = () => {
     }
   };
 
-  const handleNextChannel = () => {
-    const nextChannel = channel + 1;
-    if (nextChannel <= Object.keys(channels).length) {
-      setChannel(nextChannel);
-      setStaticEffect(true);
-      setTimeout(() => setStaticEffect(false), 1000);
-    }
-  };
+  // const handleNextChannel = () => {
+  //   const nextChannel = channel + 1;
+  //   if (nextChannel <= Object.keys(channels).length) {
+  //     // Cleanup current channel before switching
+  //     cleanupCurrentChannel();
+      
+  //     setChannel(nextChannel);
+  //     setStaticEffect(true);
+      
+  //     setTimeout(() => {
+  //       setStaticEffect(false);
+  //     }, 1000);
+  //   }
+  // };
 
-  const handlePrevChannel = () => {
-    const prevChannel = channel - 1;
-    if (prevChannel >= 1) {
-      setChannel(prevChannel);
-      setStaticEffect(true);
-      setTimeout(() => setStaticEffect(false), 1000);
-    }
-  };
+  // const handlePrevChannel = () => {
+  //   const prevChannel = channel - 1;
+  //   if (prevChannel >= 1) {
+  //     // Cleanup current channel before switching
+  //     cleanupCurrentChannel();
+      
+  //     setChannel(prevChannel);
+  //     setStaticEffect(true);
+      
+  //     setTimeout(() => {
+  //       setStaticEffect(false);
+  //     }, 1000);
+  //   }
+  // };
   const handleTimeSkip = (seconds: number) => {
     if (videoRef.current) {
       const newTime = videoRef.current.currentTime + seconds;
@@ -487,13 +520,13 @@ const TvConsole = () => {
                 )}
               </div>
 
-              <button
+              {/* <button
                 className="border-primary border-r px-3"
                 onClick={handleNextChannel}
                 disabled={!power || channel === Object.keys(channels).length}
               >
                 <SkipForward className="w-4 h-4 text-primary" />
-              </button>
+              </button> */}
               {channel == 2 && (
                 <button
                   className="border-primary border-r px-3"
@@ -529,13 +562,13 @@ const TvConsole = () => {
                 </button>
               )}
 
-              <button
+              {/* <button
                 className="border-primary border-r px-3"
                 onClick={handlePrevChannel}
                 disabled={!power || channel === 1}
               >
                 <SkipBack className="w-4 h-4 text-primary" />
-              </button>
+              </button> */}
 
               <button
                 className="border-primary border-r px-3"

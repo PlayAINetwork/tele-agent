@@ -131,7 +131,7 @@ import React, {
       };
   
       return (
-        <div className="mb-4 text-zinc-200 text-xs">
+        <div className="mb-4 text-zinc-200 text-sm">
           <div className="text-cyan-500">
             {showTimestamp && (
               <TypewriterText
@@ -362,7 +362,7 @@ import React, {
   
             <div
               ref={terminalRef}
-              className="py-4 flex-1 binaria px-3 overflow-y-auto font-mono text-sm"
+              className="py-4 flex-1 Pexico px-3 overflow-y-auto font-mono text-sm"
               style={{
                 backgroundColor: "#1a1a1a",
                 height: "100%",
@@ -386,7 +386,7 @@ import React, {
                   />
                 </div>
               ))}
-              <div className="text-green-400 pt-4 flex items-center">
+              <div className="text-green-400 pt-4 flex items-center Pexico">
                 {isLoadingNext ? (
                   <div className="flex items-center space-x-2">
                     <span className="animate-spin">⟳</span>

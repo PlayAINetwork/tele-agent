@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Sixtyfour&display=swap');
 
 @font-face {
-  font-family: "agent-sans";
+  font-family: "agent";
   font-weight: 400;
   src: url("./assets/fonts/agent-sans-regular.otf");
 }
@@ -214,7 +214,7 @@
 
 
 .agent-sans{
-  font-family: "agent-sans", serif;
+  font-family: "agent", serif;
   font-style: normal;
 }
 .binaria{
@@ -222,7 +222,10 @@
   font-style: normal;
   font-weight: 500;
 }
-
+.Pexico{
+  font-family: "Ticketing", serif;
+  font-style: normal;
+}
 .sp_hero-neon-strip-wrapper {
   /* z-index: 5; */
   /* border-radius: 1rem; */
