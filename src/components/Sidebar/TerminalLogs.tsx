@@ -468,7 +468,12 @@ const TerminalDemo = () => {
   };
 
   return (
-    <div className="h-full bg-gray-900">
+    <div className="h-full ">
+        <div className="border-b-[1px] border-primary py-2 px-2 flex uppercase justify-end w-full">
+        <p className="text-[14px] text-[#B6B6B6]">
+        terminal_is_the_brain_of_the_agent.
+        </p>
+      </div>
       <TerminalLogs
         initialLogs={logs}
         autoScroll={true}
