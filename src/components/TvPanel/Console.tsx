@@ -38,12 +38,12 @@ declare global {
 }
 
 const cn = (...classes: string[]) => classes.filter(Boolean).join(" ");
-const formatTime = (seconds: number): string => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
-};
+// const formatTime = (seconds: number): string => {
+//   const hours = Math.floor(seconds / 3600);
+//   const minutes = Math.floor((seconds % 3600) / 60);
+//   const remainingSeconds = Math.floor(seconds % 60);
+//   return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+// };
 
 const Scanlines = () => (
   <div className="absolute inset-0 pointer-events-none">
@@ -100,7 +100,7 @@ const TvConsole = () => {
   const [duration, setDuration] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
+  // const progressRef = useRef<HTMLDivElement>(null);
   const [hlsInstance, setHlsInstance] = useState<Hls | null>(null);
 
   const channels: any = {
@@ -128,6 +128,7 @@ const TvConsole = () => {
   const initializeHLS = (videoElement: HTMLVideoElement) => {
     setPower(true)
         setStaticEffect(false);
+        console.log(currentTime)
 
     if (hlsInstance) {
       hlsInstance.destroy();
@@ -391,15 +392,15 @@ const TvConsole = () => {
     }
   };
 
-  const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (progressRef.current && videoRef.current) {
-      const rect = progressRef.current.getBoundingClientRect();
-      const pos = (event.clientX - rect.left) / rect.width;
-      const seekTime = pos * duration;
-      videoRef.current.currentTime = seekTime;
-      setCurrentTime(seekTime);
-    }
-  };
+  // const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
+  //   if (progressRef.current && videoRef.current) {
+  //     const rect = progressRef.current.getBoundingClientRect();
+  //     const pos = (event.clientX - rect.left) / rect.width;
+  //     const seekTime = pos * duration;
+  //     videoRef.current.currentTime = seekTime;
+  //     setCurrentTime(seekTime);
+  //   }
+  // };
 
   const currentChannel = useMemo(() => channels[channel], [channel]);
 
@@ -453,11 +454,11 @@ const TvConsole = () => {
             playsInline
             className="h-full w-full"
             src={currentChannel.url}
-            // controls={true}
+            controls={true}
             autoPlay={isPlaying}
             muted={isMuted}
           />
-          <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
+          {/* <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
             <div
               ref={progressRef}
               className="w-full h-1 bg-gray-600 cursor-pointer mb-2"
@@ -472,7 +473,7 @@ const TvConsole = () => {
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
-          </div>
+          </div> */}
           <Scanlines />
         </div>
       );
