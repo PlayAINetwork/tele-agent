@@ -1,328 +1,366 @@
-import {
-  extractDate,
-  LocalDateTimeDisplay,
-  parseDataString,
-  removeTimestamp,
-} from "@/lib/utils";
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+// import { useState, useEffect, useMemo, useRef } from "react";
+// import Hls from "hls.js";
+// import { 
+//   ChevronRight, 
+//   Play, 
+//   Square, 
+//   Volume2, 
+//   VolumeX,
+//   SkipForward,
+//   SkipBack,
+//   Video,
+//   Rewind,
+//   FastForward
+// } from "lucide-react";
 
-const MainTerminal = () => {
-  const textToRemove =
-    'Response format should be formatted in a JSON block like this:\n```json\n{ "user": "rogue", "text": string, "action": string }\n```';
+// interface Channel {
+//   type: "live" | "rec";
+//   url: string;
+//   title: string;
+//   isHLS?: boolean;
+// }
 
-  const [logs, setLogs] = useState<any>([]);
-  // const [hasReachedBottom, setHasReachedBottom] = useState(false);
-  const terminalRef = useRef<HTMLDivElement>(null);
-  // const [currentTypingText, setCurrentTypingText] = useState("");
-  // const [isTyping, setIsTyping] = useState(false);
-  const [stringInQueue, setStringInQueue] = useState<any>([]);
-  // Maximum time to complete typing (in milliseconds)
-  // const MAX_TYPING_DURATION = 20000;
+// interface Channels {
+//   [key: number]: Channel;
+// }
 
-  // Calculate dynamic typing speed based on text length
-  // const calculateTypingSpeed = (text: string): number => {
-  //   const baseSpeed = 10; // Minimum speed for very short texts
-  //   const textLength = text.length;
+// // const cn = (...classes: string[]): string => classes.filter(Boolean).join(" ");
 
-  //   // Calculate speed to complete within MAX_TYPING_DURATION
-  //   let speed = MAX_TYPING_DURATION / textLength;
+// const formatTime = (seconds: number): string => {
+//   const hours = Math.floor(seconds / 3600);
+//   const minutes = Math.floor((seconds % 3600) / 60);
+//   const remainingSeconds = Math.floor(seconds % 60);
+//   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+// };
 
-  //   // Add variation to make it feel more natural
-  //   const variation = 0.5; // 50% variation
-  //   const randomFactor = 1 - variation + Math.random() * variation * 2;
-  //   speed *= randomFactor;
+// const Scanlines: React.FC = () => (
+//   <div className="absolute inset-0 pointer-events-none">
+//     <div
+//       className="w-full h-full opacity-20 mix-blend-overlay"
+//       style={{
+//         backgroundImage: `repeating-linear-gradient(
+//           0deg,
+//           transparent,
+//           transparent 1px,
+//           #000 1px,
+//           #000 2px
+//         )`,
+//       }}
+//     />
+//   </div>
+// );
 
-  //   // Ensure speed doesn't go below baseSpeed
-  //   return Math.max(speed, baseSpeed);
-  // };
+// const StaticNoiseEffect: React.FC = () => (
+//   <div className="absolute inset-0">
+//     <div className="absolute inset-0 animate-[flicker_0.01s_infinite]">
+//       <div className="w-full h-full">
+//         <div
+//           className="absolute inset-0 opacity-40"
+//           style={{
+//             backgroundImage: `repeating-radial-gradient(
+//               circle at 50% 50%,
+//               #fff 0px,
+//               #111 1px,
+//               #111 2px,
+//               #fff 3px
+//             )`,
+//             backgroundSize: "4px 4px",
+//             animation: "noise 0.2s infinite",
+//           }}
+//         />
+//       </div>
+//     </div>
+//     <Scanlines />
+//   </div>
+// );
 
-  // Add natural pauses for punctuation and special characters
-  // const getCharacterDelay = (char: string, baseSpeed: number): number => {
-  //   const delays = {
-  //     ".": 4,
-  //     "!": 4,
-  //     "?": 4,
-  //     ",": 2,
-  //     ":": 2,
-  //     ";": 2,
-  //     "\n": 3,
-  //   };
-  //   return baseSpeed * (delays[char as keyof typeof delays] || 1);
-  // };
+// const TvConsole: React.FC = () => {
+//   const [power, setPower] = useState<boolean>(true);
+//   const [channel, setChannel] = useState<number>(2); // Start with HLS channel
+//   const [staticEffect, setStaticEffect] = useState<boolean>(false);
+//   const [isMuted, setIsMuted] = useState<boolean>(false);
+//   const [isPlaying, setIsPlaying] = useState<boolean>(true);
+//   const [currentTime, setCurrentTime] = useState<number>(0);
+//   const [duration, setDuration] = useState<number>(0);
+//   const [isLoading, setIsLoading] = useState<boolean>(true);
+//   const videoRef = useRef<HTMLVideoElement>(null);
+//   const hlsRef = useRef<Hls | null>(null);
+//   const progressRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fetchOldLogs = async () => {
-      try {
-        const response = await axios.get(
-          "https://rogue-api.playai.network/olderlogs?page=1&limit=10"
-        );
-        response?.data?.map((item: any) => {
-          let outerData = item;
-          outerData.data = outerData.data.replace(textToRemove, "").trim();
-          const dataTrimmed = removeTimestamp(outerData?.data);
-          outerData.dataunCut = outerData?.data;
-          outerData.data = dataTrimmed;
-          outerData.dataObj = parseDataString(dataTrimmed);
-          setLogs((pre: any) => [...pre, outerData]);
-          setStringInQueue((pre: any) => [...pre, outerData]);
-        });
-      } catch (err) {
-        console.error("Error fetching logs:", err);
-      }
-    };
+//   const channels: Channels = {
+//     1: {
+//       type: "live",
+//       url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
+//       title: "rogue live",
+//     },
+//     2: {
+//       type: "rec",
+//       url: "https://assets.podcast.playai.network/master.m3u8",
+//       title: "rogue recording",
+//       isHLS: true
+//     },
+//   };
 
-    fetchOldLogs();
-  }, []);
+//   useEffect(() => {
+//     if (channel === 2 && videoRef.current) {
+//       const video = videoRef.current;
+      
+//       if (Hls.isSupported()) {
+//         const hls = new Hls({
+//           debug: false,
+//           enableWorker: true,
+//           lowLatencyMode: true,
+//         });
+        
+//         hlsRef.current = hls;
+//         hls.loadSource(channels[2].url);
+//         hls.attachMedia(video);
+        
+//         hls.on(Hls.Events.MANIFEST_PARSED, () => {
+//           setIsLoading(false);
+//           if (isPlaying) {
+//             video.play().catch(console.error);
+//           }
+//         });
 
-  useEffect(() => {
-    const worker = new Worker(
-      new URL("../../worker/eventSourceWorker.ts", import.meta.url),
-      { type: "module" }
-    );
+//         hls.on(Hls.Events.ERROR, (event, data) => {
+//           if (data.fatal) {
+//             switch (data.type) {
+//               case Hls.ErrorTypes.NETWORK_ERROR:
+//                 hls.startLoad();
+//                 break;
+//               case Hls.ErrorTypes.MEDIA_ERROR:
+//                 hls.recoverMediaError();
+//                 break;
+//               default:
+//                 initHLS();
+//                 break;
+//             }
+//           }
+//         });
 
-    worker.onmessage = (e) => {
-      let outerData = e.data;
-      outerData.data = outerData.data.replace(textToRemove, "").trim();
-      const dataTrimmed = removeTimestamp(outerData?.data);
-      outerData.dataunCut = outerData?.data;
-      outerData.data = dataTrimmed;
-      outerData.dataObj = parseDataString(dataTrimmed);
-      setLogs((pre: any) => [...pre, outerData]);
-    };
+//         return () => {
+//           if (hlsRef.current) {
+//             hlsRef.current.destroy();
+//             hlsRef.current = null;
+//           }
+//         };
+//       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+//         video.src = channels[2].url;
+//         video.addEventListener('loadedmetadata', () => {
+//           setIsLoading(false);
+//           if (isPlaying) {
+//             video.play().catch(console.error);
+//           }
+//         });
+//       }
+//     }
+//   }, [channel]);
 
-    worker.postMessage({
-      url: `https://rogue-api.playai.network/logs`,
-    });
+//   const initHLS = () => {
+//     if (hlsRef.current) {
+//       hlsRef.current.destroy();
+//     }
+//     if (videoRef.current) {
+//       const hls = new Hls();
+//       hlsRef.current = hls;
+//       hls.loadSource(channels[2].url);
+//       hls.attachMedia(videoRef.current);
+//     }
+//   };
 
-    return () => {
-      worker.terminate();
-    };
-  }, []);
+//   useEffect(() => {
+//     if (videoRef.current) {
+//       const video = videoRef.current;
+      
+//       const timeUpdate = () => setCurrentTime(video.currentTime);
+//       const durationChange = () => setDuration(video.duration);
+//       const loadedMetadata = () => setDuration(video.duration);
+      
+//       video.addEventListener('timeupdate', timeUpdate);
+//       video.addEventListener('durationchange', durationChange);
+//       video.addEventListener('loadedmetadata', loadedMetadata);
+      
+//       return () => {
+//         video.removeEventListener('timeupdate', timeUpdate);
+//         video.removeEventListener('durationchange', durationChange);
+//         video.removeEventListener('loadedmetadata', loadedMetadata);
+//       };
+//     }
+//   }, []);
 
-  // Enhanced typing effect with dynamic speed
-  // useEffect(() => {
-  //   if (logs.length > 0) {
-  //     const lastLog = logs[logs.length - 1];
-  //     const text = lastLog?.data || "";
+//   const handlePlayPause = () => {
+//     if (videoRef.current) {
+//       if (isPlaying) {
+//         videoRef.current.pause();
+//       } else {
+//         videoRef.current.play();
+//       }
+//       setIsPlaying(!isPlaying);
+//     }
+//   };
 
-  //     if (text && !isTyping) {
-  //       setIsTyping(true);
-  //       setCurrentTypingText("");
+//   const handleMuteUnmute = () => {
+//     if (videoRef.current) {
+//       videoRef.current.muted = !videoRef.current.muted;
+//       setIsMuted(!isMuted);
+//     }
+//   };
 
-  //       let currentIndex = 0;
-  //       const baseSpeed = calculateTypingSpeed(text);
-  //       let startTime = Date.now();
+//   const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
+//     if (progressRef.current && videoRef.current) {
+//       const rect = progressRef.current.getBoundingClientRect();
+//       const pos = (event.clientX - rect.left) / rect.width;
+//       const seekTime = pos * duration;
+//       videoRef.current.currentTime = seekTime;
+//       setCurrentTime(seekTime);
+//     }
+//   };
 
-  //       const typeNextCharacter = () => {
-  //         if (currentIndex < text.length) {
-  //           setCurrentTypingText((prev) => prev + text[currentIndex]);
-  //           currentIndex++;
+//   const handleTimeSkip = (seconds: number) => {
+//     if (videoRef.current) {
+//       const newTime = videoRef.current.currentTime + seconds;
+//       videoRef.current.currentTime = Math.max(0, Math.min(newTime, duration));
+//     }
+//   };
+//   const handleNextChannel = (): void => {
+//     const nextChannel = channel + 1;
+//     if (nextChannel <= Object.keys(channels).length) {
+//       setChannel(nextChannel);
+//       setStaticEffect(true);
+//       setTimeout(() => setStaticEffect(false), 1000);
+//     }
+//   };
 
-  //           // Calculate remaining time and adjust speed if needed
-  //           const elapsedTime = Date.now() - startTime;
-  //           const remainingChars = text.length - currentIndex;
-  //           const remainingTime = MAX_TYPING_DURATION - elapsedTime;
-  //           const adjustedSpeed = remainingTime / remainingChars;
+//   const handlePrevChannel = (): void => {
+//     const prevChannel = channel - 1;
+//     if (prevChannel >= 1) {
+//       setChannel(prevChannel);
+//       setStaticEffect(true);
+//       setTimeout(() => setStaticEffect(false), 1000);
+//     }
+//   };
 
-  //           // Get delay for current character
-  //           const currentChar = text[currentIndex] || "";
-  //           const delay = getCharacterDelay(
-  //             currentChar,
-  //             Math.min(baseSpeed, adjustedSpeed)
-  //           );
 
-  //           setTimeout(typeNextCharacter, delay);
-  //         } else {
-  //           setIsTyping(false);
-  //           if (terminalRef.current) {
-  //             terminalRef.current.scrollTo({
-  //               top: terminalRef.current.scrollHeight,
-  //               behavior: "smooth",
-  //             });
-  //           }
-  //         }
-  //       };
+//   const currentChannel = useMemo(() => channels[channel], [channel]);
 
-  //       typeNextCharacter();
-  //     }
-  //   }
-  // }, [logs]);
+//   const renderVideoPlayer = () => (
+//     <div className="relative w-full h-full">
+//       <video
+//         ref={videoRef}
+//         className="w-full h-full"
+//         playsInline
+//         autoPlay={isPlaying}
+//         muted={isMuted}
+//       />
+//       <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
+//         <div 
+//           ref={progressRef}
+//           className="w-full h-1 bg-gray-600 cursor-pointer mb-2"
+//           onClick={handleSeek}
+//         >
+//           <div 
+//             className="h-full bg-primary"
+//             style={{ width: `${(currentTime / duration) * 100}%` }}
+//           />
+//         </div>
+//         <div className="flex justify-between text-white text-sm">
+//           <span>{formatTime(currentTime)}</span>
+//           <span>{formatTime(duration)}</span>
+//         </div>
+//       </div>
+//       <Scanlines />
+//     </div>
+//   );
 
-  const [currentText, setCurrentText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
-  // Example text to type
-  const currentObj = stringInQueue[0] || "";
-  const currentString = currentObj?.data || "";
+//   return (
+//     <div className="relative w-full h-full overflow-hidden">
+//       <div className="relative w-full h-full">
+//         <div className="h-full grid grid-rows-[30px_1fr_40px] gap-0">
+//           <div className="w-full uppercase top-0">
+//             <div className="w-full px-2 py-1 gap-2 text-[#000000] bg-primary flex items-center">
+//               <ChevronRight className="w-4 h-4" />
+//               {currentChannel?.title}
+//             </div>
+//           </div>
 
-  useEffect(() => {
-    // If no strings in queue or typing is complete, return
-    if (stringInQueue.length === 0 || isTypingComplete) return;
+//           <div className="relative">
+//             {staticEffect ? <StaticNoiseEffect /> : renderVideoPlayer()}
+//           </div>
 
-    // Type the current character
-    if (currentIndex < currentString.length) {
-      const timeout = setTimeout(() => {
-        setCurrentText((prev) => prev + currentString[currentIndex]);
-        setCurrentIndex((prev) => prev + 1);
-      }, 50); // Adjust typing speed here
+//           <div className="flex font-[500] items-center justify-between py-0 border-t border-primary">
+//             <div className="flex gap-0 h-full text-sm">
+//               <div className="bg-primary px-3 gap-3 flex items-center">
+//                 <div className="flex text-black gap-1 items-center">
+//                   <Video className="w-4 h-4" />
+//                   REC
+//                 </div>
+//               </div>
+//               <button
+//                 className="border-primary border-r px-3"
+//                 onClick={handleNextChannel}
+//                 disabled={!power || channel === Object.keys(channels).length}
+//               >
+//                 <SkipForward className="w-4 h-4 text-primary" />
+//               </button>
+//               <button
+//                 className="border-primary border-r px-3"
+//                 onClick={() => handleTimeSkip(-10)}
+//                 disabled={!power}
+//               >
+//                 <Rewind className="w-4 h-4 text-primary" />
+//               </button>
 
-      return () => clearTimeout(timeout);
-    } else {
-      // Typing is complete for current string
-      setIsTypingComplete(true);
+//               <button
+//                 className="border-primary border-r px-3"
+//                 onClick={handlePlayPause}
+//                 disabled={!power}
+//               >
+//                 <div className="flex gap-2 items-center text-primary">
+//                   {isPlaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+//                   {isPlaying ? "STOP" : "PLAY"}
+//                 </div>
+//               </button>
 
-      // Move string from queue to logs
-      setTimeout(() => {
-        // setLogs(prevLogs => ({
-        //   data: [...prevLogs.data, currentString]
-        // }));
-        setLogs((pre: any) => [...pre, currentObj]);
-        // Remove the processed string from queue
-        setStringInQueue((prev: any) => prev.slice(1));
+//               <button
+//                 className="border-primary border-r px-3"
+//                 onClick={() => handleTimeSkip(10)}
+//                 disabled={!power}
+//               >
+//                 <FastForward className="w-4 h-4 text-primary" />
+//               </button>
 
-        // Reset for next string
-        setCurrentText("");
-        setCurrentIndex(0);
-        setIsTypingComplete(false);
-      }, 500); // Delay before processing next string
-    }
-  }, [currentIndex, currentString, stringInQueue, isTypingComplete]);
+//               <button
+//                 className="border-primary border-r px-3"
+//                 onClick={handlePrevChannel}
+//                 disabled={!power || channel === 1}
+//               >
+//                 <SkipBack className="w-4 h-4 text-primary" />
+//               </button>
+//               <button
+//                 className="border-primary border-r px-3"
+//                 onClick={handleMuteUnmute}
+//                 disabled={!power}
+//               >
+//                 {isMuted ? (
+//                   <VolumeX className="w-5 h-5 text-primary" />
+//                 ) : (
+//                   <Volume2 className="w-5 h-5 text-primary" />
+//                 )}
+//               </button>
+//             </div>
 
-  // const addToQueue = (newLog) => {
-  //   setStringInQueue(prev => [...prev, newLog]);
-  // };
+//             <div className="h-full flex">
+//               <div className="h-full flex items-center gap-2 text-primary uppercase px-3 border-l border-primary">
+//                 <ChevronRight className="w-4 h-4" color="#89FC96" />
+//                 {isLoading ? "Loading..." : formatTime(currentTime)}
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
-  const LogEntry = ({ log }: { log: any; index?: number }) => (
-    <div
-      style={{ whiteSpace: "pre-line" }}
-      className="h-auto break-all pb-10 text-sm font-thin leading-5"
-    >
-      <strong>{LocalDateTimeDisplay(extractDate(log?.dataunCut))}</strong>
-      <br />
-      <strong>
-        <span style={{ color: "rgb(134 217 97)" }}>Task Name :</span>{" "}
-        {log?.taskName}
-      </strong>
-      <br />
-      <strong>
-        <span style={{ color: "rgb(248 134 88)" }}>TaskID :</span> {log?.taskId}
-      </strong>
-      <br />
-      {log?.dataObj?.user ? (
-        <>
-          <br />
-          <span>
-            <strong className="uppercase" style={{ color: "rgb(134 217 97)" }}>
-              text :
-            </strong>{" "}
-            {log?.dataObj?.text}
-          </span>
-          <br />
-        </>
-      ) : (
-        // : index === logs.length - 1 ? (
-        //   currentTypingText.split("\n").map((line: any, lineIndex: any) => (
-        //     <React.Fragment key={lineIndex}>
-        //       {line.split(" ").map((word: any, wordIndex: any) => (
-        //         <React.Fragment key={wordIndex}>
-        //           {word?.endsWith(":") ? (
-        //             <strong
-        //               className="leading-4 font-700 uppercase"
-        //               style={{ color: "rgb(134, 217, 97)" }}
-        //             >
-        //               {word}
-        //             </strong>
-        //           ) : word?.startsWith("@") ? (
-        //             <span
-        //               className="font-700 leading-4"
-        //               style={{ color: "#8AC1B1" }}
-        //             >
-        //               {word}
-        //             </span>
-        //           ) : (
-        //             <span className="leading-4">{word}</span>
-        //           )}{" "}
-        //         </React.Fragment>
-        //       ))}
-        //       <br />
-        //     </React.Fragment>
-        //   ))
-        // )
-        log.data?.split("\n").map((line: any, lineIndex: any) => (
-          <React.Fragment key={lineIndex}>
-            {line.split(" ").map((word: any, wordIndex: any) => (
-              <React.Fragment key={wordIndex}>
-                {word?.endsWith(":") ? (
-                  <strong
-                    className="leading-4 font-700 uppercase"
-                    style={{ color: "rgb(134, 217, 97)" }}
-                  >
-                    {word}
-                  </strong>
-                ) : word?.startsWith("@") ? (
-                  <span
-                    className="font-700 leading-4"
-                    style={{ color: "#8AC1B1" }}
-                  >
-                    {word}
-                  </span>
-                ) : (
-                  <span className="leading-4">{word}</span>
-                )}{" "}
-              </React.Fragment>
-            ))}
-            <br />
-          </React.Fragment>
-        ))
-      )}
-    </div>
-  );
-
-  if (logs?.length < 1) {
-    return (
-      <div className="grid place-items-center gap-2 rounded-md uppercase text-[rgb(248 134 88)] bg-[#2F3636] h-full">
-        <div className="height-fit grid gap-2">
-          <p className="text-lg font-medium">Loading Terminal . . .</p>
-          <div className="grid w-[300px] animate-pulse gap-2">
-            <div className="h-4 w-3/4 rounded bg-foreground"></div>
-            <div className="h-4 w-1/2 rounded bg-foreground"></div>
-            <div className="h-4 w-2/3 rounded bg-foreground"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-4 h-full">
-      <div
-        className="flex-1 leading-5 relative bg-[#2F3636] border-primary border-[1px] rounded-md p-4 overflow-auto h-full"
-        ref={terminalRef}
-        style={{
-          fontFamily: "'VT323', monospace",
-        }}
-      >
-        {logs?.map((log: any, index: number) => (
-          <LogEntry key={index + log?.taskId} log={log} />
-        ))}
-        {stringInQueue.length > 0 && (
-          <pre className="whitespace-pre-wrap">
-            {currentText}
-            <span className="animate-pulse">▋</span>
-          </pre>
-        )}
-        <div className="flex">
-          <div className="pb-8 text-xs">
-            {"</>"}
-            <span className="ml-2 w-1 min-w-1 animate-[pulse_400ms_cubic-bezier(0.4,_0,_0.6,_1)_infinite] bg-white duration-1000">
-              |
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default MainTerminal;
+// export default TvConsole;
