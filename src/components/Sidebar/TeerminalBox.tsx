@@ -26,6 +26,7 @@ import { trimAddress } from "@/lib/utils";
 import { ICONS, IMAGES } from "@/assets";
 import { Input } from "../ui/input";
 
+
 const recipientAddress = import.meta.env.VITE_BANK;
 
 const TeerminalBox = () => {
@@ -46,25 +47,25 @@ const TeerminalBox = () => {
   const amount = BigInt(injectAmount * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
-  const { disableAction, setDisableAction } = useAppCtx();
-  // const [recentlist, setRecentlist] = useState<any>(null);
+  const { disableAction, setDisableAction,isLive } = useAppCtx();
+  const [recentlist, setRecentlist] = useState<any>(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "https://botcast-backend-production-bb45.up.railway.app/injection_history"
-  //       );
-  //       const filteredData = response?.data;
-  //       console.log(filteredData);
-  //       setRecentlist(filteredData.reverse());
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //       // Handle the error appropriately, e.g.:
-  //       // setError(error.message);
-  //     }
-  //   })();
-  // }, [disableAction]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(
+          "https://botcast-backend-production-bb45.up.railway.app/injection_history"
+        );
+        const filteredData = response?.data?.topics;
+        console.log(filteredData);
+        setRecentlist(filteredData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error appropriately, e.g.:
+        // setError(error.message);
+      }
+    })();
+  }, [disableAction]);
 
 ;
 
@@ -195,7 +196,7 @@ const TeerminalBox = () => {
           setDisableAction(false);
         }
         setDisableAction(false);
-      }, 7000);
+      }, 10000);
 
       // toast({
       //   title: "Transaction completed successfully",
@@ -266,31 +267,40 @@ const TeerminalBox = () => {
           )
         ) : (
           <>
+          {
+            isLive?null :
             <div className="absolute w-full h-full">
-              <img src={IMAGES.notshow} alt="" className="h-full w-full  " />
-              <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
-                <div className="bg-primary py-6 w-full">
-                  <p className="text-md uppercase py-[3px] text-center  text-[#010101]">
-                    <span className="">
-                      rogue_is_not_live_right_now.
-                      try_topic_injection_when_rogue_is_live.
-                    </span>
-                  </p>
-                </div>
+            <img src={IMAGES.notshow} alt="" className="h-full w-full  " />
+            <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
+              <div className="bg-primary py-6 w-full">
+                <p className="text-md uppercase py-[3px] text-center  text-[#010101]">
+                  <span className="">
+                    rogue_is_not_live_right_now.
+                    try_topic_injection_when_rogue_is_live.
+                  </span>
+                </p>
               </div>
             </div>
-            {messages?.map(
+          </div>
+          }
+           
+            {recentlist?.map(
               ({
-                _id,
-                text,
-                user,
+                txHash,
+                topic,
+                walletAddress,
+                status,
+                timestamp
               }: {
-                _id: string;
-                text: string;
-                user: string;
+                txHash: string;
+                topic: string;
+                walletAddress: string;
+                timestamp:number;
+                status:string;
               }) => (
-                <div key={_id}>
-                  <div className="flex gap-2 uppercase items-start binaria px-4 py-3 ">
+                <div key={txHash}>
+                  <div className="flex flex-col gap-1 uppercase i binaria px-4 py-2 ">
+                    <div className="flex gap-2 items-start">
                     <div className="flex items-center gap-1">
                       <img
                         src={ICONS.icon_textarrow}
@@ -299,14 +309,27 @@ const TeerminalBox = () => {
                         height={13}
                       />
                       <p className="text-[14px] text-[#B6B6B6]">
-                        {trimAddress(user, 3)}:
+                        {trimAddress(walletAddress, 3)}:
                       </p>
                     </div>
                     <div>
                       <p className="text-xs font-thin text-wrap pl-4 ">
-                        {text}
+                        {topic}
                       </p>
-                    </div>{" "}
+                    </div>
+                    </div>
+                  <div className="flex gap-2 justify-between uppercase items-start binaria text-xs  ">
+                  <div>
+<p className="text-[13px] text-[#B6B6B6]">
+                       {">AT: "}{timestamp}
+                      </p>
+</div>
+<div>
+<p className="text-[13px] text-[#B6B6B6]">
+                       {">STATUS: "}{status}
+                      </p>
+</div>
+</div>
                   </div>
                   <div className="border-b-[1px] border-[#F1F6F2]"></div>
                 </div>

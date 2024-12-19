@@ -13,6 +13,7 @@ import {
   FastForward,
 } from "lucide-react";
 import Hls from "hls.js";
+import { useAppCtx } from "@/context/app.contex";
 
 declare global {
   interface Window {
@@ -96,6 +97,7 @@ const TvConsole = () => {
   const [isServerError, setIsServerError] = useState(false);
   const [isShowingErrorMessage, setIsShowingErrorMessage] = useState(false);
   const [twitchPlayer, setTwitchPlayer] = useState<any>(null);
+  const {setIsLive} = useAppCtx()
 
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
@@ -298,21 +300,29 @@ const TvConsole = () => {
             setIsServerError(true);
             setIsShowingErrorMessage(true);
             setTimeout(() => {
+              setIsLive(false)
               setChannel(2);
               setIsShowingErrorMessage(false);
               setIsServerError(false);
             }, 5000);
           } else {
+            setIsLive(true)
+
             setIsServerError(false);
+            setIsLive(false)
+
             setIsShowingErrorMessage(false);
           }
         } catch (error) {
+          
           setIsServerError(true);
           setIsShowingErrorMessage(true);
           setTimeout(() => {
             setChannel(2);
             setIsShowingErrorMessage(false);
             setIsServerError(false);
+            setIsLive(false)
+
           }, 5000);
         }
       }

@@ -30,6 +30,7 @@ const VideoGenertionPopup = () => {
   const { disableAction, setDisableAction, videoGeneraing, setVideoGeneraing } =
     useAppCtx();
   const { connected, publicKey, signTransaction } = useWallet();
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>(null);
 
@@ -265,7 +266,7 @@ const VideoGenertionPopup = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild={false}>
                       <div
-                        className={`w-[100%] border border-input  max-h-[180px] uppercase cursor-pointer   relative overflow-hidden ${recent[3] === publicKey?.toString() ? "border-4" : null}`}
+                        className={`w-[100%] border border-input  max-h-[180px] uppercase cursor-pointer   relative overflow-hidden ${recent[3] === publicKey?.toString() ? "bg-primary" : "bg-primary"}`}
                         onClick={() => setSelectedFile(recent)}
                       >
                         <img
@@ -275,7 +276,7 @@ const VideoGenertionPopup = () => {
                           src="https://pbs.twimg.com/profile_images/1859652186025885696/cPRtjjm9_400x400.jpg"
                           alt=""
                         />
-                        <div className="absolute bottom-0  left-0 right-0 p-1 bg-black  group-hover:opacity-100 transition-opacity flex flex-col justify-center gap-0 px-2">
+                        <div className={`absolute bottom-0  left-0 right-0 p-1  group-hover:opacity-100 transition-opacity flex flex-col justify-center items-start gap-0 px-2 ${recent[3] === publicKey?.toString() ? "bg-primary text-black" : "bg-black "}`}>
                           <div className={`flex items-center gap-1   w-full `}>
                             <img
                               src={ICONS.icon_textarrow}
@@ -290,13 +291,13 @@ const VideoGenertionPopup = () => {
                               </span>
                             </p>
                           </div>
-                          <p className="text-[12px] text-[#B6B6B6]  ">
+                          <p className={`text-[12px] ${recent[3] === publicKey?.toString() ?"text-[#000]"  :"text-[#B6B6B6]"}   `}>
                             {">> by:" +
                               " " +
                               trimAddress(
                                 truncateText(recent[3]?.toString()),
                                 5
-                              )}{" "}
+                              )}{recent[3] === publicKey?.toString() ?"[YOU]":null}
                             {}
                           </p>
                         </div>

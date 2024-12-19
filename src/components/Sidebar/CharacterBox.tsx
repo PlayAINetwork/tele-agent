@@ -1,5 +1,5 @@
 import { ICONS, IMAGES } from "@/assets";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
@@ -16,64 +16,86 @@ import axios from "axios";
 import { Button } from "../ui/button";
 
 const CharacterBox = () => {
-  const characterList = [
-    {
-      name: "ThreadGuy",
-      image: IMAGES.img_elon,
-      id: 10001,
-      amount: 10,
-    },
-    {
-      name: "Elon Musk",
-      image: IMAGES.img_naval,
 
-      id: 10002,
-      amount: 10,
-    },
-    {
-      name: "Donald Trump",
-      image: IMAGES.img_trump,
+  // const characterList = [
+  //   {
+  //     name: "ThreadGuy",
+  //     image: IMAGES.img_elon,
+  //     id: 10001,
+  //     amount: 10,
+  //   },
+  //   {
+  //     name: "Elon Musk",
+  //     image: IMAGES.img_naval,
 
-      id: 10003,
-      amount: 100000,
-    },
-    {
-      name: "kamala",
-      image: IMAGES.img_kamala,
+  //     id: 10002,
+  //     amount: 10,
+  //   },
+  //   {
+  //     name: "Donald Trump",
+  //     image: IMAGES.img_trump,
 
-      id: 10004,
-      amount: 100000,
-    },
-    {
-      name: "mike tyson",
-      image: IMAGES.img_mick,
+  //     id: 10003,
+  //     amount: 100000,
+  //   },
+  //   {
+  //     name: "kamala",
+  //     image: IMAGES.img_kamala,
 
-      id: 10005,
-      amount: 100000,
-    },
-    {
-      name: "balaji",
-      image: IMAGES.img_balaji,
+  //     id: 10004,
+  //     amount: 100000,
+  //   },
+  //   {
+  //     name: "mike tyson",
+  //     image: IMAGES.img_mick,
 
-      id: 10006,
-      amount: 100000,
-    },
-  ];
+  //     id: 10005,
+  //     amount: 100000,
+  //   },
+  //   {
+  //     name: "balaji",
+  //     image: IMAGES.img_balaji,
+
+  //     id: 10006,
+  //     amount: 100000,
+  //   },
+  // ];
 
   const [selectedCharacter, setSelectedCharacter] = useState<any>(null);
   const { toast } = useToast();
   const { publicKey, signTransaction, connected } = useWallet();
   const { balance } = useTokenBalance(publicKey);
-  const { disableAction, setDisableAction } = useAppCtx();
+  const { disableAction, setDisableAction ,isLive} = useAppCtx();
   const [status, setStatus] = useState("");
   const connection = new Connection(import.meta.env.VITE_SOL_RPC);
+
+  const [characterList, setCharacterList] = useState<any>(null);
+  const amount= 30
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(
+          "https://botcast-backend-production-bb45.up.railway.app/all_characters"
+        );
+        const filteredData = response?.data?.characters;
+        console.log(filteredData);
+        setCharacterList(filteredData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error appropriately, e.g.:
+        // setError(error.message);
+      }
+    })();
+  }, [disableAction]);
+
   const updateChacter = async () => {
     if (selectedCharacter == null) {
       toast({
         title: "Select a character",
       });
       return false;
-    } else if (balance < selectedCharacter?.amount) {
+    } else if (balance < amount) {
       toast({
         title: "Insufficient Balance",
       });
@@ -110,7 +132,7 @@ const CharacterBox = () => {
           )
         );
       }
-      const value = BigInt(Number(selectedCharacter.amount) * 10 ** 6);
+      const value = BigInt(Number(amount) * 10 ** 6);
       // Add transfer instruction
       transaction.add(
         createTransferInstruction(
@@ -155,6 +177,7 @@ const CharacterBox = () => {
         throw new Error("Transaction failed during execution");
       }
       console.log(txInfo);
+    setTimeout(async() => {
       const response = await axios.post(
         "https://botcast-backend-production-bb45.up.railway.app/inject_character",
         { characterName: selectedCharacter?.name, txHash: signature },
@@ -187,12 +210,14 @@ const CharacterBox = () => {
       toast({
         title: "Transaction completed successfully",
       });
+    }, 10000);
     } catch (err: any) {
       setDisableAction(false);
 
       console.error("Transaction error:", err);
     }
   };
+
   return (
     <div className="flex flex-col  gap-0 h-full">
       <div className="border-b-[1px] border-primary py-2 px-2 flex uppercase justify-end w-full">
@@ -201,7 +226,9 @@ const CharacterBox = () => {
         </p>
       </div>
       <div className="relative flex-1 bg-muted overflow-auto h-full ">
-        <div className="absolute w-full h-full">
+        {
+          isLive? null:
+<div className="absolute w-full h-full z-10">
           <img src={IMAGES.notshow} alt="" className="h-full  w-full " />
           <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
             <div className="bg-primary py-6 w-full">
@@ -214,18 +241,43 @@ const CharacterBox = () => {
             </div>
           </div>
         </div>
+        }
+        
         <div className="grid grid-cols-2 gap-[1px] overflow-auto h-full ">
-          {characterList?.map((item) => (
+          {characterList?.map((item: any) => (
             <div
-              className={`w-full h-[max-content] border border-input cursor-pointer ${selectedCharacter?.id === item.id ? "bg-primary text-primary-foreground" : "bg-[transparant]"} `}
+              className={`w-full  h-[max-content] border border-input  relative ${item.active ? " ":"cursor-pointer"} ${selectedCharacter?.name === item.name ? "bg-primary text-primary-foreground" : "bg-[transparant]"} `}
               onClick={() =>
-                disableAction ? null : setSelectedCharacter(item)
+                disableAction || item.active ? null : setSelectedCharacter(item)
               }
             >
-              <img src={item.image} alt="" />
-              <div className=" flex flex-col items-center ">
+             
+              {item.active ? (
+                <>
+                   <div className="absolute w-full h-full">
+          <img src={IMAGES.notshow} alt="" className="h-full  w-full " />
+          <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
+            <div className="bg-primary py-6 w-full">
+              <p className="text-xs uppercase py-[3px] text-center  text-[#010101]">
+                <span className="">
+                  this_character_already_Active
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+                <div>
+                  <span className="text-primary text-sm absolute top-1 left-1">
+                    Live
+                  </span>
+                </div>
+                </>
+
+              ) : null}
+              <img src={`${IMAGES.img_naval}`} alt="" />
+              <div className=" flex flex-col items-center   ">
                 <div
-                  className={`flex items-center gap-1  justify-center  w-full ${selectedCharacter?.id === item.id ? "bg-[#F1F6F2]" : ""} `}
+                  className={`flex items-center gap-1  justify-center  w-full ${selectedCharacter?.name === item.name ? "bg-[#F1F6F2]" : ""} `}
                 >
                   <img
                     src={ICONS.icon_textarrow}
@@ -248,7 +300,7 @@ const CharacterBox = () => {
           ))}
         </div>
       </div>
-      <div className="flex gap-2 hidden">
+      <div className="flex gap-2 ">
         {connected ? (
           <div className="relative w-full">
             <Button
@@ -257,10 +309,10 @@ const CharacterBox = () => {
               //   variant={"ghost"}
               className="w-full"
             >
-              ADD CHARACTER WITH 100K $ROGUE
+              ADD CHARACTER WITH 30K $ROGUE
             </Button>
           </div>
-        ) : null}
+) : null} 
       </div>
     </div>
   );
