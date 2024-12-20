@@ -225,7 +225,7 @@ const CharacterBox = () => {
         </p>
       </div>
       <div className="relative flex-1 bg-muted overflow-auto h-full ">
-        {!isLive ? null : (
+        {isLive ? null : (
           <div className="absolute w-full h-full z-10">
             <img src={`${IMAGES.notshow}`} alt="" className="h-full  w-full " />
             <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
@@ -249,7 +249,7 @@ const CharacterBox = () => {
                 disableAction || item.active ? null : setSelectedCharacter(item)
               }
             >
-              {item.active ? (
+              {item?.active ? (
                 <>
                   <div className="absolute w-full h-full">
                     <img
