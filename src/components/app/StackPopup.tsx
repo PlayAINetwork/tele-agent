@@ -54,9 +54,17 @@ const StackPopup = () => {
           <div className="flex flex-col  h-full py-6 px-6   w-full border-primary border-[1px]  justify-center items-center gap-4     bg-[#131314] ">
             <div className="flex gap-3  w-full flex-wrap">
               <div className="flex w-full flex-col gap-2 text-[#F1F6F2]">
-                <div className="flex w-full  ">
+                {
+                  isStake ? 
+                  <div className="flex w-full  ">
                   <div>ROGUE Balance: {balance ?? 0}</div>
                 </div>
+                  :
+                  <div className="flex w-full  ">
+                  <div>ROGUE staked Balance:  {balance ?? 0}</div>
+                </div>
+                }
+              
               
                 <div className="flex w-full  border-[1px] border-primary">
                   
@@ -65,7 +73,7 @@ const StackPopup = () => {
                     //   value={prompt}
                     //   onChange={(e) => setPrompt(e.target.value)}
                     type="text"
-                    placeholder={isStake ?"input_$ROGUE_TO_STAKE":"ROGUE_TO_UNSTAKE"}
+                    placeholder={isStake ?"input_$ROGUE_TO_STAKE":"input_$ROGUE_TO_UNSTAKE"}
                     //   disabled={disableAction}
                     // onKeyPress={handleKeyPress}
                   />
