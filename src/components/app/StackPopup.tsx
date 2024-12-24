@@ -5,13 +5,15 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "../ui/dialog";
-import { X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
+import { useState } from "react";
 
 const StackPopup = () => {
   const { balance } = useTokenBalance();
+  const [isStake, setStake] = useState(true)
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -36,62 +38,66 @@ const StackPopup = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[400px] gap-0 h-[50vh] border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
+      <DialogContent className={` flex flex-col sm:max-w-md md:max-w-[500px] gap-0  border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto `}>
         <div className="flex justify-between">
-          <DialogDescription className=" px-4 uppercase text-md text-gray-200 py-2   bg-primary text-[#010101]">
-            {">> stake_your_rogue"}
+          <DialogDescription onClick={()=> setStake(true)} className={` px-4 w-full uppercase text-md text-gray-200 py-2  cursor-pointer  ${isStake ? "bg-primary text-[#010101] ":"bg-[#181818] text-[#fff]"} `}>
+            {">> stake_$rogue"}
           </DialogDescription>
-
-          <DialogClose className="w-[40px] flex justify-center items-center bg-primary z-10">
+          <DialogDescription onClick={()=> setStake(false)} className={`px-4 w-full uppercase text-md text-gray-200 py-2   cursor-pointer  ${isStake ? "bg-[#181818] text-[#fff]":"bg-primary text-[#010101]"} `}>
+            {">> UNSTAKE_$rogue"}
+          </DialogDescription>
+          <DialogClose className="min-w-[40px] flex justify-center items-center bg-primary z-10">
             <X className="text-black" />
           </DialogClose>
         </div>
-        <div className=" flex-1 h-full overflow-auto ">
-          <div className="flex flex-col  h-full  border-primary border-[1px]  justify-center items-center gap-4     bg-[#131314] ">
-            <div className="flex gap-3 flex-wrap">
-              <div className="flex flex-col gap-2">
+        <div className=" flex-1 h-full overflow-auto w-full">
+          <div className="flex flex-col  h-full py-6 px-6   w-full border-primary border-[1px]  justify-center items-center gap-4     bg-[#131314] ">
+            <div className="flex gap-3  w-full flex-wrap">
+              <div className="flex w-full flex-col gap-2 text-[#F1F6F2]">
                 <div className="flex w-full  ">
-                  <div>Rogue Balance: {balance ?? 0}</div>
+                  <div>ROGUE Balance: {balance ?? 0}</div>
                 </div>
-                <div className="flex w-full  ">
-                  <div>staked Rogue: {balance ?? 0}</div>
-                </div>
+              
                 <div className="flex w-full  border-[1px] border-primary">
-                  {/* <Textarea
-              className="h-[50px]  binaria uppercase placeholder-white"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              placeholder="Inject your topic here"
-            /> */}
+                  
                   <Input
-                    className="pr-[40px] binaria border-none  uppercase hover:bg-[#303030]"
+                    className="pr-[40px] min-w-full binaria border-none  uppercase hover:bg-[#303030]"
                     //   value={prompt}
                     //   onChange={(e) => setPrompt(e.target.value)}
                     type="text"
-                    placeholder="type_your_amount"
+                    placeholder={isStake ?"input_$ROGUE_TO_STAKE":"ROGUE_TO_UNSTAKE"}
                     //   disabled={disableAction}
                     // onKeyPress={handleKeyPress}
                   />
                 </div>
-                <div className="flex w-full gap-2  ">
+                <div className="flex w-full text-[#B6B6B6]">
+                  <div>DISCLAIMER: ONCE STAKED, t</div>
+                </div>
+               
+              </div>
+            </div>
+          </div>
+          <div className="flex w-full gap-0  ">
                   <Button
-                    className=" uppercase w-full"
+                    className=" uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
                     //   onClick={transferTokens}
                     //   disabled={videoGeneraing || !connected || disableAction}
                   >
-                    stake
+                    cancel
                   </Button>
                   <Button
                     className=" uppercase w-full "
                     //   onClick={transferTokens}
                     //   disabled={videoGeneraing || !connected || disableAction}
                   >
-                    unstake
+                <ChevronRight className="w-4 h-4" color="#000" />
+{
+  isStake ? "stake" :"unstake"
+}
+                    
                   </Button>
+                  
                 </div>
-              </div>
-            </div>
-          </div>
         </div>
       </DialogContent>
     </Dialog>
