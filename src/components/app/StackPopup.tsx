@@ -11,6 +11,9 @@ import { Button } from "../ui/button";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
 import {  useState } from "react";
 // import { useWallet } from "@solana/wallet-adapter-react";
+// import idl from '../../idl/staking_vault.json'
+// import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+// import { PublicKey } from "@solana/web3.js";
 
 const StackPopup = () => {
   const { balance } = useTokenBalance();
@@ -22,15 +25,23 @@ const StackPopup = () => {
 
   // const { publicKey, connected, sendTransaction } = useWallet();
 
-   // Find user account PDA
-  //  const getUserAccountPDA = useCallback(async () => {
-  //   if (!publicKey || !program) return null;
-  //   const [userAccountPDA] = await PublicKey.findProgramAddress(
-  //     [Buffer.from('user'), publicKey.toBuffer()],
-  //     program.programId
-  //   );
-  //   return userAccountPDA;
-  // }, [publicKey, program]);
+
+  // Your program ID
+// const programID = new PublicKey('8tXF2AovpSHm7MfugZSZX7wV5eBQhrJC8YqWEkrtSUmM');
+
+// // Your vault token account (replace with actual)
+// const vaultTokenPubkey = new PublicKey('5XyiTDh2sa2jM69u4eb6htBs8nRrWoUqpCXtcA3QtXwB');
+
+
+//    // Find user account PDA
+//    const getUserAccountPDA = useCallback(async () => {
+//     if (!publicKey || !program) return null;
+//     const [userAccountPDA] = await PublicKey.findProgramAddress(
+//       [Buffer.from('user'), publicKey.toBuffer()],
+//       program.programId
+//     );
+//     return userAccountPDA;
+//   }, [publicKey, program]);
 
 
 
