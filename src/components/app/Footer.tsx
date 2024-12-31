@@ -28,9 +28,12 @@ const Footer = () => {
       </div>
       <div className="flex">
         <Button
-        onClick={() =>
-          open("https://raydium.io/swap/?outputMint=27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL&inputMint=sol", "_brace")
-        }
+          onClick={() =>
+            open(
+              "https://raydium.io/swap/?outputMint=27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL&inputMint=sol",
+              "_brace"
+            )
+          }
           variant={"ghost"}
           className="w-full text-md  py-1 px-6 h-auto uppercase rounded-[40px]"
         >
@@ -47,7 +50,7 @@ const Footer = () => {
               {"[Disconnect]"}
             </div>
           </Button>
-        ):null}
+        ) : null}
       </div>{" "}
     </div>
   );

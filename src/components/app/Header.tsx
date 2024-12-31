@@ -1,6 +1,7 @@
 import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
+// import StackPopup from "./StackPopup";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
@@ -79,6 +80,7 @@ const Header = () => {
                 </span>
               </span>
             </div>
+            {/* <StackPopup/> */}
 
            <VideoGenertionPopup/>
            

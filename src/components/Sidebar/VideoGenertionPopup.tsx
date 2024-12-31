@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -23,15 +23,14 @@ import { trimAddress, truncateText } from "@/lib/utils";
 import { VideoPlayer } from "./GenerateVedio";
 import { ICONS } from "@/assets";
 import { Button } from "../ui/button";
-import {
-  X
-} from "lucide-react";
+import { X } from "lucide-react";
 import { Input } from "../ui/input";
 
 const VideoGenertionPopup = () => {
   const { disableAction, setDisableAction, videoGeneraing, setVideoGeneraing } =
     useAppCtx();
   const { connected, publicKey, signTransaction } = useWallet();
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>(null);
 
@@ -233,7 +232,7 @@ const VideoGenertionPopup = () => {
           </DialogDescription>
 
           <DialogClose className="w-[40px] flex justify-center items-center bg-primary z-10">
-            <X className="text-black"/>
+            <X className="text-black" />
           </DialogClose>
         </div>
         <div className=" flex-1 h-full overflow-auto ">
@@ -267,7 +266,7 @@ const VideoGenertionPopup = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild={false}>
                       <div
-                        className={`w-[100%] border border-input  max-h-[180px] uppercase cursor-pointer   relative overflow-hidden ${recent[3] === publicKey?.toString() ? "border-4" : null}`}
+                        className={`w-[100%] border border-input  max-h-[180px] uppercase cursor-pointer   relative overflow-hidden ${recent[3] === publicKey?.toString() ? "bg-primary" : "bg-primary"}`}
                         onClick={() => setSelectedFile(recent)}
                       >
                         <img
@@ -277,7 +276,7 @@ const VideoGenertionPopup = () => {
                           src="https://pbs.twimg.com/profile_images/1859652186025885696/cPRtjjm9_400x400.jpg"
                           alt=""
                         />
-                        <div className="absolute bottom-0  left-0 right-0 p-1 bg-black  group-hover:opacity-100 transition-opacity flex flex-col justify-center gap-0 px-2">
+                        <div className={`absolute bottom-0  left-0 right-0 p-1  group-hover:opacity-100 transition-opacity flex flex-col justify-center items-start gap-0 px-2 ${recent[3] === publicKey?.toString() ? "bg-primary text-black" : "bg-black "}`}>
                           <div className={`flex items-center gap-1   w-full `}>
                             <img
                               src={ICONS.icon_textarrow}
@@ -292,13 +291,13 @@ const VideoGenertionPopup = () => {
                               </span>
                             </p>
                           </div>
-                          <p className="text-[12px] text-[#B6B6B6]  ">
+                          <p className={`text-[12px] ${recent[3] === publicKey?.toString() ?"text-[#000]"  :"text-[#B6B6B6]"}   `}>
                             {">> by:" +
                               " " +
                               trimAddress(
                                 truncateText(recent[3]?.toString()),
                                 5
-                              )}{" "}
+                              )}{recent[3] === publicKey?.toString() ?"[YOU]":null}
                             {}
                           </p>
                         </div>
@@ -306,9 +305,23 @@ const VideoGenertionPopup = () => {
                     </DialogTrigger>
 
                     <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[55%] gap-0  border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
+                      <div className="flex justify-between  border-b-[1px] border-primary">
+                       <div className="flex items-center">
+                       <DialogDescription className=" px-4 uppercase text-sm text-gray-200 py-2   text-[#fff]">
+                          {">> create_video_with_rogue"}
+                        </DialogDescription>
+                        <DialogDescription className=" px-4 uppercase text-sm text-gray-200 py-2   bg-primary text-[#010101]">
+                          {">> video_player"}
+                        </DialogDescription>
+                       </div>
+
+                        <DialogClose className="w-[40px] flex justify-center items-center bg-primary z-10">
+                          <X className="text-black" />
+                        </DialogClose>
+                      </div>
                       <div className="flex justify-between">
                         {selectedFile !== null ? (
-                          <DialogDescription className=" px-4 text-md text-gray-200 py-2   bg-primary text-[#010101]">
+                          <DialogDescription className=" px-4 text-md text-gray-200 py-2   border-b-[1px] w-full  border-primary text-[#fff] text-xs">
                             {">> " + selectedFile[2]}
                           </DialogDescription>
                         ) : null}
@@ -316,7 +329,11 @@ const VideoGenertionPopup = () => {
                       <div className="  h-full w-full  ">
                         {selectedFile !== null ? (
                           <div className="py-0 h-full w-full">
-                            <VideoPlayer videoUrl={selectedFile[1]} />
+                            <VideoPlayer
+                              videoUrl={selectedFile[1]}
+                              user={selectedFile[3]}
+                              text={selectedFile[2]}
+                            />
                           </div>
                         ) : null}
                       </div>

@@ -21,10 +21,19 @@ import axios from "axios";
 import { useAppCtx } from "@/context/app.contex";
 import { api } from "../../../convex/_generated/api";
 
-import {  useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { trimAddress } from "@/lib/utils";
 import { ICONS, IMAGES } from "@/assets";
 import { Input } from "../ui/input";
+import {
+  differenceInMinutes,
+  differenceInHours,
+  differenceInDays,
+  differenceInMonths,
+  differenceInYears,
+  format
+} from 'date-fns';
+
 
 const recipientAddress = import.meta.env.VITE_BANK;
 
@@ -40,13 +49,66 @@ const TeerminalBox = () => {
   const connection = new Connection(import.meta.env.VITE_SOL_RPC);
   // const address: any = publicKey?.toString();
   const boxRef: any = useRef(null);
-  const isInjext = false;
 
-  const injectAmount = 20;
+  const injectAmount = 20000;
   const amount = BigInt(injectAmount * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
-  const { disableAction, setDisableAction } = useAppCtx();
+  const { disableAction, setDisableAction, isLive } = useAppCtx();
+  const [recentlist, setRecentlist] = useState<any>(null);
+
+  function formatTimestamp(timestamp:number) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    
+    // Time differences
+    const minutesDiff = differenceInMinutes(now, date);
+    const hoursDiff = differenceInHours(now, date);
+    const daysDiff = differenceInDays(now, date);
+    const monthsDiff = differenceInMonths(now, date);
+    const yearsDiff = differenceInYears(now, date);
+  
+    // Less than an hour: show minutes
+    if (minutesDiff < 60) {
+      return `${minutesDiff}m`;
+    }
+    
+    // Less than 24 hours: show hours
+    if (hoursDiff < 24) {
+      return `${hoursDiff}h`;
+    }
+    
+    // Less than a month: show days and hours
+    if (monthsDiff < 1) {
+      const remainingHours = hoursDiff % 24;
+      return `${daysDiff}d ${remainingHours}h`;
+    }
+    
+    // Less than a year: show month and day
+    if (yearsDiff < 1) {
+      return format(date, 'MMM dd');
+    }
+    
+    // More than a year: show day, month, and year
+    return format(date, 'dd MMM yyyy');
+  }
+  
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(
+          "https://botcast-backend-production-bb45.up.railway.app/injection_history"
+        );
+        const filteredData = response?.data?.topics;
+        console.log(filteredData);
+        setRecentlist(filteredData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error appropriately, e.g.:
+        // setError(error.message);
+      }
+    })();
+  }, [disableAction]);
 
   const transferTokens = async () => {
     if (topic === "") {
@@ -174,7 +236,7 @@ const TeerminalBox = () => {
           setDisableAction(false);
         }
         setDisableAction(false);
-      }, 7000);
+      }, 10000);
 
       // toast({
       //   title: "Transaction completed successfully",
@@ -211,19 +273,39 @@ const TeerminalBox = () => {
         ref={boxRef}
         className="flex flex-col relative flex-1 h-full realtive  gap-0 overflow-hidden h-full bg-[#131314] "
       >
-        {isInjext ? (
-          messages?.map(
-            ({
-              _id,
-              text,
-              user,
-            }: {
-              _id: string;
-              text: string;
-              user: string;
-            }) => (
-              <div key={_id}>
-                <div className="flex gap-2 uppercase items-start binaria px-4 py-3 ">
+        {isLive ? null : (
+          <div className="absolute w-full h-full">
+            <img src={IMAGES.notshow} alt="" className="h-full w-full  " />
+            <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
+              <div className="bg-primary py-6 w-full">
+                <p className="text-md uppercase py-[3px] text-center  text-[#010101]">
+                  <span className="">
+                    rogue_is_not_live_right_now.
+                    try_topic_injection_when_rogue_is_live.
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {recentlist?.map(
+          ({
+            txHash,
+            topic,
+            walletAddress,
+            status,
+            timestamp,
+          }: {
+            txHash: string;
+            topic: string;
+            walletAddress: string;
+            timestamp: number;
+            status: string;
+          }) => (
+            <div key={txHash}>
+              <div className="flex flex-col gap-1 uppercase i binaria px-4 py-2 ">
+                <div className="flex gap-2 items-start">
                   <div className="flex items-center gap-1">
                     <img
                       src={ICONS.icon_textarrow}
@@ -232,66 +314,31 @@ const TeerminalBox = () => {
                       height={13}
                     />
                     <p className="text-[14px] text-[#B6B6B6]">
-                      {trimAddress(user, 3)}:
+                      {trimAddress(walletAddress, 3)}:
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-thin text-wrap pl-4 ">{text}</p>
-                  </div>{" "}
-                </div>
-                <div className="border-b-[1px] border-[#F1F6F2]"></div>
-              </div>
-            )
-          )
-        ) : (
-          <>
-            <div className="absolute w-full h-full">
-              <img src={IMAGES.notshow} alt="" className="h-full w-full  " />
-              <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
-                <div className="bg-primary py-6 w-full">
-                  <p className="text-md uppercase py-[3px] text-center  text-[#010101]">
-                    <span className="">
-                      rogue_is_not_live_right_now.
-                      try_topic_injection_when_rogue_is_live.
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            {messages?.map(
-              ({
-                _id,
-                text,
-                user,
-              }: {
-                _id: string;
-                text: string;
-                user: string;
-              }) => (
-                <div key={_id}>
-                  <div className="flex gap-2 uppercase items-start binaria px-4 py-3 ">
-                    <div className="flex items-center gap-1">
-                      <img
-                        src={ICONS.icon_textarrow}
-                        alt=""
-                        className="max-h-[13px]"
-                        height={13}
-                      />
-                      <p className="text-[14px] text-[#B6B6B6]">
-                        {trimAddress(user, 3)}:
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-thin text-wrap pl-4 ">
-                        {text}
-                      </p>
-                    </div>{" "}
+                    <p className="text-xs font-thin text-wrap pl-4 ">{topic}</p>
                   </div>
-                  <div className="border-b-[1px] border-[#F1F6F2]"></div>
                 </div>
-              )
-            )}
-          </>
+                <div className="flex gap-2 justify-between uppercase items-start binaria text-xs  ">
+                  <div>
+                    <p className="text-[13px] text-[#B6B6B6]">
+                      {">AT: "}
+                      {formatTimestamp(timestamp)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[13px] text-[#B6B6B6]">
+                      {">STATUS: "}
+                      {status}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="border-b-[1px] border-[#F1F6F2]"></div>
+            </div>
+          )
         )}
       </div>
       {/* <div className="flex justify-between items-center">

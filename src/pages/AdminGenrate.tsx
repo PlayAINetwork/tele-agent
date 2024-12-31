@@ -173,7 +173,9 @@ const AdminGenrate = () => {
                   </DialogHeader>
                   {selectedFile !== null ? (
                     <div className="py-4">
-                      <VideoPlayer videoUrl={selectedFile[1]} />
+                      <VideoPlayer videoUrl={selectedFile[1]}
+                              user={selectedFile[3]}
+                              text={selectedFile[2]} />
                     </div>
                   ) : null}
                 </DialogContent>

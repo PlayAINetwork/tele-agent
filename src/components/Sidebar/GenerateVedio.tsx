@@ -23,7 +23,15 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/dialog";
-import { truncateText } from "@/lib/utils";
+import { trimAddress, truncateText } from "@/lib/utils";
+import {
+  Play,
+ 
+  Square,
+  Voicemail,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 
 const GenerateVedio = () => {
   const { disableAction, setDisableAction, videoGeneraing, setVideoGeneraing } =
@@ -213,29 +221,8 @@ const GenerateVedio = () => {
   };
   return (
     <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
-      {/* <div className=" flex flex-col gap-2 "> */}
-      {/* <p className="text-[15px] font-600 ">Recent</p> */}
-      {/* <div className="gap-2 flex overflow-auto horizontalBar">
-          {recent?.map((recent) => (
-            <div className="min-w-[150px] h-[100px] cursor-pointer   relative rounded-md overflow-hidden">
-              <img
-                width={"100%"}
-                height={"100%"}
-                className="object-contain"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiCC2REU0Qqv3zVBzMqFSYGLfoVn4uT3TrDA&s"
-                alt=""
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/50  group-hover:opacity-100 transition-opacity flex justify-center gap-4">
-                <p className="text-[12px] ">hellow </p>
-              </div>
-            </div>
-          ))}
-        </div> */}
-      {/* </div> */}
-      <div
-    
-        className="flex flex-col flex-1   border-primary border-[1px]  gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] "
-      >
+     
+      <div className="flex flex-col flex-1   border-primary border-[1px]  gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] ">
         {recentlist?.length > 0 ? (
           <p className="text-[15px] font-600 ">Recent</p>
         ) : (
@@ -297,7 +284,8 @@ const GenerateVedio = () => {
                     ) : null}
                     {selectedFile !== null ? (
                       <div className="py-4">
-                        <VideoPlayer videoUrl={selectedFile[1]} />
+                                                   <VideoPlayer videoUrl={selectedFile[1]}  user={selectedFile[3]} text={selectedFile[2]}/>
+
                       </div>
                     ) : null}
                   </DialogHeader>
@@ -334,60 +322,52 @@ const GenerateVedio = () => {
 
 export default GenerateVedio;
 
-export const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
-  // const [isPlaying, setIsPlaying] = useState(false);
+export const VideoPlayer = ({
+  videoUrl,
+  user,
+  text,
+}: {
+  videoUrl: string;
+  user: any;
+  text: any;
+}) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
   const videoRef: any = React.useRef(null);
-  // const [muted, setMuted] = useState(false);
-  // const togglePlay = () => {
-  //   if (videoRef.current) {
-  //     if (isPlaying) {
-  //       videoRef.current.pause();
-  //     } else {
-  //       videoRef.current.play();
-  //     }
-  //     setIsPlaying(!isPlaying);
-  //   }
-  // };
 
-  // const toggleMute = () => {
-  //   if (videoRef.current) {
-  //     setMuted(!muted);
-  //     videoRef.current.muted = !muted;
-  //   }
-  // };
-  // Function to handle video download
-  //   const handleDownload = (videoUrl:string) => {
-  //     window.open(videoUrl, '_blank');
-  //   };
-  // Updated download function that works across devices
-  // const handleDownload = async (videoUrl: string, prompt: string) => {
-  //   try {
-  //     // setDownloading(true);
-  //     // setError('');
+  useEffect(() => {
+    const video: any = document.querySelector("video");
+    if (video) {
+      video.addEventListener("play", () => setIsPlaying(true));
+      video.addEventListener("pause", () => setIsPlaying(false));
 
-  //     // Validate URL
-  //     if (!videoUrl.trim()) {
-  //       throw new Error("Please enter a valid video URL");
-  //     }
+      return () => {
+        video.removeEventListener("play", () => setIsPlaying(true));
+        video.removeEventListener("pause", () => setIsPlaying(false));
+      };
+    }
+  }, []);
 
-  //     // Create a hidden anchor element
-  //     const link = document.createElement("a");
-  //     link.href = videoUrl;
+  const handlePlayPause = () => {
+    const video = videoRef.current;
+    if (video) {
+      setIsPlaying(!isPlaying);
+      if (isPlaying) {
+        video.pause();
+      } else {
+        video.play();
+      }
+    }
+  };
 
-  //     // Set the download attribute with a filename
-  //     const filename = prompt.split("/").pop() || "video";
-  //     link.download = filename;
-
-  //     // Add to document, click it, and remove it
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //   } catch (err) {
-  //     // setError(err.message);
-  //   } finally {
-  //     // setDownloading(false);
-  //   }
-  // };
+  const handleMuteUnmute = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = !video.muted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   return (
     <div className="relative group w-full">
@@ -399,32 +379,64 @@ export const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
         // muted={muted}
         // onEnded={() => setIsPlaying(false)}
       />
-      {/* <div className="absolute bottom-0 left-0 right-0 p-4 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex justify-center gap-4"> */}
-      {/* <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/20"
-            onClick={togglePlay}
-          >
-            {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/20"
-            onClick={toggleMute}
-          >
-            {muted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
-          </Button> */}
+      <div className="flex font-[500] h- items-center bg-primary justify-between  border-t border-primary">
+        <div className="flex gap-0 h-[40px] text-md  ">
+          <div className=" px-3 gap-3 flex items-center">
+            <div className="flex text-black gap-1 items-center">
+              <Voicemail className="w-4 h-4" />
+              created
+            </div>
+          </div>
 
-      {/* <Button 
-                    onClick={() => handleDownload(videoUrl,"prompt")}
-                    className="w-full"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download Video
-                  </Button> */}
-      {/* </div> */}
+          {/* <button
+                className="border-primary border-r px-3"
+                onClick={handleNextChannel}
+                disabled={!power || channel === Object.keys(channels).length}
+              >
+                <SkipForward className="w-4 h-4 text-primary" />
+              </button> */}
+
+          <button
+            className="border-primary bg-black border-r px-3"
+            onClick={handlePlayPause}
+          >
+            <div className="flex gap-2 items-center text-primary">
+              {isPlaying ? (
+                <Square className="w-4 h-4" />
+              ) : (
+                <Play className="w-4 h-4" />
+              )}
+              {isPlaying ? "STOP" : "PLAY"}
+            </div>
+          </button>
+
+          {/* <button
+                className="border-primary border-r px-3"
+                onClick={handlePrevChannel}
+                disabled={!power || channel === 1}
+              >
+                <SkipBack className="w-4 h-4 text-primary" />
+              </button> */}
+
+          <button
+            className="border-primary bg-black border-r px-3"
+            onClick={handleMuteUnmute}
+          >
+            {isMuted ? (
+              <VolumeX className="w-5 h-5 text-primary" />
+            ) : (
+              <Volume2 className="w-5 h-5 text-primary" />
+            )}
+          </button>
+        </div>
+
+        <div className="h-full flex">
+          <div className="  flex flex-col items-end gap-0 text-black uppercase px-3 border-l border-primary">
+            <div>{truncateText(text)}</div>
+            <div className="text-sm">{">>BY:" + trimAddress(user, 4)}</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

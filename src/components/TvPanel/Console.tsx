@@ -5,13 +5,15 @@ import {
   Square,
   Volume2,
   VolumeX,
- 
+  SkipForward,
+  SkipBack,
   Radio,
   Video,
   Rewind,
   FastForward,
 } from "lucide-react";
 import Hls from "hls.js";
+import { useAppCtx } from "@/context/app.contex";
 
 declare global {
   interface Window {
@@ -38,12 +40,12 @@ declare global {
 }
 
 const cn = (...classes: string[]) => classes.filter(Boolean).join(" ");
-// const formatTime = (seconds: number): string => {
-//   const hours = Math.floor(seconds / 3600);
-//   const minutes = Math.floor((seconds % 3600) / 60);
-//   const remainingSeconds = Math.floor(seconds % 60);
-//   return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
-// };
+const formatTime = (seconds: number): string => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+};
 
 const Scanlines = () => (
   <div className="absolute inset-0 pointer-events-none">
@@ -95,41 +97,40 @@ const TvConsole = () => {
   const [isServerError, setIsServerError] = useState(false);
   const [isShowingErrorMessage, setIsShowingErrorMessage] = useState(false);
   const [twitchPlayer, setTwitchPlayer] = useState<any>(null);
+  const {setIsLive} = useAppCtx()
 
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-  // const progressRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const [hlsInstance, setHlsInstance] = useState<Hls | null>(null);
 
   const channels: any = {
     1: {
       type: "live",
-      url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
+      url: "https://player.twitch.tv/?channel=anchorman_ai&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
       title: "rogue live",
     },
     2: {
+      type: "live",
+      url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
+      title: "rogue live",
+    },
+   
+    3: {
       type: "rec",
       url: "https://assets.podcast.playai.network/master.m3u8",
 
       // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
       title: "Rogue in conversation with CZ and Saylor.",
     },
-    // 3: {
-    //   type: "rec",
-    //   url: "https://assets.podcast.playai.network/master.m3u8",
-
-    //   // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
-    //   title: "rogue recording",
-    // },
+    
+  
   };
 
   const initializeHLS = (videoElement: HTMLVideoElement) => {
     setPower(true)
-        setStaticEffect(false);
-        console.log(currentTime)
-
     if (hlsInstance) {
       hlsInstance.destroy();
     }
@@ -179,13 +180,12 @@ const TvConsole = () => {
     }
   };
 
-
-   const cleanupCurrentChannel = () => {
+  const cleanupCurrentChannel = () => {
     if (hlsInstance) {
       hlsInstance.destroy();
       setHlsInstance(null);
     }
-    
+
     const video = videoRef.current;
     if (video) {
       video.pause();
@@ -194,13 +194,16 @@ const TvConsole = () => {
     }
   };
   useEffect(() => {
-    if (channel !== 1) {
+    if ( currentChannel?.type !== "live") {
+      const initTimeout = setTimeout(() => {
       const video = videoRef.current;
+
+      console.log(video,"videovideovideo")
       if (!video) return;
 
       // Cleanup previous channel
       cleanupCurrentChannel();
-      
+
       // Initialize new channel
       initializeHLS(video);
 
@@ -223,12 +226,16 @@ const TvConsole = () => {
         video.removeEventListener("play", playHandler);
         video.removeEventListener("pause", pauseHandler);
       };
+
+    }, 1000);
+
+    return () => clearTimeout(initTimeout);
     }
   }, [channel]);
 
   // Initialize Twitch player
   useEffect(() => {
-    if (channel === 1) {
+    if (currentChannel?.type === "live") {
       const iframe = document.querySelector("iframe") as HTMLIFrameElement;
       if (iframe && window.Twitch) {
         const player = new window.Twitch.Player(iframe, {
@@ -276,7 +283,7 @@ const TvConsole = () => {
 
   // Initialize video element for recorded content
   useEffect(() => {
-    if (channel === 2) {
+    if (currentChannel?.type !== "live") {
       const video: any = document.querySelector("video");
       if (video) {
         video.addEventListener("play", () => setIsPlaying(true));
@@ -293,28 +300,42 @@ const TvConsole = () => {
   // Server status check
   useEffect(() => {
     const checkServerStatus = async () => {
-      if (channel === 1) {
+      if (channel === 2) {
         try {
           const response = await fetch("https://rogue-paywall.playai.network");
           if (response.status === 502) {
             setIsServerError(true);
             setIsShowingErrorMessage(true);
             setTimeout(() => {
-              setChannel(2);
+              if (channel === 2) {
+              setIsLive(false)
+              setChannel(1);
               setIsShowingErrorMessage(false);
               setIsServerError(false);
+              }
             }, 5000);
           } else {
+            
+            setIsLive(true)
+
             setIsServerError(false);
+            setIsLive(false)
+
             setIsShowingErrorMessage(false);
           }
         } catch (error) {
+          
           setIsServerError(true);
           setIsShowingErrorMessage(true);
           setTimeout(() => {
-            setChannel(2);
+            if (channel === 2) {
+
+            setChannel(1);
             setIsShowingErrorMessage(false);
             setIsServerError(false);
+            setIsLive(false)
+            }
+
           }, 5000);
         }
       }
@@ -324,14 +345,14 @@ const TvConsole = () => {
   }, [channel]);
 
   const handlePlayPause = () => {
-    if (channel === 1 && twitchPlayer) {
+    if (currentChannel?.type === "live" && twitchPlayer) {
       if (isPlaying) {
         twitchPlayer.pause();
       } else {
         twitchPlayer.play();
       }
       setIsPlaying(!isPlaying);
-    } else if (channel === 2) {
+    } else if (currentChannel?.type !== "live") {
       const video = document.querySelector("video");
       if (video) {
         if (isPlaying) {
@@ -344,10 +365,10 @@ const TvConsole = () => {
   };
 
   const handleMuteUnmute = () => {
-    if (channel === 1 && twitchPlayer) {
+    if (currentChannel?.type === "live" && twitchPlayer) {
       twitchPlayer.setMuted(!isMuted);
       setIsMuted(!isMuted);
-    } else if (channel === 2) {
+    } else if (currentChannel?.type !== "live") {
       const video = document.querySelector("video");
       if (video) {
         video.muted = !video.muted;
@@ -356,35 +377,35 @@ const TvConsole = () => {
     }
   };
 
-  // const handleNextChannel = () => {
-  //   const nextChannel = channel + 1;
-  //   if (nextChannel <= Object.keys(channels).length) {
-  //     // Cleanup current channel before switching
-  //     cleanupCurrentChannel();
-      
-  //     setChannel(nextChannel);
-  //     setStaticEffect(true);
-      
-  //     setTimeout(() => {
-  //       setStaticEffect(false);
-  //     }, 1000);
-  //   }
-  // };
+  const handleNextChannel = () => {
+    const nextChannel = channel + 1;
+    if (nextChannel <= Object.keys(channels).length) {
+      // Cleanup current channel before switching
+      cleanupCurrentChannel();
 
-  // const handlePrevChannel = () => {
-  //   const prevChannel = channel - 1;
-  //   if (prevChannel >= 1) {
-  //     // Cleanup current channel before switching
-  //     cleanupCurrentChannel();
-      
-  //     setChannel(prevChannel);
-  //     setStaticEffect(true);
-      
-  //     setTimeout(() => {
-  //       setStaticEffect(false);
-  //     }, 1000);
-  //   }
-  // };
+      setChannel(nextChannel);
+      setStaticEffect(true);
+
+      setTimeout(() => {
+        setStaticEffect(false);
+      }, 1000);
+    }
+  };
+
+  const handlePrevChannel = () => {
+    const prevChannel = channel - 1;
+    if (prevChannel >= 1) {
+      // Cleanup current channel before switching
+      cleanupCurrentChannel();
+
+      setChannel(prevChannel);
+      setStaticEffect(true);
+
+      setTimeout(() => {
+        setStaticEffect(false);
+      }, 1000);
+    }
+  };
   const handleTimeSkip = (seconds: number) => {
     if (videoRef.current) {
       const newTime = videoRef.current.currentTime + seconds;
@@ -392,15 +413,15 @@ const TvConsole = () => {
     }
   };
 
-  // const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
-  //   if (progressRef.current && videoRef.current) {
-  //     const rect = progressRef.current.getBoundingClientRect();
-  //     const pos = (event.clientX - rect.left) / rect.width;
-  //     const seekTime = pos * duration;
-  //     videoRef.current.currentTime = seekTime;
-  //     setCurrentTime(seekTime);
-  //   }
-  // };
+  const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (progressRef.current && videoRef.current) {
+      const rect = progressRef.current.getBoundingClientRect();
+      const pos = (event.clientX - rect.left) / rect.width;
+      const seekTime = pos * duration;
+      videoRef.current.currentTime = seekTime;
+      setCurrentTime(seekTime);
+    }
+  };
 
   const currentChannel = useMemo(() => channels[channel], [channel]);
 
@@ -408,7 +429,7 @@ const TvConsole = () => {
     // if (!power) return null;
     // if (staticEffect) return null;
 
-    if (channel === 1 && isShowingErrorMessage) {
+    if (channel === 2 && isShowingErrorMessage) {
       return (
         <div className="w-full h-full relative">
           <div className="absolute top-0 h-full w-full flex items-center">
@@ -429,7 +450,7 @@ const TvConsole = () => {
       );
     }
 
-    if (channel === 1) {
+    if (currentChannel?.type === "live") {
       return (
         <div className="relative w-full h-full">
           <iframe
@@ -454,11 +475,11 @@ const TvConsole = () => {
             playsInline
             className="h-full w-full"
             src={currentChannel.url}
-            controls={true}
+            // controls={true}
             autoPlay={isPlaying}
             muted={isMuted}
           />
-          {/* <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
+          <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
             <div
               ref={progressRef}
               className="w-full h-1 bg-gray-600 cursor-pointer mb-2"
@@ -473,7 +494,7 @@ const TvConsole = () => {
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
-          </div> */}
+          </div>
           <Scanlines />
         </div>
       );
@@ -521,13 +542,13 @@ const TvConsole = () => {
                 )}
               </div>
 
-              {/* <button
+              <button
                 className="border-primary border-r px-3"
                 onClick={handleNextChannel}
                 disabled={!power || channel === Object.keys(channels).length}
               >
                 <SkipForward className="w-4 h-4 text-primary" />
-              </button> */}
+              </button>
               {channel == 2 && (
                 <button
                   className="border-primary border-r px-3"
@@ -563,13 +584,13 @@ const TvConsole = () => {
                 </button>
               )}
 
-              {/* <button
+              <button
                 className="border-primary border-r px-3"
                 onClick={handlePrevChannel}
                 disabled={!power || channel === 1}
               >
                 <SkipBack className="w-4 h-4 text-primary" />
-              </button> */}
+              </button>
 
               <button
                 className="border-primary border-r px-3"

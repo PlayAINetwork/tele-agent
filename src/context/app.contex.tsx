@@ -5,7 +5,10 @@ interface AppContextType {
   sidebarMenu: string;
   disableAction:boolean;
   videoGeneraing:boolean;
+  isLive:boolean;
 
+
+  setIsLive: React.Dispatch<React.SetStateAction<boolean>>;
 
   setHideSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   setSidebarMenu: React.Dispatch<React.SetStateAction<string>>;
@@ -23,10 +26,12 @@ export const AppContextProvider: React.FC<{
   const [sidebarMenu, setSidebarMenu] = useState("global");
   const [disableAction, setDisableAction] = useState(false);
   const [videoGeneraing, setVideoGeneraing] = useState(false);
+  const [isLive, setIsLive] = useState(false);
+
 
   const value = useMemo(
-    () => ({ videoGeneraing,hideSidebar,sidebarMenu,disableAction, setHideSidebar,setSidebarMenu,setDisableAction ,setVideoGeneraing}),
-    [videoGeneraing,hideSidebar,sidebarMenu,disableAction, setHideSidebar,setSidebarMenu,setDisableAction,setVideoGeneraing]
+    () => ({ videoGeneraing,hideSidebar,sidebarMenu,disableAction,isLive, setIsLive, setHideSidebar,setSidebarMenu,setDisableAction ,setVideoGeneraing}),
+    [videoGeneraing,hideSidebar,sidebarMenu,disableAction, isLive, setIsLive,setHideSidebar,setSidebarMenu,setDisableAction,setVideoGeneraing]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
