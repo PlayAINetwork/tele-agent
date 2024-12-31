@@ -110,7 +110,7 @@ const TvConsole = () => {
     1: {
       type: "live",
       url: "https://player.twitch.tv/?channel=anchorman_ai&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
-      title: "rogue live",
+      title: "Live with AnchorMan",
     },
     2: {
       type: "live",
