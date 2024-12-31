@@ -4,10 +4,16 @@ interface AppContextType {
   hideSidebar: boolean;
   sidebarMenu: string;
   disableAction:boolean;
+  videoGeneraing:boolean;
+  isLive:boolean;
+
+
+  setIsLive: React.Dispatch<React.SetStateAction<boolean>>;
 
   setHideSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   setSidebarMenu: React.Dispatch<React.SetStateAction<string>>;
   setDisableAction: React.Dispatch<React.SetStateAction<boolean>>;
+  setVideoGeneraing: React.Dispatch<React.SetStateAction<boolean>>;
 
 }
 
@@ -19,10 +25,13 @@ export const AppContextProvider: React.FC<{
   const [hideSidebar, setHideSidebar] = useState(false);
   const [sidebarMenu, setSidebarMenu] = useState("global");
   const [disableAction, setDisableAction] = useState(false);
+  const [videoGeneraing, setVideoGeneraing] = useState(false);
+  const [isLive, setIsLive] = useState(false);
+
 
   const value = useMemo(
-    () => ({ hideSidebar,sidebarMenu,disableAction, setHideSidebar,setSidebarMenu,setDisableAction }),
-    [hideSidebar,sidebarMenu,disableAction, setHideSidebar,setSidebarMenu,setDisableAction]
+    () => ({ videoGeneraing,hideSidebar,sidebarMenu,disableAction,isLive, setIsLive, setHideSidebar,setSidebarMenu,setDisableAction ,setVideoGeneraing}),
+    [videoGeneraing,hideSidebar,sidebarMenu,disableAction, isLive, setIsLive,setHideSidebar,setSidebarMenu,setDisableAction,setVideoGeneraing]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

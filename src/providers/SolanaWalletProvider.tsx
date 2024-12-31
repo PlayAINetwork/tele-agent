@@ -9,7 +9,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-import { WalletConnectWalletAdapter } from "@walletconnect/solana-adapter";
+// import { WalletConnectWalletAdapter } from "@walletconnect/solana-adapter";
 import { PhantomWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 
@@ -24,12 +24,12 @@ export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
       new TorusWalletAdapter(),
-      new WalletConnectWalletAdapter({
-        network: WalletAdapterNetwork.Mainnet,
-        options: {
-          projectId: "YOUR_PROJECT_ID",
-        },
-      }),
+      // new WalletConnectWalletAdapter({
+      //   network: WalletAdapterNetwork.Mainnet,
+      //   options: {
+      //     projectId: "YOUR_PROJECT_ID",
+      //   },
+      // }),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
