@@ -112,12 +112,18 @@ const TvConsole = () => {
       url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
       title: "rogue live",
     },
+   
     2: {
       type: "rec",
       url: "https://assets.podcast.playai.network/master.m3u8",
 
       // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
       title: "Rogue in conversation with CZ and Saylor.",
+    },
+     3: {
+      type: "live",
+      url: "https://player.twitch.tv/?channel=anchorman_ai&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
+      title: "rogue live",
     },
   
   };
@@ -187,7 +193,7 @@ const TvConsole = () => {
     }
   };
   useEffect(() => {
-    if (channel !== 1) {
+    if ( currentChannel?.type !== "live") {
       const initTimeout = setTimeout(() => {
       const video = videoRef.current;
 
@@ -228,7 +234,7 @@ const TvConsole = () => {
 
   // Initialize Twitch player
   useEffect(() => {
-    if (channel === 1) {
+    if (currentChannel?.type === "live") {
       const iframe = document.querySelector("iframe") as HTMLIFrameElement;
       if (iframe && window.Twitch) {
         const player = new window.Twitch.Player(iframe, {
@@ -276,7 +282,7 @@ const TvConsole = () => {
 
   // Initialize video element for recorded content
   useEffect(() => {
-    if (channel === 2) {
+    if (currentChannel?.type !== "live") {
       const video: any = document.querySelector("video");
       if (video) {
         video.addEventListener("play", () => setIsPlaying(true));
@@ -332,14 +338,14 @@ const TvConsole = () => {
   }, [channel]);
 
   const handlePlayPause = () => {
-    if (channel === 1 && twitchPlayer) {
+    if (currentChannel?.type === "live" && twitchPlayer) {
       if (isPlaying) {
         twitchPlayer.pause();
       } else {
         twitchPlayer.play();
       }
       setIsPlaying(!isPlaying);
-    } else if (channel === 2) {
+    } else if (currentChannel?.type !== "live") {
       const video = document.querySelector("video");
       if (video) {
         if (isPlaying) {
@@ -352,10 +358,10 @@ const TvConsole = () => {
   };
 
   const handleMuteUnmute = () => {
-    if (channel === 1 && twitchPlayer) {
+    if (currentChannel?.type === "live" && twitchPlayer) {
       twitchPlayer.setMuted(!isMuted);
       setIsMuted(!isMuted);
-    } else if (channel === 2) {
+    } else if (currentChannel?.type !== "live") {
       const video = document.querySelector("video");
       if (video) {
         video.muted = !video.muted;
@@ -437,7 +443,7 @@ const TvConsole = () => {
       );
     }
 
-    if (channel === 1) {
+    if (currentChannel?.type === "live") {
       return (
         <div className="relative w-full h-full">
           <iframe
