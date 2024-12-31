@@ -608,7 +608,10 @@ const TvConsole = () => {
             <div className="h-full flex">
               <div className="h-full flex items-center gap-2 text-primary uppercase px-3 border-l border-primary">
                 <ChevronRight className="w-4 h-4" color="#89FC96" />
-                {isServerError
+                {channel === 1 ?
+                "live right now"
+                :
+                isServerError
                   ? "not live right now"
                   : isLoading
                     ? "Loading..."
