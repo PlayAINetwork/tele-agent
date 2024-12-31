@@ -109,22 +109,23 @@ const TvConsole = () => {
   const channels: any = {
     1: {
       type: "live",
+      url: "https://player.twitch.tv/?channel=anchorman_ai&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
+      title: "rogue live",
+    },
+    2: {
+      type: "live",
       url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
       title: "rogue live",
     },
    
-    2: {
+    3: {
       type: "rec",
       url: "https://assets.podcast.playai.network/master.m3u8",
 
       // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
       title: "Rogue in conversation with CZ and Saylor.",
     },
-     3: {
-      type: "live",
-      url: "https://player.twitch.tv/?channel=anchorman_ai&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
-      title: "rogue live",
-    },
+    
   
   };
 
@@ -299,19 +300,22 @@ const TvConsole = () => {
   // Server status check
   useEffect(() => {
     const checkServerStatus = async () => {
-      if (channel === 1) {
+      if (channel === 2) {
         try {
           const response = await fetch("https://rogue-paywall.playai.network");
           if (response.status === 502) {
             setIsServerError(true);
             setIsShowingErrorMessage(true);
             setTimeout(() => {
+              if (channel === 2) {
               setIsLive(false)
-              setChannel(2);
+              setChannel(1);
               setIsShowingErrorMessage(false);
               setIsServerError(false);
+              }
             }, 5000);
           } else {
+            
             setIsLive(true)
 
             setIsServerError(false);
@@ -324,10 +328,13 @@ const TvConsole = () => {
           setIsServerError(true);
           setIsShowingErrorMessage(true);
           setTimeout(() => {
-            setChannel(2);
+            if (channel === 2) {
+
+            setChannel(1);
             setIsShowingErrorMessage(false);
             setIsServerError(false);
             setIsLive(false)
+            }
 
           }, 5000);
         }
@@ -422,7 +429,7 @@ const TvConsole = () => {
     // if (!power) return null;
     // if (staticEffect) return null;
 
-    if (channel === 1 && isShowingErrorMessage) {
+    if (channel === 2 && isShowingErrorMessage) {
       return (
         <div className="w-full h-full relative">
           <div className="absolute top-0 h-full w-full flex items-center">
