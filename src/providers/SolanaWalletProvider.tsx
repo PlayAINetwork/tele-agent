@@ -15,7 +15,7 @@ import { PhantomWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter } from 
 
 export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
   const endpoint = useMemo(
-    () => clusterApiUrl(WalletAdapterNetwork.Mainnet),
+    () => clusterApiUrl(WalletAdapterNetwork.Devnet),
     []
   );
 

@@ -22,7 +22,7 @@ export const useTokenBalance = (walletAddress?: any) => {
         );
         const account = await getAccount(connection, associatedAddress);
 
-        setBalance(Number(account.amount) / 10 ** 6);
+        setBalance(Number(account.amount) / 10 ** 9);
         setError(null);
       } catch (err: any) {
         setError(err.message);
