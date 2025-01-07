@@ -1,11 +1,12 @@
 import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
-import StackPopup from "./StackPopup";
+// import StackPopup from "./StackPopup";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
-  // const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -36,23 +37,24 @@ const Header = () => {
     const interval = setInterval(fetchTokenData, 30000);
     return () => clearInterval(interval);
   }, []);
+  const navigate = useNavigate()
 
   return (
     <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
       <div className="flex gap-3">
         {/* <img src={IMAGES.logo} alt="" className="w-[100px] lg:w-[200px]"/> */}
         <div
-          className="w-full h-full bg-primary p-[2px] uppercase"
+          className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: "polygon(0 0, 94.5% 2%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(0 0, 96.1% 2%, 100% 100%, 0% 100%)",
           }}
         >
-          <div className="flex h-full ">
+          <div className="flex h-full text-sm gap-[1px] ">
             <div>
               <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
             </div>
-            {/* <div
-              className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+            <div
+              className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
               style={{
                 clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
               }}
@@ -79,8 +81,18 @@ const Header = () => {
                   {"> Coming soon <"}
                 </span>
               </span>
-            </div> */}
-            <StackPopup/>
+            </div>
+
+            <div
+              className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+             
+          onClick={()=>navigate("/rogueagent")}
+            >
+              <span className="text-white relative transition-transform duration-300 ease-in-out">
+             {" > Leaderboard <"}
+              </span>
+            </div>
+            {/* <StackPopup/> */}
 
            <VideoGenertionPopup/>
            

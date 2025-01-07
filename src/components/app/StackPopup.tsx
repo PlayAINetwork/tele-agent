@@ -30,7 +30,7 @@ import { IDL } from "./staking_vault";
 //   "46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N"
 // );
 
-const programID = new PublicKey('DKVAPnqZjEQwGBmckw7DH7LhdW9cLCkRqpmVuHiLspnc');
+const programID = new PublicKey('6MZWCa95kXiV77ohT2c7Q7rFyftRF8pyAxFa1GMPJQMU');
 
 
 const StackPopup = () => {
@@ -45,7 +45,7 @@ const StackPopup = () => {
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [vaultInfo, setVaultInfo] = useState<any>(null);
 
-const showIn =false
+const showIn =true
    const getProvider = () => {
       if (!wallet.publicKey) throw new Error('Wallet not connected!');
       const provider = new AnchorProvider(
@@ -66,6 +66,15 @@ const showIn =false
         const program = getProgram();
        
         const vaultTokenAccount = new web3.Keypair();
+
+        // Convert the Keypair to JSON format
+const vaultTokenAccountJSON = {
+  publicKey: vaultTokenAccount.publicKey.toBase58(),
+  secretKey: Array.from(vaultTokenAccount.secretKey), // Converts Uint8Array to a plain array
+};
+
+// Log or save the JSON
+console.log(JSON.stringify(vaultTokenAccountJSON, null, 2));
        
         const mint = new PublicKey("46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N");
        
@@ -140,11 +149,11 @@ const showIn =false
         const program = getProgram();
         const amount = new BN(parseFloat(depositAmount) * 1e9);
   
-        const [vaultPDA, vaultt] = await PublicKey.findProgramAddress(
+        const [vaultPDA] = await PublicKey.findProgramAddress(
           [Buffer.from('vault'), wallet.publicKey!.toBuffer()],
           program.programId
         );
-        console.log("vaultPDA",vaultPDA.toString(),vaultt)
+        console.log("vaultPDA",vaultPDA.toString())
   
         const [userAccountPDA] = await PublicKey.findProgramAddress(
           [Buffer.from('user'), wallet.publicKey!.toBuffer()],

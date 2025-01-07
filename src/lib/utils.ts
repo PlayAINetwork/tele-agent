@@ -122,3 +122,72 @@ export const extractDate = (text: string) => {
   const match = text.match(/\[(.*?)\]/)
   return match ? match[1] : ''
 }
+
+export function calculatePercentageChange(
+  previousPrice: number,
+  currentPrice: number
+) {
+  if (previousPrice === 0) {
+    return {
+      text: `-`,
+      value: 0,
+    };
+  }
+  const change = ((currentPrice - previousPrice) / previousPrice) * 100;
+  const isWholeNumber = (n: number) => n % 1 === 0;
+  return {
+    text: `${change > 0 ? "+" : change < 0 ? "-" : "="}${
+      isWholeNumber(change) ? change : change.toFixed(2)
+    }%`,
+    value: change,
+  }; // Returns the result rounded to two decimal places
+}
+
+export function formatBigNumber(num: any) {
+  // Convert to number if string
+  num = Number(num);
+
+  // Handle invalid input
+  if (isNaN(num)) {
+    return "Invalid number";
+  }
+
+  // Helper function to check if a number is whole
+  const isWholeNumber = (n: number) => n % 1 === 0;
+
+  // Define thresholds
+  const trillion = 1000000000000;
+  const billion = 1000000000;
+  const million = 1000000;
+  const thousand = 1000;
+
+  // Format with appropriate suffix
+  if (Math.abs(num) >= trillion) {
+    const formatted = num / trillion;
+    return isWholeNumber(formatted)
+      ? `${formatted}T`
+      : `${formatted.toFixed(2)}T`;
+  } else if (Math.abs(num) >= billion) {
+    const formatted = num / billion;
+    return isWholeNumber(formatted)
+      ? `${formatted}B`
+      : `${formatted.toFixed(2)}B`;
+  } else if (Math.abs(num) >= million) {
+    const formatted = num / million;
+    return isWholeNumber(formatted)
+      ? `${formatted}M`
+      : `${formatted.toFixed(2)}M`;
+  } else if (Math.abs(num) >= thousand) {
+    const formatted = num / thousand;
+    return isWholeNumber(formatted)
+      ? `${formatted}K`
+      : `${formatted.toFixed(2)}K`;
+  }
+
+  // For smaller numbers, check if it's whole
+  return isWholeNumber(num) ? `${num}` : num.toFixed(2);
+}
+export function getHDAgentImageUrl(imageUrl: string) {
+  const updatedUrl = imageUrl.replace("normal", "400x400");
+  return updatedUrl;
+}
