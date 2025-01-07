@@ -1,12 +1,12 @@
 import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
-// import StackPopup from "./StackPopup";
+import StackPopup from "./StackPopup";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  // const [isHovered, setIsHovered] = useState(false);
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -37,7 +37,7 @@ const Header = () => {
     const interval = setInterval(fetchTokenData, 30000);
     return () => clearInterval(interval);
   }, []);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
@@ -53,7 +53,7 @@ const Header = () => {
             <div>
               <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
             </div>
-            <div
+            {/* <div
               className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
               style={{
                 clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
@@ -81,21 +81,19 @@ const Header = () => {
                   {"> Coming soon <"}
                 </span>
               </span>
-            </div>
+            </div> */}
+            <StackPopup/>
 
             <div
               className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-             
-          onClick={()=>navigate("/rogueagent")}
+              onClick={() => navigate("/rogueagent")}
             >
               <span className="text-white relative transition-transform duration-300 ease-in-out">
-             {" > Leaderboard <"}
+                {" > Leaderboard <"}
               </span>
             </div>
-            {/* <StackPopup/> */}
 
-           <VideoGenertionPopup/>
-           
+            <VideoGenertionPopup />
           </div>
         </div>
 
