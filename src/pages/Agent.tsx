@@ -1,6 +1,24 @@
+import Navbar from "@/components/Home/Navbar";
+import Sidebar from "@/components/Sidebar";
 
 const Agent = () => {
-  return <div className="  p-6 h-full py-14 gap-6 overflow-scroll"></div>;
+  return  <div className="h-full w-full flex binaria relative">
+  <Navbar />
+  <div className="w-full h-full overflow-scroll">
+
+    <div className="flex h-full justify-between">
+        <div>
+
+        </div>
+
+
+
+        <Sidebar/>
+
+    </div>
+    
+  </div>
+</div>
 };
 
 export default Agent;

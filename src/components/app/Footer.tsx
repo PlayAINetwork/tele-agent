@@ -15,7 +15,22 @@ const Footer = () => {
     });
   };
   return (
+
+    <div>
+      <div className="flex">
+<div className=" flex-1   ">
+          {/* <ConnectWallet /> */}
+          <Button className="w-full">view leaderboard</Button>
+        </div>
+        <div className=" flex-[5]  border-t ">
+          {/* <ConnectWallet /> */}
+          <Button variant={"outline"} className="w-full ">view leaderboard</Button>
+        </div>
+</div>
+
     <div className="flex  justify-between w-full border-t-[1px] border-primary bg-secondary p-4 py-2">
+
+
       <div>
         <Button
           className="text-md"
@@ -53,6 +68,8 @@ const Footer = () => {
         ) : null}
       </div>{" "}
     </div>
+    </div>
+
   );
 };
 

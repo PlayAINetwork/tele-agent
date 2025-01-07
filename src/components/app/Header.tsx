@@ -50,7 +50,7 @@ const Header = () => {
           }}
         >
           <div className="flex h-full text-sm gap-[1px] ">
-            <div>
+            <div className="cursor-pointer" onClick={()=> navigate("/")}>
               <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
             </div>
             <div

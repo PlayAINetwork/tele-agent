@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/app/Header";
 import { IMAGES } from "@/assets";
 import Footer from "@/components/app/Footer";
@@ -117,14 +117,15 @@ function AppLayout() {
           </div>
         </div>
       ) : (
-   <>
-         
+        <div className="flex flex-col flex-1 h-full">
           <Header />
-          <Outlet />
+
+          <div className="flex-1 flex flex-col  overflow-scroll ">
+            <Outlet />
+          </div>
 
           <Footer />
-          </>
-
+        </div>
       )}
     </main>
   );

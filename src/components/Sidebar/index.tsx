@@ -16,7 +16,7 @@ const Sidebar = () => {
 
   // const config = genConfig(address);
 
-  const { hideSidebar, sidebarMenu } = useAppCtx();
+  const {  sidebarMenu } = useAppCtx();
 
  
   return (
@@ -52,7 +52,7 @@ const Sidebar = () => {
         <img src={IMAGES.bg} alt="" className="h-full" />
       </div>
       <div className="h-full relative z-[10] bg-card binaria">
-        {!hideSidebar && (
+        
           <div className="flex flex-col gap-0 h-full">
             <Tabs />
             <div className="grow  h-4   ">
@@ -125,7 +125,7 @@ const Sidebar = () => {
               </div>
             )}
           </div>
-        )}
+       
       </div>
     </aside>
   );
