@@ -1,4 +1,4 @@
-import  { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { Program, AnchorProvider, BN, web3 } from "@project-serum/anchor";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -42,8 +42,8 @@ const StakePopup = () => {
   const [vaultBalance, setVaultBalance] = useState(0);
   const [mybalance, setMybalance] = useState();
   const [balance, setBalance] = useState<any>(null);
+  const [error, setError] = useState(null);
 
- 
   useEffect(() => {
     const fetchBalance = async () => {
       try {
@@ -54,8 +54,6 @@ const StakePopup = () => {
         const TOKEN_ADDRESS = "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq";
         const tokenPublicKey = new PublicKey(TOKEN_ADDRESS);
 
-        
-
         const associatedAddress = await getAssociatedTokenAddress(
           tokenPublicKey,
           publicKey
@@ -63,18 +61,19 @@ const StakePopup = () => {
         const account = await getAccount(connection, associatedAddress);
 
         setBalance(Number(account.amount) / 10 ** 9);
-      
       } catch (err: any) {
-        console.log(err)
+        console.log(err);
+        setError(err.message);
+
       } finally {
         setLoading(false);
       }
     };
 
-    if (wallet?.publicKey,isStake) {
+    if (wallet?.publicKey) {
       fetchBalance();
     }
-  }, [wallet?.publicKey,mybalance]);
+  }, [wallet?.publicKey, isStake, mybalance,error]);
 
   const [loading, setLoading] = useState(false);
 
@@ -185,15 +184,13 @@ const StakePopup = () => {
       await checkVaultInitialization();
       toast({
         title: "Initiated Successfully ",
-      
       });
     } catch (error) {
       console.error("Error initializing vault:", error);
       toast({
-        title: "Failed to initialize vault. Please check if you have enough SOL for transaction fees. ",
-      
+        title:
+          "Failed to initialize vault. Please check if you have enough SOL for transaction fees. ",
       });
-     
     } finally {
       setLoading(false);
     }
@@ -230,7 +227,7 @@ const StakePopup = () => {
         .transferIn(new BN(parseFloat(depositAmount) * 10 ** tokenDecimals))
         .accounts({
           tokenAccountOwnerPda: tokenAccountOwnerPDA,
-          vaultData:vaultData,
+          vaultData: vaultData,
           vaultTokenAccount: vaultTokenAccount,
           senderTokenAccount: userATA.address,
           mintOfTokenBeingSent: TOKEN_MINT,
@@ -243,17 +240,14 @@ const StakePopup = () => {
 
       await checkVaultInitialization();
       setDepositAmount("");
-      setMybalance(balance)
+      setMybalance(balance);
       toast({
         title: "Deposited Successfully ",
-      
       });
-
     } catch (error) {
       console.error("Error depositing tokens:", error);
       toast({
         title: "Failed to deposit tokens ",
-      
       });
     } finally {
       setLoading(false);
@@ -289,7 +283,7 @@ const StakePopup = () => {
         .accounts({
           tokenAccountOwnerPda: tokenAccountOwnerPDA,
           vaultTokenAccount: vaultTokenAccount,
-          vaultData:vaultData,
+          vaultData: vaultData,
           senderTokenAccount: userATA,
           mintOfTokenBeingSent: TOKEN_MINT,
           signer: wallet.publicKey,
@@ -303,13 +297,11 @@ const StakePopup = () => {
       setWithdrawAmount("");
       toast({
         title: "Success to withdraw tokens",
-      
       });
     } catch (error) {
       console.error("Error withdrawing tokens:", error);
       toast({
         title: "Failed to withdraw tokens ",
-      
       });
     } finally {
       setLoading(false);
@@ -404,9 +396,7 @@ const StakePopup = () => {
                   />
                 </div>
               </div>
-              <div className="text-[#B6B6B6]">
-              DISCLAIMER: ONCE STAKED, t
-                    </div>
+              <div className="text-[#B6B6B6]">DISCLAIMER: ONCE STAKED, t</div>
             </div>
           </div>
 
