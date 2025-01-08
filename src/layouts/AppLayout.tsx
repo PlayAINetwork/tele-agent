@@ -120,7 +120,7 @@ function AppLayout() {
         <div className="flex flex-col flex-1 h-full">
           <Header />
 
-          <div className="flex-1 flex flex-col  overflow-scroll ">
+          <div className="flex-1 flex flex-col relative z-[1] overflow-scroll ">
             <Outlet />
           </div>
 

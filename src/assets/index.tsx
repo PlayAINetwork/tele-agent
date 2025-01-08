@@ -16,6 +16,8 @@ import net from "./images/net-box.webp";
 import notshow from "./images/noshow.png";
 import disbg from "./images/bg-dis.png";
 import mobile from "./images/mobile.png";
+import blackshard from "./images/blackshard.png";
+
 
 
 
@@ -23,6 +25,7 @@ import mobile from "./images/mobile.png";
 
 
 export const IMAGES = {
+  blackshard,
   mobile,
   disbg,
   img_balaji,

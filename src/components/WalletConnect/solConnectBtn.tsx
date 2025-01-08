@@ -2,7 +2,7 @@ import  { useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Button } from "../ui/button";
-import DYNAMICICONS from "@/assets/DynamicIcon";
+
 
 const CustomSolanaButton = ({
   connectText = "Connect Wallet",
@@ -53,7 +53,7 @@ const CustomSolanaButton = ({
     : connectText;
 
   return (
-   <Button className="w-full px-0 binaria">
+   <Button className="w-full px-0 binaria h-full bg-[#383838] text-[#fff]">
 
       <WalletMultiButton
         className={`${baseStyle} flex bg-transparent gap-2${loading ? "opacity-75 cursor-not-allowed w-full" : "min-w-full "}`}
@@ -78,7 +78,7 @@ const CustomSolanaButton = ({
           </svg>
         ) : null}
         <div className="pr-2">
-          <DYNAMICICONS.Arrow />
+          {/* <DYNAMICICONS.Arrow color="#fff"  /> */}
         </div>
         {buttonText}
       </WalletMultiButton>

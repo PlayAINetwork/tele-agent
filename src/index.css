@@ -166,11 +166,17 @@
 .wallet-adapter-button-trigger {
   width: 100% !important;
   background-color: transparent !important;
-  color:#010101 !important;
+  color:#fff !important;
   justify-content: center !important;
   font-family: "binaria", serif !important;
-  font-weight: 400;
-  font-style: normal;
+  font-weight: 400 !important;
+  text-transform: uppercase;
+  
+}
+
+.wallet-adapter-button-trigger:hover{
+  color:#000 !important;
+
 }
 
 ::placeholder {
@@ -249,4 +255,8 @@ textarea:focus-visible {
   border: none;
   outline: none;
   box-shadow: none !important;
+}
+.blackshade{
+  background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 33.33%, rgba(0, 0, 0, 0) 66.67%, #000000 100%);
+
 }

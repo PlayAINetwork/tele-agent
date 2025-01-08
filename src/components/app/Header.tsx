@@ -1,12 +1,20 @@
-import { ICONS, IMAGES } from "@/assets";
+import {  IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 // import StackPopup from "./StackPopup";
 import { useNavigate } from "react-router-dom";
+import { Input } from "../ui/input";
+import { Search } from "lucide-react";
+import CustomSolanaButton from "../WalletConnect/solConnectBtn";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { AgentItem } from "../Home/Navbar";
 
 const Header = () => {
-  const [tokenData, setTokenData] = useState<any>(null);
+  // const [tokenData, setTokenData] = useState<any>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const { connected } = useWallet();
+  const [search, setSearch] = useState("")
+
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -21,10 +29,10 @@ const Header = () => {
 
         if (data.pairs && data.pairs.length > 0) {
           // Sort by volume and get the most liquid pair
-          const mostLiquidPair = data.pairs.sort(
-            (a: any, b: any) => parseFloat(b.priceUsd) - parseFloat(a.priceUsd)
-          )[0];
-          setTokenData(mostLiquidPair);
+          // const mostLiquidPair = data.pairs.sort(
+          //   (a: any, b: any) => parseFloat(b.priceUsd) - parseFloat(a.priceUsd)
+          // )[0];
+          // setTokenData(mostLiquidPair);
         } else {
           console.log("No trading pairs found");
         }
@@ -37,10 +45,10 @@ const Header = () => {
     const interval = setInterval(fetchTokenData, 30000);
     return () => clearInterval(interval);
   }, []);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
+    <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary relative z-10">
       <div className="flex gap-3">
         {/* <img src={IMAGES.logo} alt="" className="w-[100px] lg:w-[200px]"/> */}
         <div
@@ -50,7 +58,7 @@ const Header = () => {
           }}
         >
           <div className="flex h-full text-sm gap-[1px] ">
-            <div className="cursor-pointer" onClick={()=> navigate("/")}>
+            <div className="cursor-pointer" onClick={() => navigate("/")}>
               <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
             </div>
             <div
@@ -85,17 +93,15 @@ const Header = () => {
 
             <div
               className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-             
-          onClick={()=>navigate("/rogueagent")}
+              onClick={() => navigate("/rogueagent")}
             >
               <span className="text-white relative transition-transform duration-300 ease-in-out">
-             {" > Leaderboard <"}
+                {" > Leaderboard <"}
               </span>
             </div>
             {/* <StackPopup/> */}
 
-           <VideoGenertionPopup/>
-           
+            <VideoGenertionPopup />
           </div>
         </div>
 
@@ -110,8 +116,55 @@ const Header = () => {
           Learn more
         </Button> */}
       </div>
-      <div className="flex items-center gap-4">
-        <div className="flex  gap-2 text-md pt-1">
+      <div className="flex items-center gap-0">
+        <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
+          <Search />
+          <Input
+            className="pr-[5px] binaria border-none  uppercase bg-transparent w-[220px]"
+            type="text"
+            value={search}
+            placeholder="search_agents"
+            onChange={(e)=>setSearch(e.target.value)}
+            // disabled={disableAction}
+          />
+          {
+            search !== ""?
+            <div className="z-100 absolute top-[67px] left-0  w-full max-h-[300px] bg-secondary overflow-scroll border border-primary p-2">
+            <div>
+              <AgentItem/>
+              <AgentItem/>
+              <AgentItem/>
+              <AgentItem/>
+              <AgentItem/>
+              <AgentItem/>
+
+
+            </div>
+
+          </div>
+            :null
+          }
+         
+        </div>
+
+        {connected ? null :
+         
+         (
+           <div 
+         className="border-x-[1px] border-primary cursor-pointer h-full flex items-center"
+           
+           >
+             <CustomSolanaButton
+             
+               connectText="Connect Wallet"
+               disconnectText="Disconnect Wallet"
+               buttonStyle="primary"
+               size="medium"
+             />
+           </div>
+         )}
+
+        {/* <div className="flex  gap-2 text-md pt-1">
           <p className="text-primary">$ROGUE:</p>
           <p>
             {" "}
@@ -119,8 +172,8 @@ const Header = () => {
               ? parseFloat(tokenData?.priceUsd).toFixed(6)
               : 0.0}
           </p>
-        </div>
-        <div className="h-full flex uppercase">
+        </div> */}
+        {/* <div className="h-full flex uppercase">
           <div
             onClick={() =>
               open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
@@ -149,47 +202,7 @@ const Header = () => {
           >
             Twitter
           </div>
-        </div>
-
-        {/* <Button
-          onClick={() =>
-            open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
-          }
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-        </Button>
-        <Button
-          onClick={() =>
-            open(
-              "https://dexscreener.com/solana/bgzm2era3ifpkcmb4w49of3cj9ruverxzhe2pzbbp8tv",
-              "_brace"
-            )
-          }
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-          <img
-            src={ICONS.icon_PIXELS_decscrenner}
-            alt=""
-            className="w-[50px]"
-          />
-        </Button>
-
-        <Button
-          onClick={() => open("https://x.com/0xRogueAgent", "_brace")}
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-          <img src={ICONS.icon_PIXELS_X} alt="" className="w-[50px]" />
-        </Button>
-        <Button
-          onClick={() => open("https://t.me/AgentRogue_Official", "_brace")}
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-          <img src={ICONS.PIXELS_Telegram} alt="" className="w-[50px]" />
-        </Button> */}
+        </div> */}
       </div>
     </div>
   );

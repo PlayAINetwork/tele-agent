@@ -3,7 +3,6 @@ import { useAppCtx } from "@/context/app.contex";
 import Tabs from "./Tabs";
 import GlobelBox from "./GlobelBox";
 import TeerminalBox from "./TeerminalBox";
-import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useWallet } from "@solana/wallet-adapter-react";
 import CharacterBox from "./CharacterBox";
 
@@ -116,12 +115,12 @@ const Sidebar = () => {
             // ) : 
             (
               <div className="px-0">
-                <CustomSolanaButton
+                {/* <CustomSolanaButton
                   connectText="Connect Wallet"
                   disconnectText="Disconnect Wallet"
                   buttonStyle="primary"
                   size="medium"
-                />
+                /> */}
               </div>
             )}
           </div>
