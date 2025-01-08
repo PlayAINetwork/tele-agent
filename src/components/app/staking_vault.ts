@@ -1,222 +1,80 @@
-export const IDL :any= {
-  "version": "0.1.0",
-  "name": "staking_vault",
-  "instructions": [
+export const IDL: any = {
+  version: "0.1.0",
+  name: "token_vault",
+  instructions: [
     {
-      "name": "initialize",
-      "accounts": [
-        {
-          "name": "vault",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaultTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        }
+      name: "initialize",
+      accounts: [
+        { name: "payer", isMut: true, isSigner: true },
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "tokenAccountOwnerPda", isMut: false, isSigner: false },
+        { name: "vaultTokenAccount", isMut: true, isSigner: false },
+        { name: "mintOfTokenBeingSent", isMut: false, isSigner: false },
+        { name: "systemProgram", isMut: false, isSigner: false },
+        { name: "tokenProgram", isMut: false, isSigner: false },
+        { name: "rent", isMut: false, isSigner: false },
       ],
-      "args": []
+      args: [],
     },
     {
-      "name": "createUserAccount",
-      "accounts": [
-        {
-          "name": "userAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userAuthority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        }
+      name: "transferIn",
+      accounts: [
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "tokenAccountOwnerPda", isMut: false, isSigner: false },
+        { name: "vaultTokenAccount", isMut: true, isSigner: false },
+        { name: "senderTokenAccount", isMut: true, isSigner: false },
+        { name: "mintOfTokenBeingSent", isMut: false, isSigner: false },
+        { name: "signer", isMut: false, isSigner: true },
+        { name: "systemProgram", isMut: false, isSigner: false },
+        { name: "tokenProgram", isMut: false, isSigner: false },
+        { name: "rent", isMut: false, isSigner: false },
       ],
-      "args": []
+      args: [{ name: "amount", type: "u64" }],
     },
     {
-      "name": "deposit",
-      "accounts": [
-        {
-          "name": "vault",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaultTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userAuthority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+      name: "transferOut",
+      accounts: [
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "tokenAccountOwnerPda", isMut: false, isSigner: false },
+        { name: "vaultTokenAccount", isMut: true, isSigner: false },
+        { name: "senderTokenAccount", isMut: true, isSigner: false },
+        { name: "mintOfTokenBeingSent", isMut: false, isSigner: false },
+        { name: "signer", isMut: false, isSigner: true },
+        { name: "systemProgram", isMut: false, isSigner: false },
+        { name: "tokenProgram", isMut: false, isSigner: false },
+        { name: "rent", isMut: false, isSigner: false },
       ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
+      args: [{ name: "amount", type: "u64" }],
     },
-    {
-      "name": "withdraw",
-      "accounts": [
-        {
-          "name": "vault",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaultTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userAuthority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    }
   ],
-  "accounts": [
+  accounts: [
     {
-      "name": "Vault",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "tokenAccount",
-            "type": "publicKey"
-          },
-          {
-            "name": "totalDeposits",
-            "type": "u64"
-          }
-        ]
-      }
+      name: "VaultData",
+      type: {
+        kind: "struct",
+        fields: [
+          { name: "userBalances", type: { vec: { defined: "UserBalance" } } },
+        ],
+      },
     },
-    {
-      "name": "UserAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "owner",
-            "type": "publicKey"
-          },
-          {
-            "name": "depositedAmount",
-            "type": "u64"
-          },
-          {
-            "name": "lastDepositTimestamp",
-            "type": "i64"
-          }
-        ]
-      }
-    }
   ],
-  "errors": [
+  types: [
     {
-      "code": 6000,
-      "name": "InvalidAmount",
-      "msg": "Amount must be greater than 0"
+      name: "UserBalance",
+      type: {
+        kind: "struct",
+        fields: [
+          { name: "user", type: "publicKey" },
+          { name: "amount", type: "u64" },
+        ],
+      },
     },
-    {
-      "code": 6001,
-      "name": "InsufficientBalance",
-      "msg": "Insufficient balance"
-    },
-    {
-      "code": 6002,
-      "name": "Overflow",
-      "msg": "Arithmetic overflow"
-    },
-    {
-      "code": 6003,
-      "name": "UnauthorizedAccess",
-      "msg": "Unauthorized access"
-    }
   ],
-  "metadata": {
-    "address": "6MZWCa95kXiV77ohT2c7Q7rFyftRF8pyAxFa1GMPJQMU"
-  }
-}
+  errors: [
+    {
+      code: 6000,
+      name: "InsufficientBalance",
+      msg: "Insufficient balance for withdrawal",
+    },
+  ],
+};

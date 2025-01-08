@@ -2,7 +2,7 @@ import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 import StackPopup from "./StackPopup";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
@@ -37,7 +37,7 @@ const Header = () => {
     const interval = setInterval(fetchTokenData, 30000);
     return () => clearInterval(interval);
   }, []);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
@@ -46,7 +46,7 @@ const Header = () => {
         <div
           className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: "polygon(0 0, 96.1% 2%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(0 0, 95.5% 2%, 100% 100%, 0% 100%)",
           }}
         >
           <div className="flex h-full text-sm gap-[1px] ">
@@ -84,14 +84,14 @@ const Header = () => {
             </div> */}
             <StackPopup/>
 
-            <div
+            {/* <div
               className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
               onClick={() => navigate("/rogueagent")}
             >
               <span className="text-white relative transition-transform duration-300 ease-in-out">
                 {" > Leaderboard <"}
               </span>
-            </div>
+            </div> */}
 
             <VideoGenertionPopup />
           </div>
