@@ -44,7 +44,7 @@ const StakePopup = () => {
   const fetchBalance = async (wallet: any) => {
     try {
       setLoading(true);
-      const connection = new Connection(import.meta.env.VITE_SOL_RPC_DEV);
+      const connection = new Connection("https://api.devnet.solana.com");
       const publicKey = new PublicKey(wallet?.publicKey);
       // const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
       const TOKEN_ADDRESS = "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq";
