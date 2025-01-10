@@ -22,22 +22,6 @@ import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useToast } from "@/hooks/use-toast";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
 
-function computeFloatVals(
-  a: string,
-  b: string,
-  precision: number = 9,
-  addValues: boolean = true
-): number {
-  const factor = Math.pow(10, precision); // Scale factor based on precision
-  const numA = parseFloat(a); // Convert string to float
-  const numB = parseFloat(b); // Convert string to float
-
-  const result = addValues
-    ? (Math.round(numA * factor) + Math.round(numB * factor)) / factor
-    : (Math.round(numA * factor) - Math.round(numB * factor)) / factor;
-  return result;
-}
-
 const TOKEN_MINT = new PublicKey(
   "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq"
 );
