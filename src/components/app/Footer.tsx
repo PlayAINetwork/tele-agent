@@ -6,7 +6,6 @@ import { useWallet } from "@solana/wallet-adapter-react";
 const Footer = () => {
   const { toast } = useToast();
   const { connected, publicKey, disconnect } = useWallet();
-
   const address: any = publicKey?.toString();
   const copy = async (address: string) => {
     await navigator.clipboard.writeText(address);

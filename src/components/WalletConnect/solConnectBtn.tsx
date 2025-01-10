@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useEffect, useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Button } from "../ui/button";
@@ -33,8 +33,8 @@ const CustomSolanaButton = ({
     ${styles[buttonStyle]}
   `;
 
-  const shortenAddress = (address:any) => {
-    setLoading(false)
+  const shortenAddress = (address: any) => {
+    setLoading(false);
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
   };
 
@@ -51,10 +51,8 @@ const CustomSolanaButton = ({
   const buttonText = connected
     ? `${shortenAddress(publicKey?.toString())} (${disconnectText})`
     : connectText;
-
   return (
-   <Button className="w-full px-0 binaria">
-
+    <Button className="w-full px-0 binaria">
       <WalletMultiButton
         className={`${baseStyle} flex bg-transparent gap-2${loading ? "opacity-75 cursor-not-allowed w-full" : "min-w-full "}`}
         onClick={handleClick}
@@ -82,8 +80,7 @@ const CustomSolanaButton = ({
         </div>
         {buttonText}
       </WalletMultiButton>
-      </Button>
-
+    </Button>
   );
 };
 

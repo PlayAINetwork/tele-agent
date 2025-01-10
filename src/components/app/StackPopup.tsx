@@ -18,15 +18,30 @@ import {
 import { ChevronRight, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-// import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
-import { IDL } from "./staking_vault";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useToast } from "@/hooks/use-toast";
+import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
+
+function computeFloatVals(
+  a: string,
+  b: string,
+  precision: number = 9,
+  addValues: boolean = true
+): number {
+  const factor = Math.pow(10, precision); // Scale factor based on precision
+  const numA = parseFloat(a); // Convert string to float
+  const numB = parseFloat(b); // Convert string to float
+
+  const result = addValues
+    ? (Math.round(numA * factor) + Math.round(numB * factor)) / factor
+    : (Math.round(numA * factor) - Math.round(numB * factor)) / factor;
+  return result;
+}
 
 const TOKEN_MINT = new PublicKey(
   "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq"
 );
-const programID = new PublicKey("EFpMgUffZPsUXYf4XEADJ3c4h96GDjhiuLGNE7caLwxB");
+const programID = new PublicKey(HOST_CONTRACT.PROGRAM_ID);
 const tokenDecimals = 9;
 
 const StakePopup = () => {
@@ -39,44 +54,38 @@ const StakePopup = () => {
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [isVaultInitialized, setIsVaultInitialized] = useState(false);
-  const [vaultBalance, setVaultBalance] = useState(0);
-  const [mybalance, setMybalance] = useState();
-  const [balance, setBalance] = useState<any>(null);
+  const [vaultBalanceofUser, setVaultBalanceofUser] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [error, setError] = useState(null);
+  const fetchBalance = async (wallet: any) => {
+    try {
+      setLoading(true);
+      const connection = new Connection(import.meta.env.VITE_SOL_RPC_DEV);
+      const publicKey = new PublicKey(wallet?.publicKey);
+      // const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
+      const TOKEN_ADDRESS = "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq";
+      const tokenPublicKey = new PublicKey(TOKEN_ADDRESS);
 
-  useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        setLoading(true);
-        const connection = new Connection(import.meta.env.VITE_SOL_RPC);
-        const publicKey = new PublicKey(wallet?.publicKey);
-        // const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
-        const TOKEN_ADDRESS = "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq";
-        const tokenPublicKey = new PublicKey(TOKEN_ADDRESS);
-
-        const associatedAddress = await getAssociatedTokenAddress(
-          tokenPublicKey,
-          publicKey
-        );
-        const account = await getAccount(connection, associatedAddress);
-
-        setBalance(Number(account.amount) / 10 ** 9);
-      } catch (err: any) {
-        console.log(err);
-        setError(err.message);
-
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (wallet?.publicKey) {
-      fetchBalance();
+      const associatedAddress = await getAssociatedTokenAddress(
+        tokenPublicKey,
+        publicKey
+      );
+      const account = await getAccount(connection, associatedAddress);
+      setBalance(Number(account.amount) / 10 ** 9);
+    } catch (err: any) {
+      console.log(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  }, [wallet?.publicKey, isStake, mybalance,error]);
+  };
+  useEffect(() => {
+    if (wallet?.publicKey) {
+      fetchBalance(wallet);
+    }
+  }, [wallet?.publicKey, isStake, balance, error]);
 
   const [loading, setLoading] = useState(false);
-
   const getProvider = () => {
     if (!wallet.publicKey) throw new Error("Wallet not connected!");
     return new AnchorProvider(
@@ -85,11 +94,45 @@ const StakePopup = () => {
       AnchorProvider.defaultOptions()
     );
   };
-
   const getProgram = useCallback(() => {
     const provider = getProvider();
-    return new Program(IDL, programID, provider);
+    return new Program(HOST_CONTRACT.IDL, programID, provider);
   }, [wallet.publicKey, connection]);
+  const getUserBalance = async (wallet: any) => {
+    try {
+      // Derive PDA for user balance account
+      const [userBalancePDA] = await PublicKey.findProgramAddress(
+        [Buffer.from("user_balance"), wallet.publicKey.toBuffer()],
+        programID
+      );
+
+      // Get the provider
+      const provider = getProvider();
+
+      // Fetch the account info
+      const accountInfo =
+        await provider.connection.getAccountInfo(userBalancePDA);
+
+      // If account doesn't exist, return 0 balance
+      if (!accountInfo) {
+        setVaultBalanceofUser(0);
+        return 0;
+      }
+
+      // Parse the account data according to the UserBalance account structure
+      // UserBalance struct has: 8 bytes for discriminator + 32 bytes for owner + 8 bytes for balance
+      const balance = accountInfo.data.slice(40, 48); // Get the last 8 bytes containing balance
+
+      // Convert the balance bytes to BigInt (u64)
+      const userBalance = Buffer.from(balance).readBigUInt64LE();
+      const formatted_balance = Number(userBalance) / Math.pow(10, 9);
+      setVaultBalanceofUser(formatted_balance);
+      return formatted_balance;
+    } catch (error) {
+      console.error("Error fetching user balance:", error);
+      throw error;
+    }
+  };
 
   const checkVaultInitialization = async () => {
     try {
@@ -105,7 +148,8 @@ const StakePopup = () => {
       if (accountInfo !== null) {
         const tokenAccount =
           await connection.getTokenAccountBalance(vaultTokenAccount);
-        setVaultBalance(tokenAccount.value.uiAmount || 0);
+        console.log(tokenAccount.value.uiAmount);
+        getUserBalance(wallet);
       }
     } catch (error) {
       console.error("Error checking vault initialization:", error);
@@ -113,7 +157,7 @@ const StakePopup = () => {
     }
   };
 
-  const validateTransaction = (amount: any) => {
+  const validateTransaction = (amount: any, stakeBalance?: any) => {
     if (!wallet.publicKey) {
       toast({
         title: "Please connect your wallet ",
@@ -135,7 +179,7 @@ const StakePopup = () => {
       return false;
     }
 
-    if (!isStake && parseFloat(amount) > vaultBalance) {
+    if (!isStake && parseFloat(amount) > parseFloat(stakeBalance)) {
       toast({
         title: "Insufficient staked balance",
       });
@@ -144,7 +188,14 @@ const StakePopup = () => {
 
     return true;
   };
-
+  const getVault = async () => {
+    const program = getProgram();
+    const [vaultData] = await PublicKey.findProgramAddress(
+      [Buffer.from("vault_data")],
+      program.programId
+    );
+    console.log("vault data", vaultData);
+  };
   const initializeVault = async () => {
     setLoading(true);
     try {
@@ -222,6 +273,10 @@ const StakePopup = () => {
         [Buffer.from("vault_data")],
         program.programId
       );
+      const [userBalance] = await PublicKey.findProgramAddress(
+        [Buffer.from("user_balance"), wallet.publicKey.toBuffer()],
+        program.programId
+      );
 
       await program.methods
         .transferIn(new BN(parseFloat(depositAmount) * 10 ** tokenDecimals))
@@ -235,12 +290,13 @@ const StakePopup = () => {
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
           rent: web3.SYSVAR_RENT_PUBKEY,
+          userBalance: userBalance,
         })
         .rpc();
 
       await checkVaultInitialization();
+      await fetchBalance(wallet);
       setDepositAmount("");
-      setMybalance(balance);
       toast({
         title: "Deposited Successfully ",
       });
@@ -255,8 +311,8 @@ const StakePopup = () => {
   };
 
   const withdrawTokens = async () => {
-    if (!validateTransaction(withdrawAmount)) return;
-
+    const balance = await getUserBalance(wallet);
+    if (!validateTransaction(withdrawAmount, balance)) return;
     setLoading(true);
     try {
       const program = getProgram();
@@ -278,6 +334,10 @@ const StakePopup = () => {
         [Buffer.from("vault_data")],
         program.programId
       );
+      const [userBalance] = await PublicKey.findProgramAddress(
+        [Buffer.from("user_balance"), wallet.publicKey.toBuffer()],
+        program.programId
+      );
       await program.methods
         .transferOut(new BN(parseFloat(withdrawAmount) * 10 ** tokenDecimals))
         .accounts({
@@ -290,11 +350,14 @@ const StakePopup = () => {
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
           rent: web3.SYSVAR_RENT_PUBKEY,
+          userBalance: userBalance,
         })
         .rpc();
 
       await checkVaultInitialization();
+      await fetchBalance(wallet);
       setWithdrawAmount("");
+      setVaultBalanceofUser(Number(balance));
       toast({
         title: "Success to withdraw tokens",
       });
@@ -313,7 +376,9 @@ const StakePopup = () => {
       checkVaultInitialization();
     }
   }, [wallet.publicKey, connection]);
-
+  useEffect(() => {
+    getVault();
+  }, []);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -340,7 +405,10 @@ const StakePopup = () => {
             {">> stake_$rogue"}
           </DialogDescription>
           <DialogDescription
-            onClick={() => setStake(false)}
+            onClick={async () => {
+              setStake(false);
+              getUserBalance(wallet);
+            }}
             className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
               isStake ? "bg-[#181818] text-[#fff]" : "bg-primary text-[#010101]"
             }`}
@@ -365,10 +433,12 @@ const StakePopup = () => {
                 <div className="flex w-full justify-between">
                   {isStake ? (
                     <div>
-                      Available Balance: {balance?.toFixed(2) ?? 0} ROGUE
+                      Available Balance: {balance?.toFixed(5) ?? 0} ROGUE
                     </div>
                   ) : (
-                    <div>Staked Balance: {vaultBalance.toFixed(2)} ROGUE</div>
+                    <div>
+                      Staked Balance: {vaultBalanceofUser.toFixed(5)} ROGUE
+                    </div>
                   )}
                 </div>
 
@@ -388,27 +458,31 @@ const StakePopup = () => {
                     step="0.000000001"
                     min="0"
                     placeholder={
-                      isStake
-                        ? "input_$ROGUE_TO_STAKE"
-                        : "input_$ROGUE_TO_UNSTAKE"
+                      !isVaultInitialized
+                        ? "Please Initialize vault first!"
+                        : isStake
+                          ? "input_$ROGUE_TO_STAKE"
+                          : "input_$ROGUE_TO_UNSTAKE"
                     }
-                    disabled={loading}
+                    disabled={loading || !isVaultInitialized}
                   />
                 </div>
               </div>
-              <div className="text-[#B6B6B6]">DISCLAIMER: ONCE STAKED, t</div>
+              {/* <div className="text-[#B6B6B6]">DISCLAIMER: ONCE STAKED, t</div> */}
             </div>
           </div>
 
           <div className="flex w-full gap-0">
             {wallet.connected ? (
               <>
-                <Button
-                  className="uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
-                  disabled={loading}
-                >
-                  cancel
-                </Button>
+                {isVaultInitialized ? (
+                  <Button
+                    className="uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
+                    disabled={loading}
+                  >
+                    cancel
+                  </Button>
+                ) : null}
 
                 {isVaultInitialized ? (
                   <Button
@@ -417,7 +491,7 @@ const StakePopup = () => {
                     disabled={loading || !isVaultInitialized}
                   >
                     <ChevronRight className="w-4 h-4" color="#000" />
-                    {isStake ? "stake" : "unstake"}
+                    {loading ? "Wait..." : isStake ? "stake" : "unstake"}
                   </Button>
                 ) : (
                   <Button
@@ -426,7 +500,7 @@ const StakePopup = () => {
                     onClick={initializeVault}
                     disabled={loading}
                   >
-                    initialize vault
+                    {loading ? "Initializing..." : "initialize vault"}
                   </Button>
                 )}
               </>

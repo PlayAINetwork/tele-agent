@@ -1,253 +1,165 @@
-const ADDRESS = "0x66FFA98990D04F7f97a7D6eBE87a36BFC2F073E1";
-const ABI = [
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_symbol",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "_decimals",
-        type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "_totalSupply",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "Approval",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "success",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "transfer",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "success",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "transferFrom",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "success",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "allowance",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "balanceOf",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "decimals",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "symbol",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalSupply",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-]as const;
+const PROGRAM_ID = "Dghbe2RAYG2L6oKNg8ASZPQzCR2sz5srofE32iwtoDMs";
 
-export const HOST_CONTRACT = { ABI, ADDRESS };
+const IDL: any = {
+  version: "0.1.0",
+  name: "token_vault",
+  instructions: [
+    {
+      name: "initialize",
+      accounts: [
+        { name: "payer", isMut: true, isSigner: true },
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "tokenAccountOwnerPda", isMut: false, isSigner: false },
+        { name: "vaultTokenAccount", isMut: true, isSigner: false },
+        { name: "mintOfTokenBeingSent", isMut: false, isSigner: false },
+        { name: "systemProgram", isMut: false, isSigner: false },
+        { name: "tokenProgram", isMut: false, isSigner: false },
+        { name: "rent", isMut: false, isSigner: false },
+      ],
+      args: [],
+    },
+    {
+      name: "pause",
+      accounts: [
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "admin", isMut: false, isSigner: true },
+      ],
+      args: [],
+    },
+    {
+      name: "unpause",
+      accounts: [
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "admin", isMut: false, isSigner: true },
+      ],
+      args: [],
+    },
+    {
+      name: "transferIn",
+      accounts: [
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "userBalance", isMut: true, isSigner: false },
+        { name: "tokenAccountOwnerPda", isMut: false, isSigner: false },
+        { name: "vaultTokenAccount", isMut: true, isSigner: false },
+        { name: "senderTokenAccount", isMut: true, isSigner: false },
+        { name: "mintOfTokenBeingSent", isMut: false, isSigner: false },
+        { name: "signer", isMut: true, isSigner: true },
+        { name: "systemProgram", isMut: false, isSigner: false },
+        { name: "tokenProgram", isMut: false, isSigner: false },
+        { name: "rent", isMut: false, isSigner: false },
+      ],
+      args: [{ name: "amount", type: "u64" }],
+    },
+    {
+      name: "transferOut",
+      accounts: [
+        { name: "vaultData", isMut: true, isSigner: false },
+        { name: "userBalance", isMut: true, isSigner: false },
+        { name: "tokenAccountOwnerPda", isMut: false, isSigner: false },
+        { name: "vaultTokenAccount", isMut: true, isSigner: false },
+        { name: "senderTokenAccount", isMut: true, isSigner: false },
+        { name: "mintOfTokenBeingSent", isMut: false, isSigner: false },
+        { name: "signer", isMut: true, isSigner: true },
+        { name: "systemProgram", isMut: false, isSigner: false },
+        { name: "tokenProgram", isMut: false, isSigner: false },
+        { name: "rent", isMut: false, isSigner: false },
+      ],
+      args: [{ name: "amount", type: "u64" }],
+    },
+    {
+      name: "getUserBalance",
+      accounts: [
+        { name: "userBalance", isMut: false, isSigner: false },
+        { name: "owner", isMut: false, isSigner: false },
+      ],
+      args: [],
+      returns: "u64",
+    },
+  ],
+  accounts: [
+    {
+      name: "VaultData",
+      type: {
+        kind: "struct",
+        fields: [
+          { name: "paused", type: "bool" },
+          { name: "admin", type: "publicKey" },
+          { name: "totalUsers", type: "u32" },
+        ],
+      },
+    },
+    {
+      name: "UserBalance",
+      type: {
+        kind: "struct",
+        fields: [
+          { name: "owner", type: "publicKey" },
+          { name: "balance", type: "u64" },
+        ],
+      },
+    },
+  ],
+  types: [
+    {
+      name: "TransferType",
+      type: {
+        kind: "enum",
+        variants: [{ name: "Deposit" }, { name: "Withdrawal" }],
+      },
+    },
+  ],
+  events: [
+    {
+      name: "TransferEvent",
+      fields: [
+        { name: "user", type: "publicKey", index: false },
+        { name: "amount", type: "u64", index: false },
+        {
+          name: "transferType",
+          type: { defined: "TransferType" },
+          index: false,
+        },
+        { name: "timestamp", type: "i64", index: false },
+        { name: "tokenMint", type: "publicKey", index: false },
+        { name: "vaultBalance", type: "u64", index: false },
+        { name: "userBalance", type: "u64", index: false },
+      ],
+    },
+    {
+      name: "InitializeEvent",
+      fields: [
+        { name: "vault", type: "publicKey", index: false },
+        { name: "admin", type: "publicKey", index: false },
+      ],
+    },
+    {
+      name: "PauseEvent",
+      fields: [
+        { name: "paused", type: "bool", index: false },
+        { name: "admin", type: "publicKey", index: false },
+        { name: "timestamp", type: "i64", index: false },
+      ],
+    },
+  ],
+  errors: [
+    {
+      code: 6000,
+      name: "InsufficientBalance",
+      msg: "Insufficient balance for withdrawal",
+    },
+    { code: 6001, name: "InvalidAmount", msg: "Invalid amount" },
+    { code: 6002, name: "InvalidOwner", msg: "Invalid token account owner" },
+    {
+      code: 6003,
+      name: "InsufficientVaultBalance",
+      msg: "Insufficient vault balance",
+    },
+    { code: 6004, name: "UnauthorizedDeployer", msg: "Unauthorized deployer" },
+    { code: 6005, name: "VaultPaused", msg: "Vault is paused" },
+    { code: 6006, name: "UnauthorizedAdmin", msg: "Unauthorized admin" },
+    { code: 6007, name: "AlreadyPaused", msg: "Vault is already paused" },
+    { code: 6008, name: "NotPaused", msg: "Vault is not paused" },
+    { code: 6009, name: "CalculationOverflow", msg: "Calculation overflow" },
+  ],
+};
+export const HOST_CONTRACT = { IDL, PROGRAM_ID };

@@ -8,9 +8,9 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
-    const { connected } = useWallet();
-    const {setVisible} = useWalletModal()
-  
+  const { connected } = useWallet();
+  const { setVisible } = useWalletModal();
+
   // const [isHovered, setIsHovered] = useState(false);
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
   useEffect(() => {
@@ -87,23 +87,23 @@ const Header = () => {
                 </span>
               </span>
             </div> */}
-            {
-              connected ?
-              <StackPopup/>
-
-              :
+            {connected ? (
+              <StackPopup />
+            ) : (
               <div
-              onClick={()=>setVisible(true)}
-          className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-          style={{ clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
-        >
-          <span className="text-white relative transition-transform duration-300 ease-in-out">
-            <span className="block transition-all duration-300 opacity-100 translate-y-0">
-              {"> stake now <"}
-            </span>
-          </span>
-        </div>
-            }
+                onClick={() => setVisible(true)}
+                className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+                style={{
+                  clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
+                }}
+              >
+                <span className="text-white relative transition-transform duration-300 ease-in-out">
+                  <span className="block transition-all duration-300 opacity-100 translate-y-0">
+                    {"> stake now <"}
+                  </span>
+                </span>
+              </div>
+            )}
 
             {/* <div
               className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"

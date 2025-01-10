@@ -16,9 +16,6 @@ export const useTokenBalance = (walletAddress?: any) => {
         // const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
         const TOKEN_ADDRESS = "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq";
         const tokenPublicKey = new PublicKey(TOKEN_ADDRESS);
-
-        
-
         const associatedAddress = await getAssociatedTokenAddress(
           tokenPublicKey,
           publicKey
