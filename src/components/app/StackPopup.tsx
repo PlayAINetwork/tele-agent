@@ -28,6 +28,20 @@ const TOKEN_MINT = new PublicKey(
 const programID = new PublicKey(HOST_CONTRACT.PROGRAM_ID);
 const tokenDecimals = 9;
 
+function computeFloatVals(
+  a: string,
+  b: string,
+  precision: number = 9,
+  addValues: boolean = true
+): number {
+  const factor = Math.pow(10, precision); // Scale factor based on precision
+  const numA = parseFloat(a); // Convert string to float
+  const numB = parseFloat(b); // Convert string to float
+  const result = addValues
+    ? (Math.round(numA * factor) + Math.round(numB * factor)) / factor
+    : (Math.round(numA * factor) - Math.round(numB * factor)) / factor;
+  return result;
+}
 const StakePopup = () => {
   const wallet: any = useWallet();
   const { connection } = useConnection();
@@ -67,7 +81,7 @@ const StakePopup = () => {
     if (wallet?.publicKey) {
       fetchBalance(wallet);
     }
-  }, [wallet?.publicKey, isStake, balance, error]);
+  }, [wallet?.publicKey, isStake, error]);
 
   const [loading, setLoading] = useState(false);
   const getProvider = () => {
@@ -279,7 +293,7 @@ const StakePopup = () => {
         .rpc();
 
       await checkVaultInitialization();
-      await fetchBalance(wallet);
+      setBalance(computeFloatVals(String(balance), depositAmount, 9, false));
       setDepositAmount("");
       toast({
         title: "Deposited Successfully ",
@@ -341,7 +355,9 @@ const StakePopup = () => {
       await checkVaultInitialization();
       await fetchBalance(wallet);
       setWithdrawAmount("");
-      setVaultBalanceofUser(Number(balance));
+      setVaultBalanceofUser(
+        computeFloatVals(String(balance), withdrawAmount, 9, false)
+      );
       toast({
         title: "Success to withdraw tokens",
       });
@@ -381,7 +397,10 @@ const StakePopup = () => {
       <DialogContent className="flex flex-col sm:max-w-md md:max-w-[500px] gap-0 border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto">
         <div className="flex justify-between">
           <DialogDescription
-            onClick={() => setStake(true)}
+            onClick={async () => {
+              setStake(true);
+              fetchBalance(wallet);
+            }}
             className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
               isStake ? "bg-primary text-[#010101]" : "bg-[#181818] text-[#fff]"
             }`}
