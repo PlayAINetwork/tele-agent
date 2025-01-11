@@ -32,7 +32,7 @@ function computeFloatVals(
   a: string,
   b: string,
   precision: number = 9,
-  addValues: boolean = true
+  addValues: boolean = false
 ): number {
   const factor = Math.pow(10, precision); // Scale factor based on precision
   const numA = parseFloat(a); // Convert string to float
@@ -47,11 +47,9 @@ const StakePopup = () => {
   const { connection } = useConnection();
   // const { balance } = useTokenBalance(wallet?.publicKey);
   const { toast } = useToast();
-
   const [isStake, setStake] = useState(true);
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [isVaultInitialized, setIsVaultInitialized] = useState(false);
   const [vaultBalanceofUser, setVaultBalanceofUser] = useState(0);
   const [balance, setBalance] = useState(0);
   const [error, setError] = useState(null);
@@ -98,9 +96,9 @@ const StakePopup = () => {
   }, [wallet.publicKey, connection]);
   const getUserBalance = async (wallet: any) => {
     try {
-      // Derive PDA for user balance account
-      const [userBalancePDA] = await PublicKey.findProgramAddress(
-        [Buffer.from("user_balance"), wallet.publicKey.toBuffer()],
+      // Derive PDA for deposit info account
+      const [depositInfoPDA] = await PublicKey.findProgramAddress(
+        [Buffer.from("deposit_info"), wallet.publicKey.toBuffer()],
         programID
       );
 
@@ -109,7 +107,7 @@ const StakePopup = () => {
 
       // Fetch the account info
       const accountInfo =
-        await provider.connection.getAccountInfo(userBalancePDA);
+        await provider.connection.getAccountInfo(depositInfoPDA);
 
       // If account doesn't exist, return 0 balance
       if (!accountInfo) {
@@ -117,41 +115,17 @@ const StakePopup = () => {
         return 0;
       }
 
-      // Parse the account data according to the UserBalance account structure
-      // UserBalance struct has: 8 bytes for discriminator + 32 bytes for owner + 8 bytes for balance
-      const balance = accountInfo.data.slice(40, 48); // Get the last 8 bytes containing balance
+      const amount = accountInfo.data.slice(40, 48); // Get the amount (8 bytes after user pubkey)
 
       // Convert the balance bytes to BigInt (u64)
-      const userBalance = Buffer.from(balance).readBigUInt64LE();
-      const formatted_balance = Number(userBalance) / Math.pow(10, 9);
+      const userBalance = Buffer.from(amount).readBigUInt64LE();
+      const formatted_balance =
+        Number(userBalance) / Math.pow(10, tokenDecimals);
       setVaultBalanceofUser(formatted_balance);
       return formatted_balance;
     } catch (error) {
       console.error("Error fetching user balance:", error);
       throw error;
-    }
-  };
-
-  const checkVaultInitialization = async () => {
-    try {
-      const program = getProgram();
-      const [vaultTokenAccount] = await PublicKey.findProgramAddress(
-        [Buffer.from("token_vault"), TOKEN_MINT.toBuffer()],
-        program.programId
-      );
-
-      const accountInfo = await connection.getAccountInfo(vaultTokenAccount);
-      setIsVaultInitialized(accountInfo !== null);
-
-      if (accountInfo !== null) {
-        const tokenAccount =
-          await connection.getTokenAccountBalance(vaultTokenAccount);
-        console.log(tokenAccount.value.uiAmount);
-        getUserBalance(wallet);
-      }
-    } catch (error) {
-      console.error("Error checking vault initialization:", error);
-      setIsVaultInitialized(false);
     }
   };
 
@@ -186,64 +160,6 @@ const StakePopup = () => {
 
     return true;
   };
-  const getVault = async () => {
-    const program = getProgram();
-    const [vaultData] = await PublicKey.findProgramAddress(
-      [Buffer.from("vault_data")],
-      program.programId
-    );
-    console.log("vault data", vaultData);
-  };
-  const initializeVault = async () => {
-    setLoading(true);
-    try {
-      const program = getProgram();
-
-      const [vaultData] = await PublicKey.findProgramAddress(
-        [Buffer.from("vault_data")],
-        program.programId
-      );
-
-      const [tokenAccountOwnerPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from("token_account_owner_pda")],
-        program.programId
-      );
-
-      const [vaultTokenAccount] = await PublicKey.findProgramAddress(
-        [Buffer.from("token_vault"), TOKEN_MINT.toBuffer()],
-        program.programId
-      );
-
-      await program.methods
-        .initialize()
-        .accounts({
-          payer: wallet.publicKey,
-          vaultData: vaultData,
-          tokenAccountOwnerPda: tokenAccountOwnerPDA,
-          vaultTokenAccount: vaultTokenAccount,
-          mintOfTokenBeingSent: TOKEN_MINT,
-          signer: wallet.publicKey,
-          systemProgram: web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          rent: web3.SYSVAR_RENT_PUBKEY,
-        })
-        .signers([])
-        .rpc();
-
-      await checkVaultInitialization();
-      toast({
-        title: "Initiated Successfully ",
-      });
-    } catch (error) {
-      console.error("Error initializing vault:", error);
-      toast({
-        title:
-          "Failed to initialize vault. Please check if you have enough SOL for transaction fees. ",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const depositTokens = async () => {
     if (!validateTransaction(depositAmount)) return;
@@ -251,57 +167,56 @@ const StakePopup = () => {
     setLoading(true);
     try {
       const program = getProgram();
-      const userATA = await getOrCreateAssociatedTokenAccount(
+
+      // Get user's Associated Token Account
+      const userMintTokenAccount = await getOrCreateAssociatedTokenAccount(
         connection,
         wallet.publicKey,
         TOKEN_MINT,
         wallet.publicKey
       );
 
-      const [tokenAccountOwnerPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from("token_account_owner_pda")],
+      // Get PDA accounts
+      const [platformConfig] = await PublicKey.findProgramAddress(
+        [Buffer.from("platform_config")],
         program.programId
       );
 
-      const [vaultTokenAccount] = await PublicKey.findProgramAddress(
-        [Buffer.from("token_vault"), TOKEN_MINT.toBuffer()],
-        program.programId
-      );
-      const [vaultData] = await PublicKey.findProgramAddress(
-        [Buffer.from("vault_data")],
-        program.programId
-      );
-      const [userBalance] = await PublicKey.findProgramAddress(
-        [Buffer.from("user_balance"), wallet.publicKey.toBuffer()],
+      const [platformMintTokenAccount] = await PublicKey.findProgramAddress(
+        [Buffer.from("platform_mint_token_account")],
         program.programId
       );
 
+      const [depositInfo] = await PublicKey.findProgramAddress(
+        [Buffer.from("deposit_info"), wallet.publicKey.toBuffer()],
+        program.programId
+      );
+
+      // Execute deposit transaction
       await program.methods
-        .transferIn(new BN(parseFloat(depositAmount) * 10 ** tokenDecimals))
+        .deposit(new BN(parseFloat(depositAmount) * 10 ** tokenDecimals))
         .accounts({
-          tokenAccountOwnerPda: tokenAccountOwnerPDA,
-          vaultData: vaultData,
-          vaultTokenAccount: vaultTokenAccount,
-          senderTokenAccount: userATA.address,
-          mintOfTokenBeingSent: TOKEN_MINT,
-          signer: wallet.publicKey,
+          user: wallet.publicKey,
+          mint: TOKEN_MINT,
+          platformConfig: platformConfig,
+          platformMintTokenAccount: platformMintTokenAccount,
+          userMintTokenAccount: userMintTokenAccount.address,
+          depositInfo: depositInfo,
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
-          rent: web3.SYSVAR_RENT_PUBKEY,
-          userBalance: userBalance,
         })
         .rpc();
 
-      await checkVaultInitialization();
-      setBalance(computeFloatVals(String(balance), depositAmount, 9, false));
+      // Update UI state
+      setBalance(computeFloatVals(String(balance), depositAmount));
       setDepositAmount("");
       toast({
-        title: "Deposited Successfully ",
+        title: "Deposited Successfully",
       });
     } catch (error) {
       console.error("Error depositing tokens:", error);
       toast({
-        title: "Failed to deposit tokens ",
+        title: "Failed to deposit tokens",
       });
     } finally {
       setLoading(false);
@@ -310,75 +225,66 @@ const StakePopup = () => {
 
   const withdrawTokens = async () => {
     const balance = await getUserBalance(wallet);
+
     if (!validateTransaction(withdrawAmount, balance)) return;
     setLoading(true);
     try {
       const program = getProgram();
-      const userATA = await getAssociatedTokenAddress(
+
+      // Get user's Associated Token Account
+      const userMintTokenAccount = await getAssociatedTokenAddress(
         TOKEN_MINT,
         wallet.publicKey
       );
 
-      const [tokenAccountOwnerPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from("token_account_owner_pda")],
+      // Get PDA accounts
+      const [platformConfig] = await PublicKey.findProgramAddress(
+        [Buffer.from("platform_config")],
         program.programId
       );
 
-      const [vaultTokenAccount] = await PublicKey.findProgramAddress(
-        [Buffer.from("token_vault"), TOKEN_MINT.toBuffer()],
+      const [platformMintTokenAccount] = await PublicKey.findProgramAddress(
+        [Buffer.from("platform_mint_token_account")],
         program.programId
       );
-      const [vaultData] = await PublicKey.findProgramAddress(
-        [Buffer.from("vault_data")],
+
+      const [depositInfo] = await PublicKey.findProgramAddress(
+        [Buffer.from("deposit_info"), wallet.publicKey.toBuffer()],
         program.programId
       );
-      const [userBalance] = await PublicKey.findProgramAddress(
-        [Buffer.from("user_balance"), wallet.publicKey.toBuffer()],
-        program.programId
-      );
+
+      // Execute withdrawal transaction
       await program.methods
-        .transferOut(new BN(parseFloat(withdrawAmount) * 10 ** tokenDecimals))
+        .withdraw(new BN(parseFloat(withdrawAmount) * 10 ** tokenDecimals))
         .accounts({
-          tokenAccountOwnerPda: tokenAccountOwnerPDA,
-          vaultTokenAccount: vaultTokenAccount,
-          vaultData: vaultData,
-          senderTokenAccount: userATA,
-          mintOfTokenBeingSent: TOKEN_MINT,
-          signer: wallet.publicKey,
+          user: wallet.publicKey,
+          mint: TOKEN_MINT,
+          platformConfig: platformConfig,
+          platformMintTokenAccount: platformMintTokenAccount,
+          userMintTokenAccount: userMintTokenAccount,
+          depositInfo: depositInfo,
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
-          rent: web3.SYSVAR_RENT_PUBKEY,
-          userBalance: userBalance,
         })
         .rpc();
 
-      await checkVaultInitialization();
+      // Update UI state
       await fetchBalance(wallet);
       setWithdrawAmount("");
-      setVaultBalanceofUser(
-        computeFloatVals(String(balance), withdrawAmount, 9, false)
-      );
+      setVaultBalanceofUser(computeFloatVals(String(balance), withdrawAmount));
       toast({
-        title: "Success to withdraw tokens",
+        title: "Successfully withdrew tokens",
       });
     } catch (error) {
       console.error("Error withdrawing tokens:", error);
       toast({
-        title: "Failed to withdraw tokens ",
+        title: "Failed to withdraw tokens",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (wallet.publicKey) {
-      checkVaultInitialization();
-    }
-  }, [wallet.publicKey, connection]);
-  useEffect(() => {
-    getVault();
-  }, []);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -393,7 +299,6 @@ const StakePopup = () => {
           </span>
         </div>
       </DialogTrigger>
-
       <DialogContent className="flex flex-col sm:max-w-md md:max-w-[500px] gap-0 border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto">
         <div className="flex justify-between">
           <DialogDescription
@@ -461,13 +366,11 @@ const StakePopup = () => {
                     step="0.000000001"
                     min="0"
                     placeholder={
-                      !isVaultInitialized
-                        ? "Please Initialize vault first!"
-                        : isStake
-                          ? "input_$ROGUE_TO_STAKE"
-                          : "input_$ROGUE_TO_UNSTAKE"
+                      isStake
+                        ? "input_$ROGUE_TO_STAKE"
+                        : "input_$ROGUE_TO_UNSTAKE"
                     }
-                    disabled={loading || !isVaultInitialized}
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -478,34 +381,20 @@ const StakePopup = () => {
           <div className="flex w-full gap-0">
             {wallet.connected ? (
               <>
-                {isVaultInitialized ? (
-                  <Button
-                    className="uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
-                    disabled={loading}
-                  >
-                    cancel
-                  </Button>
-                ) : null}
-
-                {isVaultInitialized ? (
-                  <Button
-                    className="uppercase w-full"
-                    onClick={isStake ? depositTokens : withdrawTokens}
-                    disabled={loading || !isVaultInitialized}
-                  >
-                    <ChevronRight className="w-4 h-4" color="#000" />
-                    {loading ? "Wait..." : isStake ? "stake" : "unstake"}
-                  </Button>
-                ) : (
-                  <Button
-                    className="uppercase w-full"
-                    // className="uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
-                    onClick={initializeVault}
-                    disabled={loading}
-                  >
-                    {loading ? "Initializing..." : "initialize vault"}
-                  </Button>
-                )}
+                <Button
+                  className="uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
+                  disabled={loading}
+                >
+                  cancel
+                </Button>
+                <Button
+                  className="uppercase w-full"
+                  onClick={isStake ? depositTokens : withdrawTokens}
+                  disabled={loading}
+                >
+                  <ChevronRight className="w-4 h-4" color="#000" />
+                  {loading ? "Wait..." : isStake ? "stake" : "unstake"}
+                </Button>
               </>
             ) : (
               <>
