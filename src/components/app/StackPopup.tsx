@@ -26,12 +26,12 @@ const TOKEN_MINT = new PublicKey(
   "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL"
 );
 const programID = new PublicKey(HOST_CONTRACT.PROGRAM_ID);
-const tokenDecimals = 9;
+const tokenDecimals = 6;
 
 function computeFloatVals(
   a: string,
   b: string,
-  precision: number = 9,
+  precision: number = 6,
   addValues: boolean = false
 ): number {
   const factor = Math.pow(10, precision); // Scale factor based on precision
