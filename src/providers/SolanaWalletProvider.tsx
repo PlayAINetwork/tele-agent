@@ -3,21 +3,19 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl } from "@solana/web3.js";
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 // import { WalletConnectWalletAdapter } from "@walletconnect/solana-adapter";
-import { PhantomWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter } from "@solana/wallet-adapter-wallets";
-
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+  TorusWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
 
 export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
-  const endpoint = useMemo(
-    () => clusterApiUrl(WalletAdapterNetwork.Devnet),
-    []
-  );
+  const endpoint = import.meta.env.VITE_SOL_RPC;
 
   const wallets = useMemo(
     () => [

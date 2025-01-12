@@ -23,7 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
 
 const TOKEN_MINT = new PublicKey(
-  "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq"
+  "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL"
 );
 const programID = new PublicKey(HOST_CONTRACT.PROGRAM_ID);
 const tokenDecimals = 9;
@@ -53,13 +53,14 @@ const StakePopup = () => {
   const [vaultBalanceofUser, setVaultBalanceofUser] = useState(0);
   const [balance, setBalance] = useState(0);
   const [error, setError] = useState(null);
+
   const fetchBalance = async (wallet: any) => {
     try {
       setLoading(true);
-      const connection = new Connection("https://api.devnet.solana.com");
+      const connection = new Connection(import.meta.env.VITE_SOL_RPC);
       const publicKey = new PublicKey(wallet?.publicKey);
       // const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
-      const TOKEN_ADDRESS = "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq";
+      const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
       const tokenPublicKey = new PublicKey(TOKEN_ADDRESS);
 
       const associatedAddress = await getAssociatedTokenAddress(
@@ -67,7 +68,7 @@ const StakePopup = () => {
         publicKey
       );
       const account = await getAccount(connection, associatedAddress);
-      setBalance(Number(account.amount) / 10 ** 9);
+      setBalance(Number(account.amount) / 10 ** 6);
     } catch (err: any) {
       console.log(err);
       setError(err.message);
