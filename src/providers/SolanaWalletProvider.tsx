@@ -15,7 +15,8 @@ import {
 } from "@solana/wallet-adapter-wallets";
 
 export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
-  const endpoint = import.meta.env.VITE_SOL_RPC;
+  const endpoint =
+    "https://aged-clean-dream.solana-mainnet.quiknode.pro/51a78aa7597a179d9adb3aa72df855eff57fc23a";
 
   const wallets = useMemo(
     () => [

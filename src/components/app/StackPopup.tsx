@@ -57,7 +57,9 @@ const StakePopup = () => {
   const fetchBalance = async (wallet: any) => {
     try {
       setLoading(true);
-      const connection = new Connection(import.meta.env.VITE_SOL_RPC);
+      const connection = new Connection(
+        "https://aged-clean-dream.solana-mainnet.quiknode.pro/51a78aa7597a179d9adb3aa72df855eff57fc23a"
+      );
       const publicKey = new PublicKey(wallet?.publicKey);
       // const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
       const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
