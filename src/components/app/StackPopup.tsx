@@ -289,7 +289,12 @@ const StakePopup = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={() => {
+        setDepositAmount("");
+        setWithdrawAmount("");
+      }}
+    >
       <DialogTrigger asChild>
         <div
           className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
@@ -302,11 +307,15 @@ const StakePopup = () => {
           </span>
         </div>
       </DialogTrigger>
-      <DialogContent className="flex flex-col sm:max-w-md md:max-w-[500px] gap-0 border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto">
+      <DialogContent
+        className="flex flex-col sm:max-w-md md:max-w-[500px] gap-0 border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto"
+        onPointerDownOutside={(e) => e.preventDefault()}
+      >
         <div className="flex justify-between">
           <DialogDescription
             onClick={async () => {
               setStake(true);
+              setDepositAmount("");
               fetchBalance(wallet);
             }}
             className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
@@ -318,6 +327,7 @@ const StakePopup = () => {
           <DialogDescription
             onClick={async () => {
               setStake(false);
+              setWithdrawAmount("");
               getUserBalance(wallet);
             }}
             className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
@@ -355,7 +365,7 @@ const StakePopup = () => {
 
                 <div className="flex w-full border-[1px] border-primary">
                   <Input
-                    className="pr-[40px] min-w-full binaria border-none uppercase hover:bg-[#303030]"
+                    className="binaria border-none uppercase hover:bg-[#303030]"
                     value={isStake ? depositAmount : withdrawAmount}
                     onChange={(e) => {
                       const value = e.target.value;
@@ -375,9 +385,22 @@ const StakePopup = () => {
                     }
                     disabled={loading}
                   />
+                  <Button
+                    onClick={() =>
+                      isStake
+                        ? setDepositAmount(String(balance))
+                        : setWithdrawAmount(String(vaultBalanceofUser))
+                    }
+                  >
+                    Max
+                  </Button>
                 </div>
               </div>
-              {/* <div className="text-[#B6B6B6]">DISCLAIMER: ONCE STAKED, t</div> */}
+              <div className="text-[#B6B6B6] text-xs uppercase">
+                DISCLAIMER: Staking allows you to earn airdrops while supporting
+                the project. Please note, there will not be any active yields on
+                your deposits. Rest assured, you can withdraw at any time.
+              </div>
             </div>
           </div>
 
