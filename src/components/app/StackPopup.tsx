@@ -44,6 +44,7 @@ function computeFloatVals(
 }
 const StakePopup = () => {
   const wallet: any = useWallet();
+
   const { connection } = useConnection();
   // const { balance } = useTokenBalance(wallet?.publicKey);
   const { toast } = useToast();
@@ -93,6 +94,7 @@ const StakePopup = () => {
       AnchorProvider.defaultOptions()
     );
   };
+
   const getProgram = useCallback(() => {
     const provider = getProvider();
     return new Program(HOST_CONTRACT.IDL, programID, provider);

@@ -2,15 +2,59 @@ import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 import StackPopup from "./StackPopup";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
+import { Program, Provider } from "@project-serum/anchor";
+import { formatBigNumber } from "@/lib/utils";
 // import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
   const { connected } = useWallet();
+  const { connection } = useConnection();
   const { setVisible } = useWalletModal();
+  const [totalStaked, setTotalStaked] = useState<number>(0);
+  const getTotalStakedBalance = async (
+    connection: Connection
+  ): Promise<number> => {
+    const programId = HOST_CONTRACT.PROGRAM_ID;
+    try {
+      // Create program instance
+      const program = new Program(HOST_CONTRACT.IDL, new PublicKey(programId), {
+        connection,
+      } as Provider);
 
+      // Get PlatformConfig PDA
+      const [platformConfigPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_config")],
+        new PublicKey(programId)
+      );
+
+      // Get platform config data
+      await program.account.platformConfig.fetch(platformConfigPDA);
+
+      // Get platform mint token account PDA
+      const [platformMintTokenAccountPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_mint_token_account")],
+        new PublicKey(programId)
+      );
+
+      // Get token balance
+      const tokenBalance = await connection.getTokenAccountBalance(
+        platformMintTokenAccountPDA
+      );
+      // Return the balance as a number
+      return (
+        Number(tokenBalance.value.amount) /
+        Math.pow(10, tokenBalance.value.decimals)
+      );
+    } catch (error) {
+      console.error("Error getting total staked balance:", error);
+      throw error;
+    }
+  };
   // const [isHovered, setIsHovered] = useState(false);
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
   useEffect(() => {
@@ -44,6 +88,23 @@ const Header = () => {
   }, []);
   // const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchTotalStaked = async () => {
+      try {
+        const balance = await getTotalStakedBalance(connection);
+        setTotalStaked(balance);
+      } catch (err) {
+        console.log(
+          err instanceof Error
+            ? err.message
+            : "Unknown error occurred while fetching platform stake count!"
+        );
+      }
+    };
+
+    fetchTotalStaked();
+  }, []);
+  console.log("total staked", totalStaked);
   return (
     <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
       <div className="flex gap-3">
@@ -130,14 +191,23 @@ const Header = () => {
         </Button> */}
       </div>
       <div className="flex items-center gap-4">
-        <div className="flex  gap-2 text-md pt-1">
-          <p className="text-primary">$ROGUE:</p>
-          <p>
-            {" "}
-            {tokenData?.priceUsd
-              ? parseFloat(tokenData?.priceUsd).toFixed(6)
-              : 0.0}
-          </p>
+        <div className="flex items-center gap-2">
+          <div className="flex  gap-1 text-md pt-1">
+            <p className="text-primary">STAKED:</p>
+            <p>
+              {`${formatBigNumber(totalStaked) ?? 0}`}
+              <span className="text-xs font-medium">{` $ROGUE`}</span>
+            </p>
+          </div>
+          <div className="flex  gap-1 text-md pt-1">
+            <p className="text-primary">$ROGUE:</p>
+            <p>
+              {" "}
+              {tokenData?.priceUsd
+                ? parseFloat(tokenData?.priceUsd).toFixed(6)
+                : 0.0}
+            </p>
+          </div>
         </div>
         <div className="h-full flex uppercase">
           <div
