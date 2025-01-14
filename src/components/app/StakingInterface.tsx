@@ -1,23 +1,22 @@
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { Program, AnchorProvider, web3, BN } from '@project-serum/anchor';
-import {  TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { PublicKey } from '@solana/web3.js';
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { Program, AnchorProvider, web3, BN } from "@project-serum/anchor";
+import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from "@solana/spl-token";
+import { FC, useCallback, useEffect, useState } from "react";
+import { PublicKey } from "@solana/web3.js";
+import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
 
-import { IDL } from './staking_vault';
-
-const programID = new PublicKey('DKVAPnqZjEQwGBmckw7DH7LhdW9cLCkRqpmVuHiLspnc');
+const programID = new PublicKey("DKVAPnqZjEQwGBmckw7DH7LhdW9cLCkRqpmVuHiLspnc");
 
 const StakingInterface: FC = () => {
   const { connection } = useConnection();
   const wallet = useWallet();
   const [userAccount, setUserAccount] = useState<any>(null);
-  const [depositAmount, setDepositAmount] = useState('');
-  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [depositAmount, setDepositAmount] = useState("");
+  const [withdrawAmount, setWithdrawAmount] = useState("");
   const [vaultInfo, setVaultInfo] = useState<any>(null);
 
   const getProvider = () => {
-    if (!wallet.publicKey) throw new Error('Wallet not connected!');
+    if (!wallet.publicKey) throw new Error("Wallet not connected!");
     const provider = new AnchorProvider(
       connection,
       wallet as any,
@@ -28,22 +27,22 @@ const StakingInterface: FC = () => {
 
   const getProgram = useCallback(() => {
     const provider = getProvider();
-    return new Program(IDL, programID, provider);
+    return new Program(HOST_CONTRACT.IDL, programID, provider);
   }, [wallet.publicKey, connection]);
 
   // const initializeVault = async () => {
   //   try {
   //     const program = getProgram();
-     
+
   //     const vaultTokenAccount = new web3.Keypair();
-     
+
   //     const mint = new PublicKey("46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N");
-     
+
   //     const [vaultPDA] = await PublicKey.findProgramAddress(
   //       [Buffer.from('vault'), wallet.publicKey!.toBuffer()],
   //       program.programId
   //     );
-  
+
   //     const createTokenAccountIx = SystemProgram.createAccount({
   //       fromPubkey: wallet.publicKey!,
   //       newAccountPubkey: vaultTokenAccount.publicKey,
@@ -51,14 +50,14 @@ const StakingInterface: FC = () => {
   //       lamports: await connection.getMinimumBalanceForRentExemption(ACCOUNT_SIZE),
   //       programId: TOKEN_PROGRAM_ID,
   //     });
-  
+
   //     const initTokenAccountIx = createInitializeAccountInstruction(
   //       vaultTokenAccount.publicKey,
   //       mint,
   //       wallet.publicKey!,
   //       TOKEN_PROGRAM_ID
   //     );
-  
+
   //     const tx = await program.methods
   //       .initialize()
   //       .accounts({
@@ -72,7 +71,7 @@ const StakingInterface: FC = () => {
   //       .preInstructions([createTokenAccountIx, initTokenAccountIx])
   //       .signers([vaultTokenAccount])
   //       .rpc();
-  
+
   //     console.log('Vault initialized! Transaction:', tx);
   //   } catch (error) {
   //     console.error('Error initializing vault:', error);
@@ -82,9 +81,9 @@ const StakingInterface: FC = () => {
   const createUserAccount = async () => {
     try {
       const program = getProgram();
-      
+
       const [userAccountPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from('user'), wallet.publicKey!.toBuffer()],
+        [Buffer.from("user"), wallet.publicKey!.toBuffer()],
         program.programId
       );
 
@@ -98,10 +97,10 @@ const StakingInterface: FC = () => {
         })
         .rpc();
 
-      console.log('User account created!');
+      console.log("User account created!");
       await fetchUserAccount();
     } catch (error) {
-      console.error('Error creating user account:', error);
+      console.error("Error creating user account:", error);
     }
   };
 
@@ -111,36 +110,34 @@ const StakingInterface: FC = () => {
       const amount = new BN(parseFloat(depositAmount) * 1e9);
 
       const [vaultPDA, vaultt] = await PublicKey.findProgramAddress(
-        [Buffer.from('vault'), wallet.publicKey!.toBuffer()],
+        [Buffer.from("vault"), wallet.publicKey!.toBuffer()],
         program.programId
       );
-      console.log("vaultPDA",vaultPDA.toString(),vaultt)
+      console.log("vaultPDA", vaultPDA.toString(), vaultt);
 
       const [userAccountPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from('user'), wallet.publicKey!.toBuffer()],
+        [Buffer.from("user"), wallet.publicKey!.toBuffer()],
         program.programId
       );
 
       const userTokenAccount = await getAssociatedTokenAddress(
-        new PublicKey('46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N'),
+        new PublicKey("46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N"),
         wallet.publicKey!
       );
-      console.log("userAccountPDA",userAccountPDA.toString())
-      console.log("userAccountPDA",userAccountPDA.toString())
+      console.log("userAccountPDA", userAccountPDA.toString());
+      console.log("userAccountPDA", userAccountPDA.toString());
 
-      console.log("userTokenAccount",userTokenAccount.toString())
-      console.log("userTokenAccount",userTokenAccount)
-
+      console.log("userTokenAccount", userTokenAccount.toString());
+      console.log("userTokenAccount", userTokenAccount);
 
       const vaultTokenAccount = await getAssociatedTokenAddress(
-        new PublicKey('46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N'),
+        new PublicKey("46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N"),
         vaultPDA,
         true
       );
 
-      console.log("vaultPDA",vaultPDA.toString())
-      console.log("vaultTokenAccount",vaultTokenAccount.toString())
-
+      console.log("vaultPDA", vaultPDA.toString());
+      console.log("vaultTokenAccount", vaultTokenAccount.toString());
 
       await program.methods
         .deposit(amount)
@@ -154,36 +151,36 @@ const StakingInterface: FC = () => {
         })
         .rpc();
 
-      console.log('Deposit successful!');
+      console.log("Deposit successful!");
       await fetchUserAccount();
       await fetchVaultInfo();
     } catch (error) {
-      console.error('Error depositing:', error);
+      console.error("Error depositing:", error);
     }
   };
 
   const withdraw = async () => {
     try {
       const program = getProgram();
-      const amount = new BN(parseFloat(withdrawAmount) * 1e9); 
+      const amount = new BN(parseFloat(withdrawAmount) * 1e9);
 
       const [vaultPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from('vault'), wallet.publicKey!.toBuffer()],
+        [Buffer.from("vault"), wallet.publicKey!.toBuffer()],
         program.programId
       );
 
       const [userAccountPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from('user'), wallet.publicKey!.toBuffer()],
+        [Buffer.from("user"), wallet.publicKey!.toBuffer()],
         program.programId
       );
 
       const userTokenAccount = await getAssociatedTokenAddress(
-        new PublicKey('46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N'), 
+        new PublicKey("46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N"),
         wallet.publicKey!
       );
 
       const vaultTokenAccount = await getAssociatedTokenAddress(
-        new PublicKey('46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N'), 
+        new PublicKey("46G9LP4Uxt4EeE5pgnexWDXy1vZkt5jwYLJZu6Hm3h7N"),
         vaultPDA,
         true
       );
@@ -201,11 +198,11 @@ const StakingInterface: FC = () => {
         })
         .rpc();
 
-      console.log('Withdrawal successful!');
+      console.log("Withdrawal successful!");
       await fetchUserAccount();
       await fetchVaultInfo();
     } catch (error) {
-      console.error('Error withdrawing:', error);
+      console.error("Error withdrawing:", error);
     }
   };
 
@@ -213,14 +210,14 @@ const StakingInterface: FC = () => {
     try {
       const program = getProgram();
       const [userAccountPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from('user'), wallet.publicKey!.toBuffer()],
+        [Buffer.from("user"), wallet.publicKey!.toBuffer()],
         program.programId
       );
 
       const account = await program.account.userAccount.fetch(userAccountPDA);
       setUserAccount(account);
     } catch (error) {
-      console.error('Error fetching user account:', error);
+      console.error("Error fetching user account:", error);
     }
   };
 
@@ -228,14 +225,14 @@ const StakingInterface: FC = () => {
     try {
       const program = getProgram();
       const [vaultPDA] = await PublicKey.findProgramAddress(
-        [Buffer.from('vault'), wallet.publicKey!.toBuffer()],
+        [Buffer.from("vault"), wallet.publicKey!.toBuffer()],
         program.programId
       );
 
       const vault = await program.account.vault.fetch(vaultPDA);
       setVaultInfo(vault);
     } catch (error) {
-      console.error('Error fetching vault info:', error);
+      console.error("Error fetching vault info:", error);
     }
   };
 
@@ -272,8 +269,16 @@ const StakingInterface: FC = () => {
         <div className="space-y-4">
           <div>
             <h2 className="text-xl font-semibold">Your Account</h2>
-            <p>Deposited Amount: {(userAccount.depositedAmount.toNumber() / 1e9).toFixed(2)}</p>
-            <p>Last Deposit: {new Date(userAccount.lastDepositTimestamp * 1000).toLocaleString()}</p>
+            <p>
+              Deposited Amount:{" "}
+              {(userAccount.depositedAmount.toNumber() / 1e9).toFixed(2)}
+            </p>
+            <p>
+              Last Deposit:{" "}
+              {new Date(
+                userAccount.lastDepositTimestamp * 1000
+              ).toLocaleString()}
+            </p>
           </div>
 
           <div className="space-y-2">
@@ -313,7 +318,10 @@ const StakingInterface: FC = () => {
           {vaultInfo && (
             <div>
               <h2 className="text-xl font-semibold">Vault Info</h2>
-              <p>Total Deposits: {(vaultInfo.totalDeposits.toNumber() / 1e9).toFixed(2)}</p>
+              <p>
+                Total Deposits:{" "}
+                {(vaultInfo.totalDeposits.toNumber() / 1e9).toFixed(2)}
+              </p>
             </div>
           )}
         </div>

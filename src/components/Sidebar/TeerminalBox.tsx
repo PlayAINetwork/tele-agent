@@ -271,7 +271,7 @@ const TeerminalBox = () => {
       </div>
       <div
         ref={boxRef}
-        className="flex flex-col relative flex-1 h-full realtive  gap-0 overflow-hidden  bg-[#131314] "
+        className="flex flex-col relative flex-1  realtive  gap-0 overflow-hidden h-full bg-[#131314] "
       >
         {isLive ? null : (
           <div className="absolute w-full h-full">

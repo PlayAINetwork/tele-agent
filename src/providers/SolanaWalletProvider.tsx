@@ -3,21 +3,20 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl } from "@solana/web3.js";
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 // import { WalletConnectWalletAdapter } from "@walletconnect/solana-adapter";
-import { PhantomWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter } from "@solana/wallet-adapter-wallets";
-
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+  TorusWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
 
 export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
-  const endpoint = useMemo(
-    () => clusterApiUrl(WalletAdapterNetwork.Devnet),
-    []
-  );
+  const endpoint =
+    "https://aged-clean-dream.solana-mainnet.quiknode.pro/51a78aa7597a179d9adb3aa72df855eff57fc23a";
 
   const wallets = useMemo(
     () => [

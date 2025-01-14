@@ -1,20 +1,62 @@
-import {  IMAGES } from "@/assets";
+import {  ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
-// import StackPopup from "./StackPopup";
+import StackPopup from "./StackPopup";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
+import { Program, Provider } from "@project-serum/anchor";
+import { formatBigNumber } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-import { Input } from "../ui/input";
-import { Search } from "lucide-react";
-import CustomSolanaButton from "../WalletConnect/solConnectBtn";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { AgentItem } from "../Home/Navbar";
+// import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  // const [tokenData, setTokenData] = useState<any>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const [tokenData, setTokenData] = useState<any>(null);
   const { connected } = useWallet();
-  const [search, setSearch] = useState("")
+  const { connection } = useConnection();
+  const { setVisible } = useWalletModal();
+  const [totalStaked, setTotalStaked] = useState<number>(0);
+  const getTotalStakedBalance = async (
+    connection: Connection
+  ): Promise<number> => {
+    const programId = HOST_CONTRACT.PROGRAM_ID;
+    try {
+      // Create program instance
+      const program = new Program(HOST_CONTRACT.IDL, new PublicKey(programId), {
+        connection,
+      } as Provider);
 
+      // Get PlatformConfig PDA
+      const [platformConfigPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_config")],
+        new PublicKey(programId)
+      );
+
+      // Get platform config data
+      await program.account.platformConfig.fetch(platformConfigPDA);
+
+      // Get platform mint token account PDA
+      const [platformMintTokenAccountPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_mint_token_account")],
+        new PublicKey(programId)
+      );
+
+      // Get token balance
+      const tokenBalance = await connection.getTokenAccountBalance(
+        platformMintTokenAccountPDA
+      );
+      // Return the balance as a number
+      return (
+        Number(tokenBalance.value.amount) /
+        Math.pow(10, tokenBalance.value.decimals)
+      );
+    } catch (error) {
+      console.error("Error getting total staked balance:", error);
+      throw error;
+    }
+  };
+  // const [isHovered, setIsHovered] = useState(false);
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -46,7 +88,25 @@ const Header = () => {
     return () => clearInterval(interval);
   }, []);
   const navigate = useNavigate();
+  // const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchTotalStaked = async () => {
+      try {
+        const balance = await getTotalStakedBalance(connection);
+        setTotalStaked(balance);
+      } catch (err) {
+        console.log(
+          err instanceof Error
+            ? err.message
+            : "Unknown error occurred while fetching platform stake count!"
+        );
+      }
+    };
+
+    fetchTotalStaked();
+  }, []);
+  console.log("total staked", totalStaked);
   return (
     <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary relative z-10">
       <div className="flex gap-3">
@@ -54,14 +114,14 @@ const Header = () => {
         <div
           className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: "polygon(0 0, 96.1% 2%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(0 0, 95.5% 2%, 100% 100%, 0% 100%)",
           }}
         >
           <div className="flex h-full text-sm gap-[1px] ">
             <div className="cursor-pointer" onClick={() => navigate("/")}>
               <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
             </div>
-            <div
+            {/* <div
               className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
               style={{
                 clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
@@ -89,17 +149,33 @@ const Header = () => {
                   {"> Coming soon <"}
                 </span>
               </span>
-            </div>
+            </div> */}
+            {connected ? (
+              <StackPopup />
+            ) : (
+              <div
+                onClick={() => setVisible(true)}
+                className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+                style={{
+                  clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
+                }}
+              >
+                <span className="text-white relative transition-transform duration-300 ease-in-out">
+                  <span className="block transition-all duration-300 opacity-100 translate-y-0">
+                    {"> stake now <"}
+                  </span>
+                </span>
+              </div>
+            )}
 
-            <div
+            {/* <div
               className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
               onClick={() => navigate("/rogueagent")}
             >
               <span className="text-white relative transition-transform duration-300 ease-in-out">
                 {" > Leaderboard <"}
               </span>
-            </div>
-            {/* <StackPopup/> */}
+            </div> */}
 
             <VideoGenertionPopup />
           </div>
@@ -116,64 +192,26 @@ const Header = () => {
           Learn more
         </Button> */}
       </div>
-      <div className="flex items-center gap-0">
-        <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
-          <Search />
-          <Input
-            className="pr-[5px] binaria border-none  uppercase bg-transparent w-[220px]"
-            type="text"
-            value={search}
-            placeholder="search_agents"
-            onChange={(e)=>setSearch(e.target.value)}
-            // disabled={disableAction}
-          />
-          {
-            search !== ""?
-            <div className="z-100 absolute top-[67px] left-0  w-full max-h-[300px] bg-secondary overflow-scroll border border-primary p-2">
-            <div>
-              <AgentItem/>
-              <AgentItem/>
-              <AgentItem/>
-              <AgentItem/>
-              <AgentItem/>
-              <AgentItem/>
-
-
-            </div>
-
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <div className="flex  gap-1 text-md pt-1">
+            <p className="text-primary">STAKED:</p>
+            <p>
+              {`${formatBigNumber(totalStaked) ?? 0}`}
+              <span className="text-xs font-medium">{` $ROGUE`}</span>
+            </p>
           </div>
-            :null
-          }
-         
+          <div className="flex  gap-1 text-md pt-1">
+            <p className="text-primary">$ROGUE:</p>
+            <p>
+              {" "}
+              {tokenData?.priceUsd
+                ? parseFloat(tokenData?.priceUsd).toFixed(6)
+                : 0.0}
+            </p>
+          </div>
         </div>
-
-        {connected ? null :
-         
-         (
-           <div 
-         className="border-x-[1px] border-primary cursor-pointer h-full flex items-center"
-           
-           >
-             <CustomSolanaButton
-             
-               connectText="Connect Wallet"
-               disconnectText="Disconnect Wallet"
-               buttonStyle="primary"
-               size="medium"
-             />
-           </div>
-         )}
-
-        {/* <div className="flex  gap-2 text-md pt-1">
-          <p className="text-primary">$ROGUE:</p>
-          <p>
-            {" "}
-            {tokenData?.priceUsd
-              ? parseFloat(tokenData?.priceUsd).toFixed(6)
-              : 0.0}
-          </p>
-        </div> */}
-        {/* <div className="h-full flex uppercase">
+        <div className="h-full flex uppercase">
           <div
             onClick={() =>
               open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
@@ -202,7 +240,7 @@ const Header = () => {
           >
             Twitter
           </div>
-        </div> */}
+        </div> 
       </div>
     </div>
   );
