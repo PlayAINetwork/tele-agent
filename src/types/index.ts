@@ -1,19 +1,25 @@
 export interface Agents {
-  projects?: Agent[] | null;
-  totalCount: number;
-  currentPage: number;
-  totalPages: number;
+  result?: Agent[] | null;
+  page: number;
+  total: number;
+  limit: number;
 }
 
 export interface Agent {
-  agentDetails: AgentDetails;
-  creationDate: string;
-  twitterDescription: string;
-  profileImageUrl: string;
-  ticker: string;
-  onChainStats: OnChainStats;
-  twitterStats: TwitterStats;
-  similarProjectsByMarketCap?: string[] | null;
+  address: string;
+  name: string;
+  twitter: string;
+  avatar: string;
+  marketCap: string;
+  price: string;
+  holders: number;
+  chain?: string;
+  skills: string[] | null;
+  verified: boolean;
+  verifiedAt: string |null;
+  createdAt: any
+ 
+
 }
 export interface AgentDetails {
   id: string;

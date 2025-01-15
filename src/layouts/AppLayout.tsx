@@ -57,7 +57,7 @@ function AppLayout() {
   }, []);
 
   return (
-    <main className={`h-[100vh] realtive  flex flex-col overflow-hidden `}>
+    <main className={`h-[100vh] realtive  flex flex-col overflow-hidden`}>
       {isMobile ? (
         <div className="h-full w-full ">
           <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
@@ -120,7 +120,7 @@ function AppLayout() {
         <div className="flex flex-col flex-1 h-full">
           <Header />
 
-          <div className="flex-1 flex flex-col relative z-[1] overflow-scroll ">
+          <div className="flex-1 flex flex-col relative z-[1] overflow-y-hidden ">
             <Outlet />
           </div>
 

@@ -1,5 +1,5 @@
-import {  ICONS, IMAGES } from "@/assets";
-import { useEffect, useState } from "react";
+import {  IMAGES } from "@/assets";
+import { useEffect, useRef, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 import StackPopup from "./StackPopup";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -9,13 +9,29 @@ import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
 import { Program, Provider } from "@project-serum/anchor";
 import { formatBigNumber } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import CustomSolanaButton from "../WalletConnect/solConnectBtn";
+import { Search } from "lucide-react";
+import { Input } from "../ui/input";
+import { AgentItem } from "../Home/Navbar";
+import getWalletSignMessage from "@/hooks/api/auth/getWalletSignMessage";
+import { useAuthState } from "@/context/auth.context";
+import connectWallet from "@/hooks/api/auth/connectWallet";
+import { useToast } from "@/hooks/use-toast";
+import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
+import useLogout from "@/hooks/api/useLogout";
 // import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
-  const { connected } = useWallet();
   const { connection } = useConnection();
+  const [search, setSearch] = useState("")
+  const { connected, publicKey, disconnect, signMessage } = useWallet();
+  const { auth, setAuth } = useAuthState();
   const { setVisible } = useWalletModal();
+  const isSigningRef = useRef(false);
+  const { toast } = useToast();
+  const logout = useLogout();
+
   const [totalStaked, setTotalStaked] = useState<number>(0);
   const getTotalStakedBalance = async (
     connection: Connection
@@ -84,7 +100,7 @@ const Header = () => {
     };
 
     fetchTokenData();
-    const interval = setInterval(fetchTokenData, 30000);
+    const interval = setInterval(fetchTokenData, 300000);
     return () => clearInterval(interval);
   }, []);
   const navigate = useNavigate();
@@ -107,6 +123,78 @@ const Header = () => {
     fetchTotalStaked();
   }, []);
   console.log("total staked", totalStaked);
+
+
+
+
+  useEffect(() => {
+    const signWalletConnectMessage = async () => {
+      try {
+        if (!publicKey || !signMessage) {
+          throw new Error('Wallet not connected!');
+        }
+
+        const message = await getWalletSignMessage();
+        console.log("sdfd", message
+        )
+
+        if (!message) {
+          throw new Error('Failed to get message to sign');
+        }
+        console.log("sdfd")
+
+        // Convert message to Uint8Array
+        const messageBytes = new TextEncoder().encode(message.message);
+        console.log("sdfd", messageBytes)
+
+        console.log("sdfd")
+
+        // Sign the message
+        const signature = await signMessage(messageBytes);
+        console.log('Signature dsds:', signature);
+
+
+        if (signature && !isSigningRef.current) {
+          const signatureHex = Buffer.from(signature).toString('hex');
+          const signatureBase58 = bs58.encode(signature);
+
+          console.log(signatureBase58, 'Signature successful:', signatureHex);
+          isSigningRef.current = true;
+          //login logic
+          const user = await connectWallet(publicKey?.toString(), message?.nonce, signatureBase58);
+          console.log("user", user);
+          if (user.jwt) {
+            let jwt = user.jwt;
+            //note: enable when auth bug is fixed
+            localStorage.setItem("token", jwt);
+            setAuth({ token: jwt });
+            toast({
+              title: "Logged in Successfully! ",
+            });
+          }
+        }
+
+      } catch (error) {
+        console.error('Signature failed:', error);
+        // If user rejected the signature or any other error occurs, disconnect the wallet
+        await handleDisconnect();
+      }
+    };
+    console.log(publicKey, connected)
+    if (connected && publicKey && !auth.token) {
+      signWalletConnectMessage();
+    }
+  }, [connected, publicKey, signMessage, disconnect]);
+  const handleDisconnect = async () => {
+    try {
+      logout()
+    } catch (error) {
+      console.error("Failed to disconnect:", error);
+    } finally {
+    }
+  };
+
+
   return (
     <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary relative z-10">
       <div className="flex gap-3">
@@ -212,7 +300,55 @@ const Header = () => {
           </div>
         </div>
         <div className="h-full flex uppercase">
-          <div
+
+          <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
+            <Search />
+            <Input
+              className="pr-[5px] binaria border-none  uppercase bg-transparent w-[220px]"
+              type="text"
+              value={search}
+              placeholder="search_agents"
+              onChange={(e) => setSearch(e.target.value)}
+            // disabled={disableAction}
+            />
+            {
+              search !== "" ?
+                <div className="z-100 absolute top-[67px] left-0  w-full max-h-[300px] bg-secondary overflow-scroll border border-primary p-2">
+                  <div>
+                    <AgentItem />
+                    <AgentItem />
+                    <AgentItem />
+                    <AgentItem />
+                    <AgentItem />
+                    <AgentItem />
+
+
+                  </div>
+
+                </div>
+                : null
+            }
+
+          </div>
+
+          {connected ? null :
+
+            (
+              <div
+                className="border-x-[1px] border-primary cursor-pointer h-full flex items-center"
+
+              >
+                <CustomSolanaButton
+
+                  connectText="Connect Wallet"
+                  disconnectText="Disconnect Wallet"
+                  buttonStyle="primary"
+                  size="medium"
+                />
+              </div>
+            )}
+
+          {/* <div
             onClick={() =>
               open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
             }
@@ -239,8 +375,8 @@ const Header = () => {
             className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center"
           >
             Twitter
-          </div>
-        </div> 
+          </div> */}
+        </div>
       </div>
     </div>
   );

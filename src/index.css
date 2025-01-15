@@ -179,6 +179,7 @@
 
 }
 
+
 ::placeholder {
   color: hsl(0 0% 98%) !important;  
   opacity: 1; /* Firefox */
@@ -259,4 +260,27 @@ textarea:focus-visible {
 .blackshade{
   background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 33.33%, rgba(0, 0, 0, 0) 66.67%, #000000 100%);
 
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1A1F20;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #89FC96;
+  border-radius: 5px;
+
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #89FC9699;
 }

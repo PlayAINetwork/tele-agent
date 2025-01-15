@@ -1,60 +1,18 @@
 import Navbar from "@/components/Home/Navbar";
 import AgentCard from "@/components/Home/AgentCard";
 import CourseCarousel from "@/components/Home/Carousel";
+import useGetAgents from "@/hooks/api/agents/useGetAgents";
 
 
 const Home = () => {
-  const courses = [
-    {
-      title: "internal medicine i",
-      image:
-        "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description:
-        "Explore the intricacies of diagnosing and treating adult diseases...",
-    },
-    {
-      title: "biomedical technology",
-      image:
-        "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Discover cutting-edge advancements in medical devices...",
-    },
-    {
-      title: "introduction to data analytics",
-      image:
-        "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Unlock the power of data and gain in-demand skills...",
-    },
-    {
-      title: "biomedical technology",
-      image:
-        "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Discover cutting-edge advancements in medical devices...",
-    },
-    {
-      title: "introduction to data analytics",
-      image:
-        "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Unlock the power of data and gain in-demand skills...",
-    },
-    {
-      title: "biomedical technology",
-      image:
-        "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Discover cutting-edge advancements in medical devices...",
-    },
-    {
-      title: "introduction to data analytics",
-      image:
-        "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Unlock the power of data and gain in-demand skills...",
-    },
-    
-  ];
+  const {agents}= useGetAgents()
+
+
 
   return (
     <div className="h-full w-full flex binaria relative">
       <Navbar />
-      <div className="w-full h-full overflow-scroll">
+      <div className="w-full h-full overflow-y-scroll">
         <div className="h-[450px] relative">
           <CourseCarousel />
         </div>
@@ -64,8 +22,8 @@ const Home = () => {
             <p>new agents</p>
           </div>
           <div className="grid grid-cols-4 gap-3  ">
-            {courses.map((course, index) => (
-              <AgentCard key={index} data={course} />
+            {agents?.result?.map((agent, index) => (
+              <AgentCard key={index} data={agent} />
             ))}
           </div>
         </div>

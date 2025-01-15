@@ -17,6 +17,9 @@ import notshow from "./images/noshow.png";
 import disbg from "./images/bg-dis.png";
 import mobile from "./images/mobile.png";
 import blackshard from "./images/blackshard.png";
+import playaidrop from "./images/playaidrop.png";
+import upLine from "./images/upLine.png";
+
 
 
 
@@ -25,6 +28,8 @@ import blackshard from "./images/blackshard.png";
 
 
 export const IMAGES = {
+  upLine,
+  playaidrop,
   blackshard,
   mobile,
   disbg,

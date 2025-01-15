@@ -51,10 +51,10 @@ const GlobelBox = () => {
     }
   }, [messages]);
   return (
-    <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
+    <div className="   flex flex-col gap-4  h-[400px] justify-between ">
       <div
         ref={boxRef}
-        className="flex flex-col flex-1   gap-4 overflow-auto h-full  p-4 bg-[#131314] "
+        className="flex flex-col flex-1   gap-4 overflow-auto h-full   p-4 bg-[#131314] "
       >
         {messages?.map(
           ({

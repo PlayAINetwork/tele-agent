@@ -1,8 +1,8 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Button } from "../ui/button";
-
+import useLogout from "@/hooks/api/useLogout";
 
 const CustomSolanaButton = ({
   connectText = "Connect Wallet",
@@ -10,17 +10,18 @@ const CustomSolanaButton = ({
   buttonStyle = "primary",
   size = "medium",
 }) => {
-  const { connected, publicKey, disconnect } = useWallet();
+  const { connected, publicKey } = useWallet();
   const [loading, setLoading] = useState(false);
+  const logout = useLogout();
 
   // Style configurations
-  const sizes: any = {
+  const sizes :any= {
     small: "px-4 py-2 text-sm",
     medium: "px-6 py-3 text-base",
     large: "px-8 py-4 text-lg",
   };
 
-  const styles: any = {
+  const styles :any= {
     primary: "bg-purple-600 hover:bg-purple-700 text-white",
     secondary: "bg-gray-600 hover:bg-gray-700 text-white",
     outline: "border-2 border-purple-600 text-purple-600 hover:bg-purple-50",
@@ -33,32 +34,44 @@ const CustomSolanaButton = ({
     ${styles[buttonStyle]}
   `;
 
-  const shortenAddress = (address: any) => {
+  const shortenAddress = (address:any) => {
     setLoading(false);
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
   };
 
-  const handleClick = async () => {
-    if (connected) {
-      try {
-        await disconnect();
-      } catch (error) {
-        console.error("Failed to disconnect:", error);
-      }
+  const handleDisconnect = async () => {
+    try {
+      setLoading(true);
+      // await disconnect();
+      logout()
+
+
+    } catch (error) {
+      console.error("Failed to disconnect:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const buttonText = connected
+  const handleClick = async () => {
+    if (connected) {
+      await handleDisconnect();
+    }
+  };
+
+ 
+  const buttonText :any= connected
     ? `${shortenAddress(publicKey?.toString())} (${disconnectText})`
     : connectText;
+
   return (
     <Button className="w-full px-0 binaria">
       <WalletMultiButton
-        className={`${baseStyle} flex bg-transparent gap-2${loading ? "opacity-75 cursor-not-allowed w-full" : "min-w-full "}`}
+        className={`${baseStyle} flex bg-transparent gap-2 ${loading ? "opacity-75 cursor-not-allowed w-full" : "min-w-full"}`}
         onClick={handleClick}
         disabled={loading}
       >
-        {loading ? (
+        {loading && (
           <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
             <circle
               className="opacity-25"
@@ -74,7 +87,7 @@ const CustomSolanaButton = ({
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
             />
           </svg>
-        ) : null}
+        )}
         <div className="pr-2">
           {/* <DYNAMICICONS.Arrow color="#fff"  /> */}
         </div>

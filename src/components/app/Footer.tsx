@@ -1,3 +1,4 @@
+import useLogout from "@/hooks/api/useLogout";
 import { Button } from "../ui/button";
 import { trimAddress } from "@/lib/utils";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -5,9 +6,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Footer = () => {
   // const { toast } = useToast();
-  const { connected, publicKey, disconnect } = useWallet();
+  const { connected, publicKey } = useWallet();
   const navigate = useNavigate()
   const {pathname} = useLocation()
+  const logout = useLogout();
 
   const address: any = publicKey?.toString();
   // const copy = async (address: string) => {
@@ -69,7 +71,7 @@ const Footer = () => {
           </Button>
           {connected ? (
             <Button
-              onClick={disconnect}
+              onClick={logout}
               className="w-full text-md py-1 px-6 h-auto uppercase "
             >
               <div className="mt-1">

@@ -1,52 +1,31 @@
 import { IMAGES } from "@/assets";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SimpleAgentLineChart from "../Leaderboard/graphs/SimpleAgentLineChart";
 import { useNavigate } from "react-router-dom";
+import useGetAgents from "@/hooks/api/agents/useGetAgents";
+import { formatBigNumber, hasSkill } from "@/lib/utils";
+import DYNAMICICONS from "@/assets/DynamicIcon";
 
 const CourseCarousel = () => {
   //   const [currentIndex, setCurrentIndex] = useState(2);
   const [orders, setOrders] = useState([5, 6, 0, 1, 2, 3, 4]);
 const navigate = useNavigate()
-  const courses = [
-    {
-      title: "agent roguei",
-      image: "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description:
-        "Explore the intricacies of diagnosing and treating adult diseases...",
-    },
-    {
-      title: "biomedical technology",
-      image: "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Discover cutting-edge advancements in medical devices...",
-    },
-    {
-      title: "introduction to data analytics",
-      image: "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Unlock the power of data and gain in-demand skills...",
-    },
-    {
-      title: "introduction to marketing",
-      image: "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Gain insights into consumer behavior...",
-    },
-    {
-      title: "landscape & wildlife photography",
-      image: "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Capture breathtaking moments in nature...",
-    },
-    {
-      title: "web development fundamentals",
-      image: "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Master the core technologies of modern web development...",
-    },
-    {
-      title: "artificial intelligence basics",
-      image: "https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg",
-      description: "Dive into the fascinating world of AI...",
-    },
-  ];
-  const data = [
+const {agents}= useGetAgents()
+const [filterAgents, setFilterAgents] = useState<any>();
+
+
+
+
+useEffect(() => {
+ const filertdatares =  agents?.result?.slice(0,6)
+ setFilterAgents(filertdatares)
+  console.log(filertdatares)
+  }, [agents]);
+
+
+ 
+  const dataset = [
     { name: "1", marketCap: 2, mindshare: 21 },
     { name: "2", marketCap: 21, mindshare: 22 },
     { name: "3", marketCap: 23, mindshare: 20 },
@@ -98,7 +77,6 @@ const navigate = useNavigate()
         return baseClasses;
     }
   };
-
   return (
     <div className="  h-full w-full  overflow-hidden">
       <div className="h-full w-full  mx-auto px-4 py-7  items-center">
@@ -117,12 +95,13 @@ const navigate = useNavigate()
 
           {/* Carousel Items */}
           <div className="relative w-full h-full">
-            {courses.map((course, index) => (
-              <div key={index} className={getItemClasses(orders[index])} onClick={()=>navigate("/agent/addid")}>
+            {filterAgents?.map((data:any, index:any) => (
+              <div key={index} className={getItemClasses(orders[index])} onClick={() => navigate(`/agent/${data?.address}`)}>
                 <div className="  relative w-full h-full object-cover r\ overflow-hidden shadow-lg border-primary  border-[0.5px] transition-all duration-500">
                   <div
                     className="absolute
                  blackshade
+                 w-full h-full
                   
                   
                   "
@@ -130,46 +109,46 @@ const navigate = useNavigate()
                     <img
                       className="w-full h-full object-cover   "
                       src={IMAGES.blackshard}
-                      alt={course.title}
+                      alt={data?.name}
                     />
                   </div>
                   <img
                     className="w-full h-full object-cover   "
-                    src={course.image}
-                    alt={course.title}
+                    src={data?.avatar}
+                    alt={data?.name}
                   />
                 </div>
 
                 {/* {orders[index] === 0 && ( */}
-                <div className="absolute bottom-0 left-0 right-0 p-3 py-2 bg-card  border-primary  border-[0.5px]">
+                <div className="absolute bottom-0 left-0 right-0 p-3 py-2 bg-card  border-primary  border-[0.5px] max-h-[60px] min-h-[30px]">
                   <div className="flex justify-between">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                       <img
                         className="w-10  h-10 rounded-md"
-                        src="https://static.independent.co.uk/2024/11/07/20/newFile-1.jpg"
+                        src={data?.avatar}
                         alt=""
                       />
                       <div className="flex flex-col gap-0">
                         <p className="text-white text-md font-semibold capitalize ">
-                          agent rogue
+                        {data?.name}
                         </p>
-                        <p className="text-white/80 text-sm  font-normal line-clamp-2">
+                        {/* <p className="text-white/80 text-sm  font-normal line-clamp-2">
                           $ROGUE
-                        </p>
+                        </p> */}
                       </div>
                     </div>
 
-                    <div className="flex gap-6 text-sm text-[#F1F6F2] ">
+                    <div className="flex gap-6 text-sm text-[#F1F6F2] h-full ">
                       <div className="flex">
                         <div>
-                          <p>$234M</p>
+                          <p>${formatBigNumber(data?.marketCap) ?? 0}</p>
                           <p className="font-normal text-xs uppercase text-[#D4D4D4]">
                             market cap
                           </p>
                         </div>
-                        <div className="w-[60px] ">
+                        <div className="w-[60px] h-full">
                           <SimpleAgentLineChart
-                            data={data}
+                            data={dataset}
                             dataKey="marketCap"
                             color="#3b82f6"
                           />
@@ -177,18 +156,22 @@ const navigate = useNavigate()
                       </div>
                       <div className="flex">
                         <div>
-                          <p>23.4%</p>
-                          <p className="font-normal text-xs uppercase text-[#D4D4D4]">
-                            mindshare
+                       
+                          <p className="font-normal  uppercase text-[#D4D4D4]">
+                          Skill Traits
                           </p>
+                          <div className="flex gap-3">
+                              <DYNAMICICONS.socialSkil color={hasSkill(data, "social")? "#89FC96": "#959595"} />
+
+                              <DYNAMICICONS.terminalSkil color={hasSkill(data, "terminal")? "#89FC96": "#959595"} />
+
+                              <DYNAMICICONS.audioSkil color={hasSkill(data, "audio")? "#89FC96": "#959595"}/>
+                              <DYNAMICICONS.visualSkil color={hasSkill(data, "visual")? "#89FC96": "#959595"}/>
+                              <DYNAMICICONS.immearsivelSkil color={hasSkill(data, "immersive")? "#89FC96": "#959595"}/>
+
+                          </div>
                         </div>
-                        <div className="w-[60px]">
-                          <SimpleAgentLineChart
-                            data={data}
-                            dataKey="mindshare"
-                            color="#3b82f6"
-                          />
-                        </div>
+                       
                       </div>
                     </div>
                   </div>

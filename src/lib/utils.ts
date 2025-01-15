@@ -1,3 +1,4 @@
+import { Agent } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -189,3 +190,20 @@ export function getHDAgentImageUrl(imageUrl: string) {
   const updatedUrl = imageUrl.replace("normal", "400x400");
   return updatedUrl;
 }
+
+
+
+export const hasSkill = (agent:Agent, skillToCheck:any) => {
+  // Check if agent has skills array and if skillToCheck is a string
+  if (!agent?.skills || !Array.isArray(agent?.skills) || typeof skillToCheck !== 'string') {
+      return false;
+  }
+  
+  // Convert skillToCheck to lowercase for case-insensitive comparison
+  const normalizedSkill = skillToCheck?.toLowerCase();
+  
+  // Check if the skill exists in the skills array
+  return agent?.skills.some(skill => 
+      typeof skill === 'string' && skill.toLowerCase() === normalizedSkill
+  );
+};
