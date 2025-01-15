@@ -1,5 +1,5 @@
 import { SquareChevronDown, SquareChevronUp } from 'lucide-react';
-import React, { ReactNode, useState } from 'react'
+import  { ReactNode, useState } from 'react'
 
 const Collapsible = ({ children, titel, subtext }: { children: ReactNode, titel: string, subtext: string }) => {
 

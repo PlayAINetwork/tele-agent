@@ -154,7 +154,7 @@ export const AgentItem = ({
 }: {
   _onClick?: () => void;
   hideNav?: boolean;
-  data: Agent
+  data?: Agent
 }) => {
   const navigate = useNavigate()
 

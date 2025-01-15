@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
-import { AgentItem } from "../Home/Navbar";
 import getWalletSignMessage from "@/hooks/api/auth/getWalletSignMessage";
 import { useAuthState } from "@/context/auth.context";
 import connectWallet from "@/hooks/api/auth/connectWallet";
@@ -87,10 +86,10 @@ const Header = () => {
 
         if (data.pairs && data.pairs.length > 0) {
           // Sort by volume and get the most liquid pair
-          // const mostLiquidPair = data.pairs.sort(
-          //   (a: any, b: any) => parseFloat(b.priceUsd) - parseFloat(a.priceUsd)
-          // )[0];
-          // setTokenData(mostLiquidPair);
+          const mostLiquidPair = data.pairs.sort(
+            (a: any, b: any) => parseFloat(b.priceUsd) - parseFloat(a.priceUsd)
+          )[0];
+          setTokenData(mostLiquidPair);
         } else {
           console.log("No trading pairs found");
         }
@@ -315,12 +314,12 @@ const Header = () => {
               search !== "" ?
                 <div className="z-100 absolute top-[67px] left-0  w-full max-h-[300px] bg-secondary overflow-scroll border border-primary p-2">
                   <div>
+                    {/* <AgentItem />
                     <AgentItem />
                     <AgentItem />
                     <AgentItem />
                     <AgentItem />
-                    <AgentItem />
-                    <AgentItem />
+                    <AgentItem /> */}
 
 
                   </div>
