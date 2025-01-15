@@ -3,10 +3,15 @@ import Header from "@/components/app/Header";
 import { IMAGES } from "@/assets";
 import Footer from "@/components/app/Footer";
 import { Outlet } from "react-router-dom";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { useWallet } from "@solana/wallet-adapter-react";
+import StackPopup from "../components/app/StackPopup";
 
 function AppLayout() {
   const [isMobile, setIsMobile] = useState(false);
   const [tokenData, setTokenData] = useState<any>(null);
+  const { setVisible } = useWalletModal();
+  const { connected } = useWallet();
 
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
 
@@ -96,7 +101,26 @@ function AppLayout() {
                 on desktop
               </p>
             </div>
-            <div>
+            
+            <div className="flex flex-col gap-4">
+            <div className="border-[1px] border-primary  h-[50px]">
+
+{connected ? (
+  <StackPopup />
+) : (
+  <div
+    onClick={() => setVisible(true)}
+    className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+   
+  >
+    <span className="text-white relative transition-transform duration-300 ease-in-out">
+      <span className="block transition-all duration-300 opacity-100 translate-y-0">
+        {"> stake now <"}
+      </span>
+    </span>
+  </div>
+)}
+</div>
               <div className="flex uppercase items-center bg-[#383838] gap-4 border-[1px] border-primary">
                 <div
                   onClick={() =>

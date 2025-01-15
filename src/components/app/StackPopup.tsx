@@ -54,7 +54,7 @@ const StakePopup = () => {
   const [vaultBalanceofUser, setVaultBalanceofUser] = useState(0);
   const [balance, setBalance] = useState(0);
   const [error, setError] = useState(null);
-
+  const [isMobile, setIsMobile] = useState(false);
   const fetchBalance = async (wallet: any) => {
     try {
       setLoading(true);
@@ -290,6 +290,23 @@ const StakePopup = () => {
     }
   };
 
+  useEffect(() => {
+    // Function to check if screen width is mobile
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Check initially
+    checkIsMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIsMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
+
+
   return (
     <Dialog
       onOpenChange={() => {
@@ -300,7 +317,7 @@ const StakePopup = () => {
       <DialogTrigger asChild>
         <div
           className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-          style={{ clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
+          style={{ clipPath: isMobile ? "":"polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
         >
           <span className="text-white relative transition-transform duration-300 ease-in-out">
             <span className="block transition-all duration-300 opacity-100 translate-y-0">
@@ -320,7 +337,7 @@ const StakePopup = () => {
               setDepositAmount("");
               fetchBalance(wallet);
             }}
-            className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
+            className={`px-4 w-full uppercase text-sm md:text-md text-gray-200 py-2 cursor-pointer ${
               isStake ? "bg-primary text-[#010101]" : "bg-[#181818] text-[#fff]"
             }`}
           >
@@ -332,7 +349,7 @@ const StakePopup = () => {
               setWithdrawAmount("");
               getUserBalance(wallet);
             }}
-            className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
+            className={`px-4 w-full uppercase text-sm md:text-md text-gray-200 py-2 cursor-pointer ${
               isStake ? "bg-[#181818] text-[#fff]" : "bg-primary text-[#010101]"
             }`}
           >
