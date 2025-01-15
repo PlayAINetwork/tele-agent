@@ -320,7 +320,7 @@ const StakePopup = () => {
           style={{ clipPath: isMobile ? "":"polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
         >
           <span className="text-white relative transition-transform duration-300 ease-in-out">
-            <span className="block transition-all duration-300 opacity-100 translate-y-0">
+            <span className="block uppercase transition-all duration-300 opacity-100 translate-y-0">
               {"> stake now <"}
             </span>
           </span>
