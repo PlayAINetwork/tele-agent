@@ -1,11 +1,61 @@
 import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
-// import StackPopup from "./StackPopup";
+import StackPopup from "./StackPopup";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
+import { Program, Provider } from "@project-serum/anchor";
+import { formatBigNumber } from "@/lib/utils";
+// import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const { connected } = useWallet();
+  const { connection } = useConnection();
+  const { setVisible } = useWalletModal();
+  const [totalStaked, setTotalStaked] = useState<number>(0);
+  const getTotalStakedBalance = async (
+    connection: Connection
+  ): Promise<number> => {
+    const programId = HOST_CONTRACT.PROGRAM_ID;
+    try {
+      // Create program instance
+      const program = new Program(HOST_CONTRACT.IDL, new PublicKey(programId), {
+        connection,
+      } as Provider);
+
+      // Get PlatformConfig PDA
+      const [platformConfigPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_config")],
+        new PublicKey(programId)
+      );
+
+      // Get platform config data
+      await program.account.platformConfig.fetch(platformConfigPDA);
+
+      // Get platform mint token account PDA
+      const [platformMintTokenAccountPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_mint_token_account")],
+        new PublicKey(programId)
+      );
+
+      // Get token balance
+      const tokenBalance = await connection.getTokenAccountBalance(
+        platformMintTokenAccountPDA
+      );
+      // Return the balance as a number
+      return (
+        Number(tokenBalance.value.amount) /
+        Math.pow(10, tokenBalance.value.decimals)
+      );
+    } catch (error) {
+      console.error("Error getting total staked balance:", error);
+      throw error;
+    }
+  };
+  // const [isHovered, setIsHovered] = useState(false);
   const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -36,23 +86,41 @@ const Header = () => {
     const interval = setInterval(fetchTokenData, 30000);
     return () => clearInterval(interval);
   }, []);
+  // const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchTotalStaked = async () => {
+      try {
+        const balance = await getTotalStakedBalance(connection);
+        setTotalStaked(balance);
+      } catch (err) {
+        console.log(
+          err instanceof Error
+            ? err.message
+            : "Unknown error occurred while fetching platform stake count!"
+        );
+      }
+    };
+
+    fetchTotalStaked();
+  }, []);
+  console.log("total staked", totalStaked);
   return (
     <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
       <div className="flex gap-3">
         {/* <img src={IMAGES.logo} alt="" className="w-[100px] lg:w-[200px]"/> */}
         <div
-          className="w-full h-full bg-primary p-[2px] uppercase"
+          className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: "polygon(0 0, 94.5% 2%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(0 0, 95.5% 2%, 100% 100%, 0% 100%)",
           }}
         >
-          <div className="flex h-full ">
+          <div className="flex h-full text-sm gap-[1px] ">
             <div>
               <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
             </div>
-            <div
-              className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+            {/* <div
+              className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
               style={{
                 clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
               }}
@@ -79,11 +147,35 @@ const Header = () => {
                   {"> Coming soon <"}
                 </span>
               </span>
-            </div>
-            {/* <StackPopup/> */}
+            </div> */}
+            {connected ? (
+              <StackPopup />
+            ) : (
+              <div
+                onClick={() => setVisible(true)}
+                className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+                style={{
+                  clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
+                }}
+              >
+                <span className="text-white relative transition-transform duration-300 ease-in-out">
+                  <span className="block transition-all duration-300 opacity-100 translate-y-0">
+                    {"> stake now <"}
+                  </span>
+                </span>
+              </div>
+            )}
 
-           <VideoGenertionPopup/>
-           
+            {/* <div
+              className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+              onClick={() => navigate("/rogueagent")}
+            >
+              <span className="text-white relative transition-transform duration-300 ease-in-out">
+                {" > Leaderboard <"}
+              </span>
+            </div> */}
+
+            <VideoGenertionPopup />
           </div>
         </div>
 
@@ -99,14 +191,23 @@ const Header = () => {
         </Button> */}
       </div>
       <div className="flex items-center gap-4">
-        <div className="flex  gap-2 text-md pt-1">
-          <p className="text-primary">$ROGUE:</p>
-          <p>
-            {" "}
-            {tokenData?.priceUsd
-              ? parseFloat(tokenData?.priceUsd).toFixed(6)
-              : 0.0}
-          </p>
+        <div className="flex items-center gap-2">
+          <div className="flex  gap-1 text-md pt-1">
+            <p className="text-primary">STAKED:</p>
+            <p>
+              {`${formatBigNumber(totalStaked) ?? 0}`}
+              <span className="text-xs font-medium">{` $ROGUE`}</span>
+            </p>
+          </div>
+          <div className="flex  gap-1 text-md pt-1">
+            <p className="text-primary">$ROGUE:</p>
+            <p>
+              {" "}
+              {tokenData?.priceUsd
+                ? parseFloat(tokenData?.priceUsd).toFixed(6)
+                : 0.0}
+            </p>
+          </div>
         </div>
         <div className="h-full flex uppercase">
           <div

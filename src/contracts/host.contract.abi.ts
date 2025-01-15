@@ -1,253 +1,341 @@
-const ADDRESS = "0x66FFA98990D04F7f97a7D6eBE87a36BFC2F073E1";
-const ABI = [
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_symbol",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "_decimals",
-        type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "_totalSupply",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "Approval",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "success",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "transfer",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "success",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "transferFrom",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "success",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "allowance",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "balanceOf",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "decimals",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "symbol",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalSupply",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-]as const;
+const PROGRAM_ID = "79zL3sFzMF6GZjM2AgMuDa2BrVVofShrSosrXcRRLykf";
 
-export const HOST_CONTRACT = { ABI, ADDRESS };
+const IDL: any = {
+  version: "0.1.0",
+  name: "rogue_staking",
+  instructions: [
+    {
+      name: "initializePlatformConfig",
+      docs: [
+        "Initializes the platform config, setting the admin, and the mint to accept for deposits.",
+      ],
+      accounts: [
+        {
+          name: "admin",
+          isMut: true,
+          isSigner: true,
+          docs: ["The platform admin."],
+        },
+        {
+          name: "mint",
+          isMut: false,
+          isSigner: false,
+          docs: ["The token to be used for staking."],
+        },
+        {
+          name: "platformConfig",
+          isMut: true,
+          isSigner: false,
+          docs: ["The global platform config."],
+        },
+        {
+          name: "platformMintTokenAccount",
+          isMut: true,
+          isSigner: false,
+          docs: ["Vault to store deposited tokens."],
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+    },
+    {
+      name: "pauseDeposits",
+      docs: ["Pauses deposits."],
+      accounts: [
+        {
+          name: "admin",
+          isMut: true,
+          isSigner: true,
+          docs: ["The platform admin."],
+        },
+        {
+          name: "platformConfig",
+          isMut: true,
+          isSigner: false,
+          docs: ["The global platform config."],
+        },
+      ],
+      args: [],
+    },
+    {
+      name: "pauseWithdrawals",
+      docs: ["Pauses withdrawals."],
+      accounts: [
+        {
+          name: "admin",
+          isMut: true,
+          isSigner: true,
+          docs: ["The platform admin."],
+        },
+        {
+          name: "platformConfig",
+          isMut: true,
+          isSigner: false,
+          docs: ["The global platform config."],
+        },
+      ],
+      args: [],
+    },
+    {
+      name: "unpauseDeposits",
+      docs: ["UnPauses deposits."],
+      accounts: [
+        {
+          name: "admin",
+          isMut: true,
+          isSigner: true,
+          docs: ["The platform admin."],
+        },
+        {
+          name: "platformConfig",
+          isMut: true,
+          isSigner: false,
+          docs: ["The global platform config."],
+        },
+      ],
+      args: [],
+    },
+    {
+      name: "unpauseWithdrawals",
+      docs: ["UnPauses withdrawals."],
+      accounts: [
+        {
+          name: "admin",
+          isMut: true,
+          isSigner: true,
+          docs: ["The platform admin."],
+        },
+        {
+          name: "platformConfig",
+          isMut: true,
+          isSigner: false,
+          docs: ["The global platform config."],
+        },
+      ],
+      args: [],
+    },
+    {
+      name: "deposit",
+      docs: [
+        "Allows anyone to deposit tokens for staking.",
+        "",
+        "# Arguments",
+        "",
+        "* `amount` - The amount of tokens to deposit for staking.",
+      ],
+      accounts: [
+        {
+          name: "user",
+          isMut: true,
+          isSigner: true,
+          docs: ["The depositer."],
+        },
+        {
+          name: "mint",
+          isMut: false,
+          isSigner: false,
+          docs: ["The token to be used for staking."],
+        },
+        {
+          name: "platformConfig",
+          isMut: false,
+          isSigner: false,
+          docs: ["The global platform config."],
+        },
+        {
+          name: "platformMintTokenAccount",
+          isMut: true,
+          isSigner: false,
+          docs: ["Vault to store deposited tokens."],
+        },
+        {
+          name: "userMintTokenAccount",
+          isMut: true,
+          isSigner: false,
+          docs: ["User's token account to use for deposit."],
+        },
+        {
+          name: "depositInfo",
+          isMut: true,
+          isSigner: false,
+          docs: ["The user's deposit info."],
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "amount",
+          type: "u64",
+        },
+      ],
+    },
+    {
+      name: "withdraw",
+      docs: [
+        "Allows anyone with a valid deposit to unstake.",
+        "",
+        "# Arguments",
+        "",
+        "* `amount` - The amount of tokens to withdraw.",
+      ],
+      accounts: [
+        {
+          name: "user",
+          isMut: true,
+          isSigner: true,
+          docs: ["The withdrawer."],
+        },
+        {
+          name: "mint",
+          isMut: false,
+          isSigner: false,
+          docs: ["The token to be used for staking."],
+        },
+        {
+          name: "platformConfig",
+          isMut: false,
+          isSigner: false,
+          docs: ["The global platform config."],
+        },
+        {
+          name: "platformMintTokenAccount",
+          isMut: true,
+          isSigner: false,
+          docs: ["Vault to store deposited tokens."],
+        },
+        {
+          name: "userMintTokenAccount",
+          isMut: true,
+          isSigner: false,
+          docs: ["User's token account to use for deposit."],
+        },
+        {
+          name: "depositInfo",
+          isMut: true,
+          isSigner: false,
+          docs: ["The user's deposit info."],
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "amount",
+          type: "u64",
+        },
+      ],
+    },
+  ],
+  accounts: [
+    {
+      name: "DepositInfo",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "user",
+            type: "publicKey",
+          },
+          {
+            name: "amount",
+            type: "u64",
+          },
+          {
+            name: "lastWithdrawAmount",
+            type: "u64",
+          },
+          {
+            name: "lastWithdrawTimestamp",
+            type: "i64",
+          },
+          {
+            name: "bump",
+            type: "u8",
+          },
+        ],
+      },
+    },
+    {
+      name: "PlatformConfig",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "admin",
+            type: "publicKey",
+          },
+          {
+            name: "mint",
+            type: "publicKey",
+          },
+          {
+            name: "isDepositPaused",
+            type: "bool",
+          },
+          {
+            name: "isWithdrawPaused",
+            type: "bool",
+          },
+          {
+            name: "bump",
+            type: "u8",
+          },
+          {
+            name: "mintTokenAccountBump",
+            type: "u8",
+          },
+        ],
+      },
+    },
+  ],
+  errors: [
+    {
+      code: 6000,
+      name: "ValueZero",
+      msg: "Value zero",
+    },
+    {
+      code: 6001,
+      name: "InsufficientDeposit",
+      msg: "Insufficient deposit",
+    },
+    {
+      code: 6002,
+      name: "DepositsPaused",
+      msg: "Deposits paused",
+    },
+    {
+      code: 6003,
+      name: "WithdrawalsPaused",
+      msg: "Withdrawals paused",
+    },
+  ],
+};
+
+export const HOST_CONTRACT = { IDL, PROGRAM_ID };

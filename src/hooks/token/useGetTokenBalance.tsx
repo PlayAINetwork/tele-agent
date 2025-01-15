@@ -13,16 +13,16 @@ export const useTokenBalance = (walletAddress?: any) => {
         setLoading(true);
         const connection = new Connection(import.meta.env.VITE_SOL_RPC);
         const publicKey = new PublicKey(walletAddress);
-        const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
+        // const TOKEN_ADDRESS = import.meta.env.VITE_SPL_TOKEN_ADDRESS;
+        const TOKEN_ADDRESS = "29bX2GaJFbtNtfRvsedGDVvyPMQKhc5AbkZYo5RYW5Lq";
         const tokenPublicKey = new PublicKey(TOKEN_ADDRESS);
-
         const associatedAddress = await getAssociatedTokenAddress(
           tokenPublicKey,
           publicKey
         );
         const account = await getAccount(connection, associatedAddress);
 
-        setBalance(Number(account.amount) / 10 ** 6);
+        setBalance(Number(account.amount) / 10 ** 9);
         setError(null);
       } catch (err: any) {
         setError(err.message);
