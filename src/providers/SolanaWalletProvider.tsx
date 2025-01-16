@@ -13,6 +13,7 @@ import {
   SolflareWalletAdapter,
   TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
+import { WalletError } from "@solana/wallet-adapter-base";
 
 export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
   const endpoint =
@@ -36,7 +37,8 @@ export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
+      <WalletProvider wallets={wallets} autoConnect={true}
+        onError={(error: WalletError) => console.error(error)}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
