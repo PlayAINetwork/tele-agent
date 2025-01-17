@@ -21,6 +21,7 @@ import { Button } from "../ui/button";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useToast } from "@/hooks/use-toast";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
+import { handleUserTx } from "@/axios";
 
 const TOKEN_MINT = new PublicKey(
   "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL"
@@ -198,7 +199,7 @@ const StakePopup = () => {
       );
 
       // Execute deposit transaction
-      await program.methods
+      const txSignature = await program.methods
         .deposit(new BN(parseFloat(depositAmount) * 10 ** tokenDecimals))
         .accounts({
           user: wallet.publicKey,
@@ -212,11 +213,27 @@ const StakePopup = () => {
         })
         .rpc();
 
+      // Wait for transaction confirmation
+      // Wait for transaction confirmation
+      const confirmation = await connection.confirmTransaction(
+        txSignature,
+        "confirmed"
+      );
+      await connection.getBlock(confirmation.context.slot, {
+        maxSupportedTransactionVersion: 0,
+      });
+
+      await handleUserTx({
+        amount: Number(depositAmount),
+        action: "stake",
+        address: wallet.publicKey.toString(),
+        hash: txSignature,
+      });
       // Update UI state
       setBalance(computeFloatVals(String(balance), depositAmount));
       setDepositAmount("");
       toast({
-        title: "Deposited Successfully",
+        title: "Staked Successfully",
       });
     } catch (error) {
       console.error("Error depositing tokens:", error);
@@ -259,7 +276,7 @@ const StakePopup = () => {
       );
 
       // Execute withdrawal transaction
-      await program.methods
+      const txSignature = await program.methods
         .withdraw(new BN(parseFloat(withdrawAmount) * 10 ** tokenDecimals))
         .accounts({
           user: wallet.publicKey,
@@ -273,6 +290,21 @@ const StakePopup = () => {
         })
         .rpc();
 
+      // Wait for transaction confirmation
+      const confirmation = await connection.confirmTransaction(
+        txSignature,
+        "confirmed"
+      );
+      await connection.getBlock(confirmation.context.slot, {
+        maxSupportedTransactionVersion: 0,
+      });
+
+      await handleUserTx({
+        amount: Number(withdrawAmount),
+        action: "unstake",
+        address: wallet.publicKey.toString(),
+        hash: txSignature,
+      });
       // Update UI state
       await fetchBalance(wallet);
       setWithdrawAmount("");
@@ -306,7 +338,6 @@ const StakePopup = () => {
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
-
   return (
     <Dialog
       onOpenChange={() => {
@@ -317,7 +348,11 @@ const StakePopup = () => {
       <DialogTrigger asChild>
         <div
           className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-          style={{ clipPath: isMobile ? "":"polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
+          style={{
+            clipPath: isMobile
+              ? ""
+              : "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
+          }}
         >
           <span className="text-white relative transition-transform duration-300 ease-in-out">
             <span className="block uppercase transition-all duration-300 opacity-100 translate-y-0">
