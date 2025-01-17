@@ -44,6 +44,39 @@ export const addUserIfNotExists = async (address: string) => {
   }
 };
 
+export const handleUserTx = async ({
+  amount,
+  address,
+  action,
+  hash,
+}: {
+  amount: number;
+  address: string;
+  action: "stake" | "unstake";
+  hash: string;
+}) => {
+  const requestData = {
+    amount,
+    address,
+    action,
+    hash,
+  };
+
+  try {
+    const res = await axios.post(
+      "https://stake.up.railway.app/stake",
+      requestData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};
 export const updateStakeBalance = async (address: string, balance: number) => {
   try {
     const { data: updatedUser } = await axios.put(
