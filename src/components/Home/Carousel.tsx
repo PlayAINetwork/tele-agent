@@ -8,23 +8,16 @@ import { formatBigNumber, hasSkill } from "@/lib/utils";
 import DYNAMICICONS from "@/assets/DynamicIcon";
 
 const CourseCarousel = () => {
-  //   const [currentIndex, setCurrentIndex] = useState(2);
-  const [orders, setOrders] = useState([5, 6, 0, 1, 2, 3, 4]);
-const navigate = useNavigate()
-const {agents}= useGetAgents()
-const [filterAgents, setFilterAgents] = useState<any>();
+  const [orders, setOrders] = useState([3, 4, 0, 1, 2]);
+  const navigate = useNavigate();
+  const { agents } = useGetAgents();
+  const [filterAgents, setFilterAgents] = useState([]);
 
-
-
-
-useEffect(() => {
- const filertdatares =  agents?.result?.slice(0,6)
- setFilterAgents(filertdatares)
-  console.log(filertdatares)
+  useEffect(() => {
+    const filteredData:any = agents?.result?.slice(0, 5);
+    setFilterAgents(filteredData);
   }, [agents]);
 
-
- 
   const dataset = [
     { name: "1", marketCap: 2, mindshare: 21 },
     { name: "2", marketCap: 21, mindshare: 22 },
@@ -37,46 +30,40 @@ useEffect(() => {
     { name: "9", marketCap: 22, mindshare: 21 },
     { name: "10", marketCap: 23, mindshare: 2 },
   ];
+
   const handlePrev = () => {
     setOrders((prevOrders) => {
-      const newOrders = prevOrders.map((order) => (order + 1) % 7);
+      const newOrders = prevOrders.map((order) => (order + 1) % 5);
       return newOrders;
     });
-    // setCurrentIndex(
-    //   (prevIndex) => (prevIndex - 1 + courses.length) % courses.length
-    // );
   };
 
   const handleNext = () => {
     setOrders((prevOrders) => {
-      const newOrders = prevOrders.map((order) => (order - 1 + 7) % 7);
+      const newOrders = prevOrders.map((order) => (order - 1 + 5) % 5);
       return newOrders;
     });
-    // setCurrentIndex((prevIndex) => (prevIndex + 1) % courses.length);
   };
 
-  const getItemClasses = (order: any) => {
+  const getItemClasses = (order:any) => {
     const baseClasses =
       "absolute transition-all duration-500 ease-in-out cursor-pointer";
     switch (order) {
-      case 0: // Focus (Center)
-        return `${baseClasses} z-30 h-[85%] w-[48%] top-[5%] left-[26%]`;
-      case 1: // Right Big
-        return `${baseClasses} z-20 h-[75%] w-[44%] top-[10%] left-[41%]`;
-      case 2: // Right Small
-        return `${baseClasses} z-10 h-[65%] w-[40%] top-[15%] left-[53%]`;
-      case 3: // Far Right
-        return `${baseClasses} z-0 h-[55%] w-[36%] top-[20%] left-[63%] opacity-40`;
-      case 4: // Far Left
-        return `${baseClasses} z-0 h-[55%] w-[36%] top-[20%] left-[1%] opacity-40`;
-      case 5: // Left Small
-        return `${baseClasses} z-10 h-[65%] w-[40%] top-[15%] left-[7%]`;
-      case 6: // Left Big
-        return `${baseClasses} z-20 h-[75%] w-[44%] top-[10%] left-[15%]`;
+      case 0: // Center (Focus)
+        return `${baseClasses} z-30 h-[85%] w-[50%] top-[7.5%] left-[25%]`;
+      case 1: // Right
+        return `${baseClasses} z-20 h-[75%] w-[45%] top-[12.5%] left-[45%]`;
+      case 2: // Far Right
+        return `${baseClasses} z-10 h-[65%] w-[40%] top-[17.5%] left-[60%] opacity-50`;
+      case 3: // Far Left
+        return `${baseClasses} z-10 h-[65%] w-[40%] top-[17.5%] left-[0%] opacity-50`;
+      case 4: // Left
+        return `${baseClasses} z-20 h-[75%] w-[45%] top-[12.5%] left-[10%]`;
       default:
         return baseClasses;
     }
   };
+
   return (
     <div className="  h-full w-full  overflow-hidden">
       <div className="h-full w-full  mx-auto px-4 py-7  items-center">

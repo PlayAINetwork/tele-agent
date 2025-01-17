@@ -65,7 +65,7 @@ const CustomSolanaButton = ({
     : connectText;
 
   return (
-    <Button className="w-full px-0 binaria">
+    <Button className="w-full h-full px-0 binaria">
       <WalletMultiButton
         className={`${baseStyle} flex bg-transparent gap-2 ${loading ? "opacity-75 cursor-not-allowed w-full" : "min-w-full"}`}
         onClick={handleClick}

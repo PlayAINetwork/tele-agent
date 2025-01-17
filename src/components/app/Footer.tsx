@@ -1,23 +1,11 @@
-import useLogout from "@/hooks/api/useLogout";
 import { Button } from "../ui/button";
-import { trimAddress } from "@/lib/utils";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Footer = () => {
-  // const { toast } = useToast();
-  const { connected, publicKey } = useWallet();
   const navigate = useNavigate()
   const {pathname} = useLocation()
-  const logout = useLogout();
 
-  const address: any = publicKey?.toString();
-  // const copy = async (address: string) => {
-  //   await navigator.clipboard.writeText(address);
-  //   toast({
-  //     title: "Address has been copied to the clipboard.",
-  //   });
-  // };
+ 
   return (
     <div>
       {
@@ -69,18 +57,7 @@ const Footer = () => {
           >
             <div className="mt-1">BUY $ROGUE</div>
           </Button>
-          {connected ? (
-            <Button
-              onClick={logout}
-              className="w-full text-md py-1 px-6 h-auto uppercase "
-            >
-              <div className="mt-1">
-                {" "}
-                {trimAddress(address, 4) + " "}
-                {"[Disconnect]"}
-              </div>
-            </Button>
-          ) : null}
+          
         </div>{" "}
       </div>
     </div>

@@ -171,13 +171,13 @@ export const AgentItem = ({
         <div className="text-sm uppercase w-full ">
           <div className="flex font-medium gap-2  text-md">
             <p className="text-[16px]">{data?.name}</p>
-            <div
+            {/* <div
               className="rounded-xs bg-primary text-[#000] gap-1 p-1 py-0  text-xs h-max flex justify-center items-center font-bold
             "
             >
               <div className="w-2 rounded-[50%] h-2 bg-[#000]"></div>
               <p className="pt-[2px]">Live</p>
-            </div>
+            </div> */}
           </div>
           <div className="flex text-[#D4D4D4] w-full font-normal text-sm justify-between ">
             <div className="flex">

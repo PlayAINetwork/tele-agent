@@ -7,7 +7,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
 import { Program, Provider } from "@project-serum/anchor";
-import { formatBigNumber } from "@/lib/utils";
+import { formatBigNumber, trimAddress } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { Search } from "lucide-react";
@@ -18,6 +18,7 @@ import connectWallet from "@/hooks/api/auth/connectWallet";
 import { useToast } from "@/hooks/use-toast";
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import useLogout from "@/hooks/api/useLogout";
+import { Button } from "../ui/button";
 // import { useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -30,6 +31,7 @@ const Header = () => {
   const isSigningRef = useRef(false);
   const { toast } = useToast();
   const logout = useLogout();
+  const address: any = publicKey?.toString();
 
   const [totalStaked, setTotalStaked] = useState<number>(0);
   const getTotalStakedBalance = async (
@@ -330,7 +332,18 @@ const Header = () => {
 
           </div>
 
-          {connected ? null :
+          {connected ? 
+           <Button
+           onClick={logout}
+           className="w-full text-md py-1 px-6 h-auto uppercase "
+         >
+           <div className="mt-1">
+             {" "}
+             {trimAddress(address, 4) + " "}
+             {"[Disconnect]"}
+           </div>
+         </Button>
+          :
 
             (
               <div
