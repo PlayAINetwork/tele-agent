@@ -178,6 +178,12 @@
   color:#000 !important;
 
 }
+.wallet-adapter-button{
+  line-height:  fit-content !important;
+  height: fit-content !important;
+
+
+}
 
 
 ::placeholder {

@@ -18,9 +18,9 @@ const Footer = () => {
             view leaderboard
           </Button>
         </div>
-        <div className=" flex-1   ">
+        {/* <div className=" flex-1   ">
           <Button className="w-full">claim agent channel</Button>
-        </div>
+        </div> */}
       </div>
 
 :null

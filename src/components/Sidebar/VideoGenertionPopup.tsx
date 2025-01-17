@@ -216,7 +216,7 @@ const VideoGenertionPopup = () => {
     <Dialog>
       <DialogTrigger asChild>
         <div
-          className="w-full  px-6 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
+          className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
           style={{
             clipPath: "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
           }}

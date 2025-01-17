@@ -1,6 +1,5 @@
 import {  IMAGES } from "@/assets";
 import { useEffect, useRef, useState } from "react";
-import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 import StackPopup from "./StackPopup";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
@@ -10,8 +9,6 @@ import { Program, Provider } from "@project-serum/anchor";
 import { formatBigNumber, trimAddress } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
-import { Search } from "lucide-react";
-import { Input } from "../ui/input";
 import getWalletSignMessage from "@/hooks/api/auth/getWalletSignMessage";
 import { useAuthState } from "@/context/auth.context";
 import connectWallet from "@/hooks/api/auth/connectWallet";
@@ -24,7 +21,7 @@ import { Button } from "../ui/button";
 const Header = () => {
   const [tokenData, setTokenData] = useState<any>(null);
   const { connection } = useConnection();
-  const [search, setSearch] = useState("")
+  // const [search, setSearch] = useState("")
   const { connected, publicKey, disconnect, signMessage } = useWallet();
   const { auth, setAuth } = useAuthState();
   const { setVisible } = useWalletModal();
@@ -203,12 +200,12 @@ const Header = () => {
         <div
           className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: "polygon(0 0, 95.5% 2%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(0 0, 95.9% 2%, 100% 100%, 0% 100%)",
           }}
         >
           <div className="flex h-full text-sm gap-[1px] ">
             <div className="cursor-pointer" onClick={() => navigate("/")}>
-              <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
+              <img src={IMAGES.logo} alt="" className="min-w-[12rem]" />
             </div>
             {/* <div
               className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
@@ -244,7 +241,7 @@ const Header = () => {
             ) : (
               <div
                 onClick={() => setVisible(true)}
-                className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+                className="px-4 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
                 style={{
                   clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
                 }}
@@ -257,16 +254,25 @@ const Header = () => {
               </div>
             )}
 
-            {/* <div
-              className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+            <div
+              className="px-4 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
               onClick={() => navigate("/rogueagent")}
             >
               <span className="text-white relative transition-transform duration-300 ease-in-out">
                 {" > Leaderboard <"}
               </span>
-            </div> */}
+            </div>
+            <div
+              onClick={() => navigate("/rogue")}
 
-            <VideoGenertionPopup />
+          className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
+          style={{
+            clipPath: "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
+          }}
+        >
+          {"> Watch_Rogue <"}
+        </div>
+            {/* <VideoGenertionPopup /> */}
           </div>
         </div>
 
@@ -302,7 +308,7 @@ const Header = () => {
         </div>
         <div className="h-full flex uppercase">
 
-          <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
+          {/* <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
             <Search />
             <Input
               className="pr-[5px] binaria border-none  uppercase bg-transparent w-[220px]"
@@ -316,12 +322,12 @@ const Header = () => {
               search !== "" ?
                 <div className="z-100 absolute top-[67px] left-0  w-full max-h-[300px] bg-secondary overflow-scroll border border-primary p-2">
                   <div>
-                    {/* <AgentItem />
                     <AgentItem />
                     <AgentItem />
                     <AgentItem />
                     <AgentItem />
-                    <AgentItem /> */}
+                    <AgentItem />
+                    <AgentItem />
 
 
                   </div>
@@ -330,7 +336,7 @@ const Header = () => {
                 : null
             }
 
-          </div>
+          </div> */}
 
           {connected ? 
            <Button
@@ -347,7 +353,7 @@ const Header = () => {
 
             (
               <div
-                className="border-x-[1px] border-primary cursor-pointer h-full flex items-center"
+                className="border-x-[1px] border-primary cursor-pointer  flex items-center"
 
               >
                 <CustomSolanaButton

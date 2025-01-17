@@ -3,7 +3,9 @@ export const ROUTES = {
         global: "/",
         adminGenerate: "/admin-generate",
         rogueagent: "/rogueagent",
-        agent: "/agent/:id"
+        agent: "/agent/:id",
+        rogue: "/rogue"
+
 
     },
 };

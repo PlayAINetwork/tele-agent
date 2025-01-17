@@ -86,7 +86,7 @@ const LeaderboardTable = () => {
       <div className=" py-3 text-2xl">
         <p>RANKINGS</p>
       </div>
-      <div className="border max-w-full w-full h-[400px] overflow-x-auto overflow-y-auto">
+      <div className="border max-w-full w-full max-h-[400px] overflow-x-auto overflow-y-auto">
         <Table
           containerClassname="w-full
               [&_th]:bg-[#1A1F20] 

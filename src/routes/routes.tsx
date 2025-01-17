@@ -6,6 +6,7 @@ import AdminGenrate from '@/pages/AdminGenrate'
 import LeaderBoard from '@/pages/LeaderBoard'
 import AppLayout from '@/layouts/AppLayout'
 import Agent from '@/pages/Agent'
+import Rogue from '@/pages/Rogue'
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
         path: ROUTES.nodes.agent,
         element: <Agent />,
       },
+      {
+        path: ROUTES.nodes.rogue,
+        element: <Rogue />,
+      },
+      
       
     ],
   },

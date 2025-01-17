@@ -34,7 +34,7 @@ useEffect(() => {
   return (
     <div className="h-full w-full flex binaria relative">
       <Navbar />
-      <div className="w-full h-full overflow-scroll ">
+      <div className="w-full h-full overflow-y-scroll ">
         <div className="flex h-full justify-between w-full ">
           <div className="p-4 px-10 w-full flex flex-col gap-3 ">
             <div
