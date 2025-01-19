@@ -30,9 +30,9 @@ const Sidebar = () => {
         <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
           <GlobelBox />
 
-          <div className="p-4">
-            {/* <ChatComponent agentId={id} /> */}
-          </div>
+          {/* <div className="p-4">
+            <ChatComponent agentId={id} />
+          </div> */}
         </Collapsible>
 
         {/* <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
