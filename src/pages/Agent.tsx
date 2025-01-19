@@ -2,22 +2,24 @@ import DYNAMICICONS from "@/assets/DynamicIcon";
 import GraphSection from "@/components/AgentPage/GraphSection";
 import Navbar from "@/components/Home/Navbar";
 import Sidebar from "@/components/Sidebar";
+import SimpleCardSkeleton from "@/components/Skeleton/SimpleCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import useGetAgentDetails from "@/hooks/api/agents/useGetAgentDetails";
 import useGetAgentVideo from "@/hooks/api/agents/useGetAgentVideo";
 import { useToast } from "@/hooks/use-toast";
 import { hasSkill, trimAddress } from "@/lib/utils";
 import { ArrowLeft, BadgeCheck, Copy, Globe, Twitter } from "lucide-react";
 import { useEffect } from "react";
-import {  useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Agent = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { id } = useParams()
-  const { agent } = useGetAgentDetails(id ?? "")
+  const { agent ,loadingAgent} = useGetAgentDetails(id ?? "")
   const { agentVideo } = useGetAgentVideo(id ?? "")
 
-
+  // const loadingAgent = true
   useEffect(() => {
     console.log(agentVideo, "agent")
 
@@ -54,61 +56,87 @@ const Agent = () => {
             </p> */}
 
             <div className="flex justify-between items-center">
-              <div className="flex gap-2">
-                <img
-                  className="w-12  h-12 rounded-sm "
-                  src={agent?.avatar}
-                  alt=""
-                />
-                <div className="flex flex-col gap-0">
-                  <div className="flex items-center gap-1">
-                    <p className="text-white text-md font-normal uppercase ">
-                      {agent?.name}
-                    </p>
-                    <div className="text-primary">
-                      {
-                        agent?.verified ?
-                          <BadgeCheck size={"16px"} />
-                          : null
-                      }
-                    </div>
-                  </div>
+              {
+                loadingAgent ?
 
+                  <SimpleCardSkeleton />
+                  :
                   <div className="flex gap-2">
-                    {/* <p className="text-white/80 text-xs  font-normal line-clamp-2">
+                    <img
+                      className="w-12  h-12 rounded-sm "
+                      src={agent?.avatar}
+                      alt=""
+                    />
+                    <div className="flex flex-col gap-0">
+                      <div className="flex items-center gap-1">
+                        <p className="text-white text-md font-normal uppercase ">
+                          {agent?.name}
+                        </p>
+                        <div className="text-primary">
+                          {
+                            agent?.verified ?
+                              <BadgeCheck size={"16px"} />
+                              : null
+                          }
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        {/* <p className="text-white/80 text-xs  font-normal line-clamp-2">
                       $ROGUE
                     </p> */}
-                    <div
-                      onClick={() => copyAddress(agent?.addres)}
-                      className="flex gap-1 cursor-pointer items-center text-white/80 text-xs hover:text-white/100 font-normal "
-                    >
-                      {trimAddress(agent?.address)}
+                        <div
+                          onClick={() => copyAddress(agent?.addres)}
+                          className="flex gap-1 cursor-pointer items-center text-white/80 text-xs hover:text-white/100 font-normal "
+                        >
+                          {trimAddress(agent?.address)}
 
-                      <Copy size={"12px"} />
+                          <Copy size={"12px"} />
+                        </div>
+                      </div>
                     </div>
+
                   </div>
-                </div>
-              </div>
+              }
+
 
               <div className="flex gap-2">
-                <div className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30">
-                  {" "}
-                  {agent?.name}: ${agent?.price}
-                </div>
-                <div onClick={() => window.open(`https://x.com/${agent?.twitter}`, "_blank")} className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30 cursor-pointer hover:bg-white/10">
-                  {" "}
-                  <Twitter size={"20px"} />
-                </div>
-                {/* <div className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30 cursor-pointer hover:bg-white/10">
+                {
+                  loadingAgent ?
 
-                  {" "}
-                  <Twitter size={"20px"} />
-                </div> */}
-                <div className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30 cursor-pointer hover:bg-white/10">
+                    <>
+                      <div className="text-white/80 text-sm border h-6 w-20  font-normal line-clamp-2 border-white/30">
+                        <Skeleton className="w-full h-full  border-primary border-[0.5px]  " />
+                      </div>
+                      <div className="text-white/80 text-sm border h-6 w-8  font-normal line-clamp-2 border-white/30">
+                        <Skeleton className="w-full h-full  border-primary border-[0.5px]  " />
+                      </div>
+                      <div className="text-white/80 text-sm border h-6 w-8  font-normal line-clamp-2 border-white/30">
+                        <Skeleton className="w-full h-full  border-primary border-[0.5px]  " />
+                      </div>
+                    </>
 
-                  {" "}
-                  <Globe size={"20px"} />
-                </div>
+
+                    :
+                    <>
+                      <div className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30">
+                        {" "}
+                        {agent?.name}: ${agent?.price}
+                      </div>
+                      <div onClick={() => window.open(`https://x.com/${agent?.twitter}`, "_blank")} className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30 cursor-pointer hover:bg-white/10">
+                        {" "}
+                        <Twitter size={"20px"} />
+                      </div>
+
+                      <div className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30 cursor-pointer hover:bg-white/10">
+
+                        {" "}
+                        <Globe size={"20px"} />
+                      </div>
+                    </>
+                }
+
+
               </div>
             </div>
 
@@ -117,60 +145,69 @@ const Agent = () => {
                 <p>Skill Traits:</p>
               </div>
 
-              <div className="flex gap-2">
-                {
-                  !hasSkill(agent, "social") && !hasSkill(agent, "terminal") && !hasSkill(agent, "audio") && !hasSkill(agent, "visual") && !hasSkill(agent, "immersive") ?
-                    <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
+              {
+                loadingAgent ?
+                  <div className="text-white/80 text-sm border h-6 w-24  font-normal line-clamp-2 border-white/30">
+                    <Skeleton className="w-full h-full  border-primary border-[0.5px]  " />
+                  </div>
 
-                      No skill traits
-                    </div>
-                    : null
-                }
-                {
-                  hasSkill(agent, "social") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
-                    <DYNAMICICONS.socialSkil color={hasSkill(agent, "social") ? "#89FC96" : "#89FC96"} />
+                  :
+                  <div className="flex gap-2">
+                    {
+                      !hasSkill(agent, "social") && !hasSkill(agent, "terminal") && !hasSkill(agent, "audio") && !hasSkill(agent, "visual") && !hasSkill(agent, "immersive") ?
+                        <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
 
-                    social
-                  </div> : null
+                          No skill traits
+                        </div>
+                        : null
+                    }
+                    {
+                      hasSkill(agent, "social") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
+                        <DYNAMICICONS.socialSkil color={hasSkill(agent, "social") ? "#89FC96" : "#89FC96"} />
 
-                }
+                        social
+                      </div> : null
 
-                {
-                  hasSkill(agent, "terminal") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
-                    <DYNAMICICONS.terminalSkil color={hasSkill(agent, "terminal") ? "#89FC96" : "#89FC96"} />
+                    }
 
-                    terminal
-                  </div> : null
+                    {
+                      hasSkill(agent, "terminal") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
+                        <DYNAMICICONS.terminalSkil color={hasSkill(agent, "terminal") ? "#89FC96" : "#89FC96"} />
 
-                }
-                {
-                  hasSkill(agent, "audio") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
-                    <DYNAMICICONS.audioSkil color={hasSkill(agent, "audio") ? "#89FC96" : "#89FC96"} />
+                        terminal
+                      </div> : null
 
-                    social
-                  </div> : null
+                    }
+                    {
+                      hasSkill(agent, "audio") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
+                        <DYNAMICICONS.audioSkil color={hasSkill(agent, "audio") ? "#89FC96" : "#89FC96"} />
 
-                }
-                {
-                  hasSkill(agent, "visual") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
-                    <DYNAMICICONS.visualSkil color={hasSkill(agent, "visual") ? "#89FC96" : "#89FC96"} />
+                        social
+                      </div> : null
 
-                    social
-                  </div> : null
+                    }
+                    {
+                      hasSkill(agent, "visual") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
+                        <DYNAMICICONS.visualSkil color={hasSkill(agent, "visual") ? "#89FC96" : "#89FC96"} />
 
-                }
-                {
-                  hasSkill(agent, "immersive") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
-                    <DYNAMICICONS.immearsivelSkil color={hasSkill(agent, "immersive") ? "#89FC96" : "#89FC96"} />
+                        social
+                      </div> : null
 
-                    social
-                  </div> : null
+                    }
+                    {
+                      hasSkill(agent, "immersive") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
+                        <DYNAMICICONS.immearsivelSkil color={hasSkill(agent, "immersive") ? "#89FC96" : "#89FC96"} />
 
-                }
-              </div>
+                        social
+                      </div> : null
+
+                    }
+                  </div>
+              }
+
             </div>{
               agent?.name !== null ?
-                <GraphSection data={agent} />
+                <GraphSection data={agent} isLoading={loadingAgent} />
                 : null
             }
 

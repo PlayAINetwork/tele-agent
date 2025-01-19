@@ -5,10 +5,11 @@ import { Agent } from "@/types";
 import { LogIn, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SimpleCardSkeleton from "../Skeleton/SimpleCardSkeleton";
 
 const Navbar = () => {
   const { hideSidebar, setHideSidebar } = useAppCtx();
-  const { agents } = useGetAgents()
+  const { agents,loadingAgent } = useGetAgents()
   const [newAgents, setNewAgents] = useState<any>();
   const [topAgents, setTopAgents] = useState<any>();
 
@@ -75,6 +76,15 @@ const Navbar = () => {
                 className={`mt-4 flex flex-col gap-2  ${hideSidebar ? "pt-6" : ""}`}
               >
                 {
+
+                  loadingAgent ?
+                  [...Array(5)].map((_, i) => (
+                    <SimpleCardSkeleton key={i}/>
+
+                  ))
+
+
+                  :
                   topAgents?.map((agent: Agent) => (
 
                     <AgentItem hideNav={hideSidebar} data={agent} />
@@ -102,6 +112,16 @@ const Navbar = () => {
 
               <div className="mt-4 flex flex-col gap-2 ">
                 {
+                    
+
+                      loadingAgent ?
+                      [...Array(5)].map((_, i) => (
+                        <SimpleCardSkeleton key={i}/>
+    
+                      ))
+    
+    
+                      :
                   newAgents?.map((agent: Agent) => (
 
                     <AgentItem hideNav={hideSidebar} data={agent} />

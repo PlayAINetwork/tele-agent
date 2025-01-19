@@ -129,7 +129,7 @@ const LeaderboardTable = () => {
             </TableRow>
           </TableHeader>
           {loadingAgent ? (
-            <div className="h-full w-full absolute top-0 left-0 z-10 bg-card grid place-items-center">
+            <div className="h-full w-full absolute top-0 left-0 z-10 bg-[#00120A] grid place-items-center">
               <div className="grid place-items-center gap-2">
                 {/* <Brand className="text-2xl" /> */}
                 <div className="flex items-center justify-center gap-2 border p-2 px-4 bg-primary text-primary-foreground rounded-xl ">

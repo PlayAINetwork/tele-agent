@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 import useGetAgents from "@/hooks/api/agents/useGetAgents";
 import { formatBigNumber, hasSkill } from "@/lib/utils";
 import DYNAMICICONS from "@/assets/DynamicIcon";
+import { Skeleton } from "../ui/skeleton";
 
 const CourseCarousel = () => {
   const [orders, setOrders] = useState([3, 4, 0, 1, 2]);
   const navigate = useNavigate();
-  const { agents } = useGetAgents();
+  const { agents,loadingAgent } = useGetAgents();
   const [filterAgents, setFilterAgents] = useState([]);
 
   useEffect(() => {
@@ -70,8 +71,49 @@ const CourseCarousel = () => {
           </button>
 
           {/* Carousel Items */}
+          
           <div className="relative w-full h-full">
-            {filterAgents?.map((data: any, index: any) => (
+            {
+            loadingAgent ?
+            [...Array(5)].map((_, index) => (
+              <div key={index} className={getItemClasses(orders[index]) + " bg-gray-800"}>
+                 <Skeleton className="w-full h-full  border-primary border-[0.5px] rounded-[0px] " />
+
+
+                <div className="absolute bottom-0 left-0 right-0 p-3 py-2 bg-card border-primary border-[0.5px] max-h-[60px] min-h-[30px]">
+                  <div className="flex justify-between">
+                    <div className="flex gap-2 items-center">
+                      <div className="w-10 h-10 rounded-md bg-gray-700 animate-pulse" />
+                      <div className="flex flex-col gap-1">
+                        <div className="h-4 w-24 bg-gray-700 rounded animate-pulse" />
+                      </div>
+                    </div>
+
+                    <div className="flex gap-6 text-sm h-full">
+                      <div className="flex gap-2">
+                        <div>
+                          <div className="h-4 w-20 bg-gray-700 rounded animate-pulse mb-1" />
+                          <div className="h-3 w-16 bg-gray-700 rounded animate-pulse" />
+                        </div>
+                        <div className="w-[60px] h-full bg-gray-700 rounded animate-pulse" />
+                      </div>
+                      <div className="flex">
+                        <div>
+                          <div className="h-3 w-20 bg-gray-700 rounded animate-pulse mb-2" />
+                          <div className="flex gap-3">
+                            {[...Array(5)].map((_, i) => (
+                              <div key={i} className="w-4 h-4 bg-gray-700 rounded animate-pulse" />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+            :
+            filterAgents?.map((data: any, index: any) => (
               <div key={index} className={getItemClasses(orders[index])} onClick={() => navigate(`/agent/${data?.address}`)}>
                 <div className="  relative w-full h-full object-cover r\ overflow-hidden shadow-lg border-primary  border-[0.5px] transition-all duration-500">
                   <div
