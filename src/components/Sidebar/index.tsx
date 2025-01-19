@@ -5,9 +5,10 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { IMAGES } from "@/assets";
 import Collapsible from "../app/Collapsible";
 
+
+
 const Sidebar = () => {
   const { connected } = useWallet();
-  // const {id} = useParams()
 
   // const config = genConfig(address);
 

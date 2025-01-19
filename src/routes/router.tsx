@@ -4,7 +4,9 @@ export const ROUTES = {
         adminGenerate: "/admin-generate",
         rogueagent: "/rogueagent",
         agent: "/agent/:id",
-        rogue: "/rogue"
+        rogue: "/rogue",
+        twitterAuth: "/auth/twitter/callback"
+
 
 
     },

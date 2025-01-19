@@ -6,6 +6,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function getUrlParameter(name: string) {
+  const searchParams = new URLSearchParams(location.search);
+  return searchParams.get(name);
+}
+
 export function trimAddress(address: string, lengt: number = 7) {
   // Check if the address is a valid string
   if (typeof address !== "string") {

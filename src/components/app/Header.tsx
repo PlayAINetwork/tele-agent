@@ -1,4 +1,4 @@
-import {  IMAGES } from "@/assets";
+import { IMAGES } from "@/assets";
 import { useEffect, useRef, useState } from "react";
 import StackPopup from "./StackPopup";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -200,7 +200,7 @@ const Header = () => {
         <div
           className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: "polygon(0 0, 95.9% 2%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(0 0, 96.3% 2%, 100% 100%, 0% 100%)",
           }}
         >
           <div className="flex h-full text-sm gap-[1px] ">
@@ -265,13 +265,13 @@ const Header = () => {
             <div
               onClick={() => navigate("/rogue")}
 
-          className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
-          style={{
-            clipPath: "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
-          }}
-        >
-          {"> Watch_Rogue <"}
-        </div>
+              className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
+              style={{
+                clipPath: "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
+              }}
+            >
+              {"> Watch_Rogue <"}
+            </div>
             {/* <VideoGenertionPopup /> */}
           </div>
         </div>
@@ -338,18 +338,18 @@ const Header = () => {
 
           </div> */}
 
-          {connected ? 
-           <Button
-           onClick={logout}
-           className="w-full text-md py-1 px-6 h-auto uppercase "
-         >
-           <div className="mt-1">
-             {" "}
-             {trimAddress(address, 4) + " "}
-             {"[Disconnect]"}
-           </div>
-         </Button>
-          :
+          {connected ?
+            <Button
+              onClick={logout}
+              className="w-full text-md py-1 px-6 h-auto uppercase "
+            >
+              <div className="mt-1">
+                {" "}
+                {trimAddress(address, 4) + " "}
+                {"[Disconnect]"}
+              </div>
+            </Button>
+            :
 
             (
               <div

@@ -7,12 +7,13 @@ import LeaderBoard from '@/pages/LeaderBoard'
 import AppLayout from '@/layouts/AppLayout'
 import Agent from '@/pages/Agent'
 import Rogue from '@/pages/Rogue'
+import ErrorBoundary from '@/components/app/ErrorBoundary'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <AppLayout />,
-    errorElement: <Home />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: ROUTES.nodes.global,
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.nodes.rogueagent,
+        element: <LeaderBoard />,
+      },
+      {
+        path: ROUTES.nodes.twitterAuth,
         element: <LeaderBoard />,
       },
       {

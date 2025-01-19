@@ -1,4 +1,5 @@
 import DYNAMICICONS from "@/assets/DynamicIcon";
+import GraphSection from "@/components/AgentPage/GraphSection";
 import Navbar from "@/components/Home/Navbar";
 import Sidebar from "@/components/Sidebar";
 import useGetAgentDetails from "@/hooks/api/agents/useGetAgentDetails";
@@ -7,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { hasSkill, trimAddress } from "@/lib/utils";
 import { ArrowLeft, BadgeCheck, Copy, Globe, Twitter } from "lucide-react";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 
 const Agent = () => {
   const navigate = useNavigate();
@@ -17,10 +18,10 @@ const Agent = () => {
   const { agentVideo } = useGetAgentVideo(id ?? "")
 
 
-useEffect(() => {
-  console.log(agentVideo, "agent")
+  useEffect(() => {
+    console.log(agentVideo, "agent")
 
-  }, [agent,agentVideo]);
+  }, [agent, agentVideo]);
 
 
   const copyAddress = async (address: string) => {
@@ -167,12 +168,16 @@ useEffect(() => {
 
                 }
               </div>
-            </div>
+            </div>{
+              agent?.name !== null ?
+                <GraphSection data={agent} />
+                : null
+            }
 
-            {/* <GraphSection/> */}
+
 
             <div className="pb-8">
-              <div className=" py-2 flex text-mditems-center gap-1 font-normal  uppercase">
+              {/* <div className=" py-2 flex text-mditems-center gap-1 font-normal  uppercase">
                 <p>about:</p>
               </div>
               <div className="flex gap-2">
@@ -182,7 +187,7 @@ useEffect(() => {
                   first ai podcaster agents drawn at inspiration from joe rogan
                   by rektdin, powered by play ai network. with etx etc etc etc
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <Sidebar />

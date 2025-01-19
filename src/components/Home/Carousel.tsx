@@ -14,22 +14,11 @@ const CourseCarousel = () => {
   const [filterAgents, setFilterAgents] = useState([]);
 
   useEffect(() => {
-    const filteredData:any = agents?.result?.slice(0, 5);
+    const filteredData: any = agents?.result?.slice(0, 5);
     setFilterAgents(filteredData);
   }, [agents]);
 
-  const dataset = [
-    { name: "1", marketCap: 2, mindshare: 21 },
-    { name: "2", marketCap: 21, mindshare: 22 },
-    { name: "3", marketCap: 23, mindshare: 20 },
-    { name: "4", marketCap: 22, mindshare: 21 },
-    { name: "5", marketCap: 24, mindshare: 23 },
-    { name: "6", marketCap: 5, mindshare: 22 },
-    { name: "7", marketCap: 21, mindshare: 24 },
-    { name: "8", marketCap: 23, mindshare: 25 },
-    { name: "9", marketCap: 22, mindshare: 21 },
-    { name: "10", marketCap: 23, mindshare: 2 },
-  ];
+  
 
   const handlePrev = () => {
     setOrders((prevOrders) => {
@@ -45,7 +34,7 @@ const CourseCarousel = () => {
     });
   };
 
-  const getItemClasses = (order:any) => {
+  const getItemClasses = (order: any) => {
     const baseClasses =
       "absolute transition-all duration-500 ease-in-out cursor-pointer";
     switch (order) {
@@ -82,7 +71,7 @@ const CourseCarousel = () => {
 
           {/* Carousel Items */}
           <div className="relative w-full h-full">
-            {filterAgents?.map((data:any, index:any) => (
+            {filterAgents?.map((data: any, index: any) => (
               <div key={index} className={getItemClasses(orders[index])} onClick={() => navigate(`/agent/${data?.address}`)}>
                 <div className="  relative w-full h-full object-cover r\ overflow-hidden shadow-lg border-primary  border-[0.5px] transition-all duration-500">
                   <div
@@ -117,7 +106,7 @@ const CourseCarousel = () => {
                       />
                       <div className="flex flex-col gap-0">
                         <p className="text-white text-md font-semibold capitalize ">
-                        {data?.name}
+                          {data?.name}
                         </p>
                         {/* <p className="text-white/80 text-sm  font-normal line-clamp-2">
                           $ROGUE
@@ -135,30 +124,30 @@ const CourseCarousel = () => {
                         </div>
                         <div className="w-[60px] h-full">
                           <SimpleAgentLineChart
-                            data={dataset}
-                            dataKey="marketCap"
+                            data={data?.marketCapGraph}
+                            dataKey="value"
                             color="#3b82f6"
                           />
                         </div>
                       </div>
                       <div className="flex">
                         <div>
-                       
+
                           <p className="font-normal  uppercase text-[#D4D4D4]">
-                          Skill Traits
+                            Skill Traits
                           </p>
                           <div className="flex gap-3">
-                              <DYNAMICICONS.socialSkil color={hasSkill(data, "social")? "#89FC96": "#959595"} />
+                            <DYNAMICICONS.socialSkil color={hasSkill(data, "social") ? "#89FC96" : "#959595"} />
 
-                              <DYNAMICICONS.terminalSkil color={hasSkill(data, "terminal")? "#89FC96": "#959595"} />
+                            <DYNAMICICONS.terminalSkil color={hasSkill(data, "terminal") ? "#89FC96" : "#959595"} />
 
-                              <DYNAMICICONS.audioSkil color={hasSkill(data, "audio")? "#89FC96": "#959595"}/>
-                              <DYNAMICICONS.visualSkil color={hasSkill(data, "visual")? "#89FC96": "#959595"}/>
-                              <DYNAMICICONS.immearsivelSkil color={hasSkill(data, "immersive")? "#89FC96": "#959595"}/>
+                            <DYNAMICICONS.audioSkil color={hasSkill(data, "audio") ? "#89FC96" : "#959595"} />
+                            <DYNAMICICONS.visualSkil color={hasSkill(data, "visual") ? "#89FC96" : "#959595"} />
+                            <DYNAMICICONS.immearsivelSkil color={hasSkill(data, "immersive") ? "#89FC96" : "#959595"} />
 
                           </div>
                         </div>
-                       
+
                       </div>
                     </div>
                   </div>

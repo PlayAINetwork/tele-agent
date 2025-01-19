@@ -11,6 +11,8 @@ import {  Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGetAgents from "@/hooks/api/agents/useGetAgents";
 import DYNAMICICONS from "@/assets/DynamicIcon";
+import VerifyTwitter from "./VerifyTwitter";
+import SimpleAgentLineChart from "./graphs/SimpleAgentLineChart";
 
 // const RenderPageBtns = ({
 //   totalPages,
@@ -97,9 +99,13 @@ const LeaderboardTable = () => {
 
               [&_th]:text-nowrap
               first:[&_th]:sticky 
+              first:[&_th]:bg-bg 
+
               first:[&_th]:left-0 
               first:[&_th]:z-10
               first:[&_td]:sticky 
+              first:[&_td]:bg-[#00120A]
+
               first:[&_td]:z-10 
               first:[&_td]:left-0 
               [&_td]:py-3 
@@ -191,7 +197,17 @@ className="text-center"
 
 
                   <TableCell className="text-center">
-                    {formatBigNumber(agent?.marketCap)}
+                  <div className="flex justify-around">
+                  {formatBigNumber(agent?.marketCap)}
+
+                   <div className="w-[60px] h-[35px]">
+                          <SimpleAgentLineChart
+                            data={agent?.marketCapGraph}
+                            dataKey="value"
+                            color="#3b82f6"
+                          />
+                        </div>
+                   </div>
                   </TableCell>
                   {/* <TableCell
                       className={cn(
@@ -220,12 +236,25 @@ className="text-center"
 
                   </TableCell>
                   <TableCell className="text-center">
-                    {formatBigNumber(agent?.holders)}
+                  <div className="flex justify-around">
+
+                   {formatBigNumber(agent?.holders)}
+                   <div className="w-[60px] h-[35px]">
+                          <SimpleAgentLineChart
+                            data={agent?.holdersGraph}
+                            dataKey="value"
+                            color="#3b82f6"
+                          />
+                        </div>
+                   </div>
 
                   </TableCell>
                   <TableCell className="text-center uppercase">
                     {
-                      agent?.verified ? <span className="text-[#89FC96]">verified</span> : <span className="text-#959595 cursor-pointer">unverified</span>
+                      agent?.verified ? <span className="text-[#89FC96]">verified</span> : 
+                    <VerifyTwitter data={agent}/>
+                      
+                      // <span className="text-#959595 cursor-pointer">unverified</span>
                     }
 
                   </TableCell>

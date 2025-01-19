@@ -2,7 +2,8 @@ import DYNAMICICONS from '@/assets/DynamicIcon';
 import useGetAgents from '@/hooks/api/agents/useGetAgents';
 import { cn, formatBigNumber, hasSkill } from '@/lib/utils';
 import { Agent } from '@/types';
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import SimpleAgentLineChart from './graphs/SimpleAgentLineChart';
 
 const Top5Agents = () => {
     const { agents } = useGetAgents()
@@ -10,12 +11,12 @@ const Top5Agents = () => {
 
 
     useEffect(() => {
-        const filertdatares = agents?.result?.slice(0, 6)
+        const filertdatares = agents?.result?.slice(0, 5)
         setFilterAgents(filertdatares)
         console.log(filertdatares)
     }, [agents]);
     return (
-        <div className="grid grid-cols-5 gap-4  ">
+        <div className="grid  grid-cols-5 gap-4  ">
 
 
 
@@ -23,10 +24,16 @@ const Top5Agents = () => {
                 filterAgents?.map((event: Agent) => (
                     <div
                         className={cn(
-                            "w-full h-full flex flex-col items-center border-[1px]  justify-center relative",
+                            "w-full h-full flex flex-col relative items-center border-[1px]  justify-center relative",
                             1 > 0 ? "bg-green-800" : "bg-red-800"
                         )}
                     >
+                        <div className="w-full h-full absolute">
+                            <SimpleAgentLineChart
+                                data={event?.marketCapGraph}
+                                dataKey="value"
+                                color="#3b82f6"
+                            /> </div>
                         <img
                             src={event?.avatar}
                             alt={event?.name}
@@ -42,14 +49,14 @@ const Top5Agents = () => {
 
 
                         <div className={cn("absolute bottom-0 px-4 py-2 bg-[#1A1F20]  left-0 w-full text-white text-[0.9rem]")}>
-                        <div className="grid grid-cols-5 gap-4  ">
-                        <DYNAMICICONS.socialSkil w={"22px"} h={"22px"} color={hasSkill(event, "social")? "#89FC96": "#959595"} />
+                            <div className="grid grid-cols-5 gap-4  ">
+                                <DYNAMICICONS.socialSkil w={"22px"} h={"22px"} color={hasSkill(event, "social") ? "#89FC96" : "#959595"} />
 
-<DYNAMICICONS.terminalSkil  w={"22px"} h={"22px"} color={hasSkill(event, "terminal")? "#89FC96": "#959595"} />
+                                <DYNAMICICONS.terminalSkil w={"22px"} h={"22px"} color={hasSkill(event, "terminal") ? "#89FC96" : "#959595"} />
 
-<DYNAMICICONS.audioSkil  w={"22px"} h={"22px"} color={hasSkill(event, "audio")? "#89FC96": "#959595"}/>
-<DYNAMICICONS.visualSkil  w={"22px"} h={"22px"} color={hasSkill(event, "visual")? "#89FC96": "#959595"}/>
-<DYNAMICICONS.immearsivelSkil  w={"22px"} h={"22px"} color={hasSkill(event, "immersive")? "#89FC96": "#959595"}/>
+                                <DYNAMICICONS.audioSkil w={"22px"} h={"22px"} color={hasSkill(event, "audio") ? "#89FC96" : "#959595"} />
+                                <DYNAMICICONS.visualSkil w={"22px"} h={"22px"} color={hasSkill(event, "visual") ? "#89FC96" : "#959595"} />
+                                <DYNAMICICONS.immearsivelSkil w={"22px"} h={"22px"} color={hasSkill(event, "immersive") ? "#89FC96" : "#959595"} />
 
                             </div>
                         </div>

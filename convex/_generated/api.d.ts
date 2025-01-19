@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as functions_agentChats from "../functions/agentChats.js";
 import type * as functions_chats from "../functions/chats.js";
 import type * as functions_createVedio from "../functions/createVedio.js";
 import type * as functions_index from "../functions/index.js";
@@ -27,6 +28,7 @@ import type * as functions_inject from "../functions/inject.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "functions/agentChats": typeof functions_agentChats;
   "functions/chats": typeof functions_chats;
   "functions/createVedio": typeof functions_createVedio;
   "functions/index": typeof functions_index;

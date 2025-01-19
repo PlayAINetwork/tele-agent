@@ -4,7 +4,11 @@ export interface Agents {
   total: number;
   limit: number;
 }
+interface GraphData {
+  date: string,
+  value: string
 
+}
 export interface Agent {
   address: string;
   name: string;
@@ -18,7 +22,9 @@ export interface Agent {
   verified: boolean;
   verifiedAt: string |null;
   createdAt: any
- 
+  marketCapGraph: GraphData[],
+  holdersGraph: GraphData[],
+  dataPoints:any
 
 }
 export interface AgentDetails {

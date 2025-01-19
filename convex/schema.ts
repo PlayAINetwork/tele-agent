@@ -16,5 +16,11 @@ export default defineSchema({
     url: v.string(),
     prompt: v.string(),
     timestamp: v.any(),
-  })
+  }),
+  agentChat: defineTable({
+    user: v.string(),
+    agent: v.string(),
+    text: v.string(),
+    timestamp: v.any(),
+  }),
 });

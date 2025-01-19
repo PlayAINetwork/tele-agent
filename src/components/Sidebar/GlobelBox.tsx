@@ -10,17 +10,25 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { ICONS } from "@/assets";
+import { useParams } from "react-router-dom";
 
 const GlobelBox = () => {
   const { connected, publicKey } = useWallet();
   const address: any = publicKey?.toString();
+  const { id } = useParams()
 
   const { disableAction } = useAppCtx();
   const { toast } = useToast();
   const messages = useQuery(api.functions.chats.getChats);
+  const messagesAgent = useQuery(api.functions.agentChats.getChats, { agent: id ?? "" });
+
   const sends = useMutation(api.functions.chats.send);
+  const sendsAgent = useMutation(api.functions.agentChats.send);
+
   const boxRef: any = useRef(null);
   const [message, setChatMessage] = useState("");
+  const [chat, setChat] = useState<any>([]);
+
   // console.log(messages ? messages :"ddfd","messages")
   const handleSend = () => {
     if (message === "") {
@@ -30,7 +38,12 @@ const GlobelBox = () => {
       return false;
     }
     if (message.trim()) {
-      sends({ user: address, text: message });
+      console.log(id, "id")
+      if (id !== undefined)
+        sendsAgent({ user: address, text: message, agent: id });
+
+      else
+        sends({ user: address, text: message });
       setChatMessage(""); // Clear the input after sending
     }
   };
@@ -42,6 +55,12 @@ const GlobelBox = () => {
   };
 
   useEffect(() => {
+    if (id === undefined) {
+      setChat(messages)
+    } else {
+      setChat(messagesAgent)
+
+    }
     // Scroll to the bottom whenever logs change
     if (boxRef.current) {
       boxRef.current.scrollTo({
@@ -49,14 +68,14 @@ const GlobelBox = () => {
         behavior: "smooth",
       });
     }
-  }, [messages]);
+  }, [messages, messagesAgent]);
   return (
     <div className="   flex flex-col gap-4  h-[400px] justify-between ">
       <div
         ref={boxRef}
         className="flex flex-col flex-1   gap-4 overflow-auto h-full   p-4 bg-[#131314] "
       >
-        {messages?.map(
+        {chat?.map(
           ({
             _id,
             text,

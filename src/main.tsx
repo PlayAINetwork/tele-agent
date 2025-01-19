@@ -6,10 +6,8 @@ import { AppContextProvider } from "./context/app.contex.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import ConvexServerProvider from "./providers/ConvexProvider.tsx";
 import { SolanaWalletProvider } from "./providers/SolanaWalletProvider.tsx";
-import { Buffer } from 'buffer';
 import { AuthContextProvider } from "./context/auth.context.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-window.Buffer = Buffer;
 
 export const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
