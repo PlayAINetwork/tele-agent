@@ -6,89 +6,131 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatBigNumber, hasSkill } from "@/lib/utils";
-import {  Loader2 } from "lucide-react";
+import { formatBigNumber, hasSkill, processGraphData } from "@/lib/utils";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGetAgents from "@/hooks/api/agents/useGetAgents";
 import DYNAMICICONS from "@/assets/DynamicIcon";
 import VerifyTwitter from "./VerifyTwitter";
 import SimpleAgentLineChart from "./graphs/SimpleAgentLineChart";
+import { Button } from "../ui/button";
+import { useMemo, useState } from "react";
 
-// const RenderPageBtns = ({
-//   totalPages,
-//   page,
-//   currentPage,
-//   setPage,
-// }: {
-//   totalPages: number;
-//   page: number;
-//   currentPage: number;
-//   setPage: (pageId: number) => void;
-// }) => {
-//   return totalPages > 3 ? (
-//     <div className="flex items-center gap-1">
-//       <Button
-//         variant={page === currentPage ? "default" : "ghost"}
-//         className="p-[1px] px-3 text-[0.7rem] h-fit"
-//         onClick={() => setPage(page)}
-//       >
-//         {page}
-//       </Button>
-//       <Button
-//         variant={page + 1 === currentPage ? "default" : "ghost"}
-//         className="p-[1px] px-3 text-[0.7rem] h-fit"
-//         onClick={() => setPage(page + 1)}
-//       >
-//         {page + 1}
-//       </Button>
-//       <Button
-//         variant={page + 2 === currentPage ? "default" : "ghost"}
-//         className="p-[1px] px-3 text-[0.7rem] h-fit"
-//         onClick={() => setPage(page + 2)}
-//       >
-//         {page + 2}
-//       </Button>
-//       <Button
-//         variant={page + 3 === currentPage ? "default" : "ghost"}
-//         className="p-[1px] px-3 text-[0.7rem] h-fit"
-//         onClick={() => setPage(page + 3)}
-//       >
-//         {page + 3}
-//       </Button>
-//     </div>
-//   ) : (
-//     <div className="flex items-center gap-1">
-//       {[...Array(totalPages)].map((_, id) => {
-//         return (
-//           <Button
-//             variant={"ghost"}
-//             className="p-[1px] px-3 text-[0.7rem] h-fit"
-//             key={id + 1}
-//             onClick={() => setPage(id + 1)}
-//           >
-//             {id + 1}
-//           </Button>
-//         );
-//       })}
-//     </div>
-//   );
-// };
+const RenderPageBtns = ({
+  totalPages,
+  page,
+  currentPage,
+  setPage,
+}: {
+  totalPages: number;
+  page: number;
+  currentPage: number;
+  setPage: (pageId: number) => void;
+}) => {
+  return totalPages > 3 ? (
+    <div className="flex items-center gap-1">
+      <Button
+        variant={page === currentPage ? "default" : "ghost"}
+        className="p-[1px] px-3 text-[0.7rem] h-fit"
+        onClick={() => setPage(page)}
+      >
+        {page}
+      </Button>
+      <Button
+        variant={page + 1 === currentPage ? "default" : "ghost"}
+        className="p-[1px] px-3 text-[0.7rem] h-fit"
+        onClick={() => setPage(page + 1)}
+      >
+        {page + 1}
+      </Button>
+      <Button
+        variant={page + 2 === currentPage ? "default" : "ghost"}
+        className="p-[1px] px-3 text-[0.7rem] h-fit"
+        onClick={() => setPage(page + 2)}
+      >
+        {page + 2}
+      </Button>
+      <Button
+        variant={page + 3 === currentPage ? "default" : "ghost"}
+        className="p-[1px] px-3 text-[0.7rem] h-fit"
+        onClick={() => setPage(page + 3)}
+      >
+        {page + 3}
+      </Button>
+    </div>
+  ) : (
+    <div className="flex items-center gap-1">
+      {[...Array(totalPages)]?.map((_, id) => {
+        return (
+          <Button
+            variant={"ghost"}
+            className="p-[1px] px-3 text-[0.7rem] h-fit"
+            key={id + 1}
+            onClick={() => setPage(id + 1)}
+          >
+            {id + 1}
+          </Button>
+        );
+      })}
+    </div>
+  );
+};
 const LeaderboardTable = () => {
-  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [time, setTime] = useState({type: '7D', value: 'week'});
+
+  const [totalPage, setTotalPage] = useState(1);
+
   const navigate = useNavigate();
-  const { agents,loadingAgent } = useGetAgents()
+  const { agents, loadingAgent } = useGetAgents({
+    page: page,
+    time: time?.value ?? 'week',
+  });
 
-  // const { data, isLoading: loadingAgents } = useGetLeadeboardTable({
-  //   page: page,
-  // });
 
+  const agentsData: any = useMemo(() => {
+    setTotalPage(agents?.total / 10);
+    return agents ? agents : [];
+  }, [agents]);
+  const timeInterval = [{type: '1H', value: 'hour'},{type: '6H', value: '6hour'},{type: '24H', value: 'day'}, {type: '7D', value: 'week'}, {type: '30D', value: 'month'}]
+
+  const getTimeBaseData = (time: string, data:any) => {
+
+    if(time === 'week'){
+      return data?.dataPoints?._7DaysAgo
+    }else if(time === 'month'){
+      return data?.dataPoints?._30DaysAgo
+
+    }else if(time === 'day'){
+      return data?.dataPoints?._24HoursAgo
+    }else if(time === 'hour'){
+      return data?.dataPoints?._1HourAgo
+    }else if(time === '6hour'){
+      return data?.dataPoints?._6HoursAgo
+    }
+
+  }
 
   return (
     <div className=" w-full overflow-hidden relative">
-      <div className=" py-3 text-2xl">
-        <p>RANKINGS</p>
+      <div className="flex items-center gap-6 mb-2">
+        <div className=" py-3 text-2xl">
+          <p className="leading-[100%] pt-1">RANKINGS</p>
+        </div>
+
+        <div className="flex border-[.5px] h-max">
+          {
+            timeInterval?.map((el, index) => (
+              <div key={index} onClick={() => setTime(el)} className={`p-1 px-2 text-sm cursor-pointer border-r-[.5px] ${time.type === el.type ? 'bg-primary text-black' : 'text-white'}`}>
+                <p>{el.type}</p>
+
+              </div>
+            ))
+          }
+
+        </div>
       </div>
-      <div className="border max-w-full w-full max-h-[400px] overflow-x-auto overflow-y-auto">
+      <div className="border-[.5px] max-w-full w-full min-h-[400px] max-h-[680px] overflow-x-auto overflow-y-auto">
         <Table
           containerClassname="w-full
               [&_th]:bg-[#1A1F20] 
@@ -114,7 +156,7 @@ const LeaderboardTable = () => {
             "
         >
           <TableHeader>
-            <TableRow className="text-[#fff] text-sm">
+            <TableRow className="text-[#fff] text-sm uppercase">
               <TableHead className="text-center">Agent Name</TableHead>
               <TableHead className="text-center">social</TableHead>
               <TableHead className="text-center">terminal</TableHead>
@@ -140,7 +182,7 @@ const LeaderboardTable = () => {
             </div>
           ) : (
             <TableBody>
-              {agents?.result?.map((agent: any) => (
+              {agentsData?.result?.map((agent: any) => (
                 <TableRow className="text-sm " key={agent?.address}>
                   <TableCell
                     className="sticky min-w-[100px] max-w-[150px] truncate cursor-pointer"
@@ -167,47 +209,48 @@ const LeaderboardTable = () => {
 
                   </TableCell>
                   <TableCell
-className="text-center"
+                    className="text-center"
                   >
                     <div className="w-full justify-center items-center flex ">
-                    <DYNAMICICONS.terminalSkil w={"24px"} h={"24px"}  color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
-
-                    </div>
-
-                  </TableCell>
-                  <TableCell className="text-center ">
-                  <div className="w-full justify-center items-center flex ">
-                    <DYNAMICICONS.audioSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+                      <DYNAMICICONS.terminalSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
 
                     </div>
 
                   </TableCell>
                   <TableCell className="text-center ">
                     <div className="w-full justify-center items-center flex ">
-                    <DYNAMICICONS.visualSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+                      <DYNAMICICONS.audioSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+
+                    </div>
+
+                  </TableCell>
+                  <TableCell className="text-center ">
+                    <div className="w-full justify-center items-center flex ">
+                      <DYNAMICICONS.visualSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
 
                     </div>
                   </TableCell>
                   <TableCell className="text-center  justify-center items-center flex">
                     <div className="w-full justify-center items-center flex ">
-                    <DYNAMICICONS.immearsivelSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+                      <DYNAMICICONS.immearsivelSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
 
                     </div>
                   </TableCell>
 
 
                   <TableCell className="text-center">
-                  <div className="flex justify-around">
-                  {formatBigNumber(agent?.marketCap)}
+                    <div className="flex justify-around">
+                      {formatBigNumber(getTimeBaseData( time.value ,agent).tokenMarketCap)}
 
-                   <div className="w-[60px] h-[35px]">
-                          <SimpleAgentLineChart
-                            data={agent?.marketCapGraph}
-                            dataKey="value"
-                            color="#3b82f6"
-                          />
-                        </div>
-                   </div>
+                      <div className="w-[60px] h-[35px]">
+                        <SimpleAgentLineChart
+                          data={time.value == "week" || time.value == "month"|| time.value == "day" ? processGraphData(agent?.marketCapGraph):agent?.marketCapGraph}
+
+                          dataKey="value"
+                          color="#3b82f6"
+                        />
+                      </div>
+                    </div>
                   </TableCell>
                   {/* <TableCell
                       className={cn(
@@ -232,28 +275,29 @@ className="text-center"
                       )} %`}
                     </TableCell> */}
                   <TableCell className="text-center">
-                    ${agent?.price}
+                    ${getTimeBaseData( time.value ,agent).tokenPrice.toFixed(8)}
 
                   </TableCell>
                   <TableCell className="text-center">
-                  <div className="flex justify-around">
+                    <div className="flex justify-around">
 
-                   {formatBigNumber(agent?.holders)}
-                   <div className="w-[60px] h-[35px]">
-                          <SimpleAgentLineChart
-                            data={agent?.holdersGraph}
-                            dataKey="value"
-                            color="#3b82f6"
-                          />
-                        </div>
-                   </div>
+                      {formatBigNumber(getTimeBaseData( time.value ,agent).tokenHoldersCount)}
+                      <div className="w-[60px] h-[35px]">
+                        <SimpleAgentLineChart
+                          data={time.value == "week" || time.value == "month"|| time.value == "day" ? processGraphData(agent?.holdersGraph):agent?.holdersGraph}
+
+                          dataKey="value"
+                          color="#3b82f6"
+                        />
+                      </div>
+                    </div>
 
                   </TableCell>
                   <TableCell className="text-center uppercase">
                     {
-                      agent?.verified ? <span className="text-[#89FC96]">verified</span> : 
-                    <VerifyTwitter data={agent}/>
-                      
+                      agent?.verified ? <span className="text-[#89FC96]">verified</span> :
+                        <VerifyTwitter data={agent} />
+
                       // <span className="text-#959595 cursor-pointer">unverified</span>
                     }
 
@@ -264,48 +308,52 @@ className="text-center"
           )}
         </Table>
       </div>
-      {/* <div className="flex gap-2 items-center justify-center p-2 ">
-          <Button
-            variant={"ghost"}
-            className="text-[0.7rem] p-[1px]  h-fit gap-0 items-center"
-            disabled={page === 1}
-            onClick={() => {
-              if (page === 1) return;
-              setPage((prev) => prev - 1);
-            }}
-          >
-            <ChevronLeft className="p-[1px] pb-[2px]" />
-            <span className="pr-2">Previous</span>
-          </Button>
-          <RenderPageBtns
-            totalPages={agents.total}
-            setPage={setPage}
-            page={
-              page > 2 && page < agents?.page - 1
-                ? page - 1
-                : page > 2 &&
-                  page <= agents?.total - 1 &&
-                  page < agents?.total
+      {
+        agents?.result && agents.result.length > 0 && (
+      <div className="flex gap-2 items-center justify-center p-2 ">
+        <Button
+          variant={"ghost"}
+          className="text-[0.7rem] p-[1px]  h-fit gap-0 items-center"
+          disabled={page === 1}
+          onClick={() => {
+            if (page === 1) return;
+            setPage((prev) => prev - 1);
+          }}
+        >
+          <ChevronLeft className="p-[1px] pb-[2px]" />
+          <span className="pr-2">Previous</span>
+        </Button>
+        <RenderPageBtns
+          totalPages={totalPage}
+          setPage={setPage}
+          page={
+            page > 2 && page < agents?.page - 1
+              ? page - 1
+              : page > 2 &&
+                page <= totalPage - 1 &&
+                page < totalPage
                 ? page - 2
-                : page === agents?.total
-                ? page - 3
-                : 1
-            }
-            currentPage={page}
-          />
-          <Button
-            variant={"ghost"}
-            className="text-[0.7rem] p-[1px] h-fit gap-0 items-center"
-            disabled={page >= agents?.total}
-            onClick={() => {
-              if (page >= agents?.total) return;
-              setPage((prev) => prev + 1);
-            }}
-          >
-            <span className="pl-2">Next</span>
-            <ChevronRight className="p-[1px] pb-[2px]" />
-          </Button>
-        </div> */}
+                : page === totalPage
+                  ? page - 3
+                  : 1
+          }
+          currentPage={page}
+        />
+        <Button
+          variant={"ghost"}
+          className="text-[0.7rem] p-[1px] h-fit gap-0 items-center"
+          disabled={page >= totalPage}
+          onClick={() => {
+            if (page >= totalPage) return;
+            setPage((prev) => prev + 1);
+          }}
+        >
+          <span className="pl-2">Next</span>
+          <ChevronRight className="p-[1px] pb-[2px]" />
+        </Button>
+      </div>
+        )
+      }
     </div>
   );
 };

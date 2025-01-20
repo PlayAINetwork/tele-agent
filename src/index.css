@@ -276,7 +276,7 @@ textarea:focus-visible {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #1A1F20;
+  background: transparent;
 }
 
 /* Handle */

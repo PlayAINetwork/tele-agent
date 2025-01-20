@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 
 const Home = () => {
-  const {agents,loadingAgent}= useGetAgents()
+  const {agents,loadingAgent}= useGetAgents({ page: 1,time:"week" });
 
 
 
@@ -19,7 +19,7 @@ const Home = () => {
         </div>
 
         <div className="px-4  py-6">
-          <div className=" py-4 text-lg  uppercase">
+          <div className=" py-4 text-lg font-bold  uppercase">
             <p>new agents</p>
           </div>
           <div className="grid grid-cols-4 gap-3  ">

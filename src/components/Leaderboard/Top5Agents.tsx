@@ -1,14 +1,41 @@
 import DYNAMICICONS from '@/assets/DynamicIcon';
 import useGetAgents from '@/hooks/api/agents/useGetAgents';
-import { cn, formatBigNumber, hasSkill } from '@/lib/utils';
+import { cn, formatBigNumber, hasSkill, processGraphData } from '@/lib/utils';
 import { Agent } from '@/types';
 import { useEffect, useState } from 'react'
 import SimpleAgentLineChart from './graphs/SimpleAgentLineChart';
 
 const Top5Agents = () => {
-    const { agents } = useGetAgents()
+    const { agents } = useGetAgents({ page: 1,time:"week" })
     const [filterAgents, setFilterAgents] = useState<any>();
 
+const trendColor = (data:any, dataKey:string) => {
+    // Return default color if data is invalid or too short
+    if (!Array.isArray(data) || data.length < 2) {
+      return "#3b82f6";
+    }
+
+    // Get the first and last data points to determine overall trend
+    const firstPoint = data[0]?.[dataKey];
+    const lastPoint = data[data.length - 1]?.[dataKey];
+
+    // Ensure both data points exist
+    if (firstPoint === undefined || lastPoint === undefined) {
+      return "#3b82f6";
+    }
+
+    // Parse values safely
+    const start = parseFloat(firstPoint);
+    const end = parseFloat(lastPoint);
+
+    // Check if both values are valid numbers
+    if (isNaN(start) || isNaN(end)) {
+      return "#3b82f6";
+    }
+
+    // Determine color based on overall trend
+    return end > start ? true : false;
+  };
 
     useEffect(() => {
         const filertdatares = agents?.result?.slice(0, 5)
@@ -24,13 +51,13 @@ const Top5Agents = () => {
                 filterAgents?.map((event: Agent) => (
                     <div
                         className={cn(
-                            "w-full h-full flex flex-col relative items-center border-[1px]  justify-center relative",
-                            1 > 0 ? "bg-green-800" : "bg-red-800"
+                            "w-full h-full flex flex-col  items-center border-[1px]  justify-center relative",
+                            trendColor(processGraphData(event?.marketCapGraph),"value") ? "bg-green-800" : "bg-red-900"
                         )}
                     >
                         <div className="w-full h-full absolute">
                             <SimpleAgentLineChart
-                                data={event?.marketCapGraph}
+                                data={processGraphData(event?.marketCapGraph)}
                                 dataKey="value"
                                 color="#3b82f6"
                             /> </div>

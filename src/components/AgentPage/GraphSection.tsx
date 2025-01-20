@@ -1,6 +1,6 @@
 import { Agent } from '@/types';
 import SimpleAgentLineChart from '../Leaderboard/graphs/SimpleAgentLineChart';
-import { formatBigNumber } from '@/lib/utils';
+import { formatBigNumber, processGraphData } from '@/lib/utils';
 import { Skeleton } from '../ui/skeleton';
 
 const GraphSection = ({ data, isLoading }: { data: Agent, isLoading: Boolean }) => {
@@ -50,7 +50,8 @@ const GraphSection = ({ data, isLoading }: { data: Agent, isLoading: Boolean }) 
           <>
             <div className="relative border-[.1px] bottom-[#F1F6F2] p-2 w-full h-[100px]">
               <SimpleAgentLineChart
-                data={data?.marketCapGraph}
+                data={processGraphData(data?.marketCapGraph,20)}
+
                 dataKey="value"
                 color="#3b82f6"
               />
@@ -64,7 +65,7 @@ const GraphSection = ({ data, isLoading }: { data: Agent, isLoading: Boolean }) 
 
             <div className="relative border-[.1px] bottom-[#F1F6F2] p-2 w-full h-[100px]">
               <SimpleAgentLineChart
-                data={data?.holdersGraph}
+                data={processGraphData(data?.holdersGraph,10)}
                 dataKey="value"
                 color="#3b82f6"
               />

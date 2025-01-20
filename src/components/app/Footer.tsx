@@ -27,7 +27,7 @@ const Footer = () => {
       }
       
 
-      <div className="flex  justify-between w-full border-t-[1px] border-primary bg-secondary p-4 py-2">
+      <div className="flex  justify-between w-full border-t-[1px] border-[#959595] items-center bg-secondary p-4 py-2">
         <div>
           {/* <Button
             className="text-md"
@@ -39,7 +39,7 @@ const Footer = () => {
           </Button> */}
 
           <div
-          className="text-primary text-md"
+          className="text-[#959595] text-md "
           >
           Copyright © 2025 agentexperience • All Rights Reserved
           </div>

@@ -1,15 +1,15 @@
 import { useAppCtx } from "@/context/app.contex";
 import useGetAgents from "@/hooks/api/agents/useGetAgents";
-import { cn, formatBigNumber } from "@/lib/utils";
+import { cn, formatBigNumber, hasSkill } from "@/lib/utils";
 import { Agent } from "@/types";
 import { LogIn, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import SimpleCardSkeleton from "../Skeleton/SimpleCardSkeleton";
+import DYNAMICICONS from "@/assets/DynamicIcon";
 
 const Navbar = () => {
   const { hideSidebar, setHideSidebar } = useAppCtx();
-  const { agents,loadingAgent } = useGetAgents()
+  const { agents, loadingAgent } = useGetAgents({ page: 1, time: "week" });
   const [newAgents, setNewAgents] = useState<any>();
   const [topAgents, setTopAgents] = useState<any>();
 
@@ -67,30 +67,30 @@ const Navbar = () => {
           <div className="flex flex-col gap-4 ">
             <div className="flex-1 ">
               {!hideSidebar && (
-                <div className="flex uppercase underline">
+                <div className="flex text-xl font-bold uppercase underline">
                   <p>Top_agents</p>
                 </div>
               )}
 
               <div
-                className={`mt-4 flex flex-col gap-2  ${hideSidebar ? "pt-6" : ""}`}
+                className={`mt-4 flex flex-col gap-0  ${hideSidebar ? "pt-6" : ""}`}
               >
                 {
 
                   loadingAgent ?
-                  [...Array(5)].map((_, i) => (
-                    <SimpleCardSkeleton key={i}/>
+                    [...Array(5)].map((_, i) => (
+                      <SimpleCardSkeleton key={i} />
 
-                  ))
-
-
-                  :
-                  topAgents?.map((agent: Agent) => (
-
-                    <AgentItem hideNav={hideSidebar} data={agent} />
+                    ))
 
 
-                  ))
+                    :
+                    topAgents?.map((agent: Agent) => (
+
+                      <AgentItem hideNav={hideSidebar} data={agent} />
+
+
+                    ))
                 }
 
               </div>
@@ -102,7 +102,9 @@ const Navbar = () => {
               >
                 {!hideSidebar ? (
                   <>
-                    <p> new_agents</p>
+                    <div className="flex text-xl font-bold uppercase underline">
+                      <p>new_agents</p>
+                    </div>
                     <div className="w-full h-[1px] bg-[#fff]"></div>
                   </>
                 ) : (
@@ -110,24 +112,24 @@ const Navbar = () => {
                 )}
               </div>
 
-              <div className="mt-4 flex flex-col gap-2 ">
+              <div className="mt-4 flex flex-col gap-0 ">
                 {
-                    
-
-                      loadingAgent ?
-                      [...Array(5)].map((_, i) => (
-                        <SimpleCardSkeleton key={i}/>
-    
-                      ))
-    
-    
-                      :
-                  newAgents?.map((agent: Agent) => (
-
-                    <AgentItem hideNav={hideSidebar} data={agent} />
 
 
-                  ))
+                  loadingAgent ?
+                    [...Array(5)].map((_, i) => (
+                      <SimpleCardSkeleton key={i} />
+
+                    ))
+
+
+                    :
+                    newAgents?.map((agent: Agent) => (
+
+                      <AgentItem hideNav={hideSidebar} data={agent} />
+
+
+                    ))
                 }
 
               </div>
@@ -174,38 +176,80 @@ export const AgentItem = ({
 }: {
   _onClick?: () => void;
   hideNav?: boolean;
-  data?: Agent
+  data: Agent
 }) => {
-  const navigate = useNavigate()
 
   return (
     <div
-      onClick={() => navigate(`/agent/${data?.address}`)}
-      className="flex cursor-pointer rounded-sm gap-3 w-full p-2 hover:bg-white/10" >
+      // onClick={() => navigate(`/agent/${data?.address}`)}
+      className="flex cursor-pointer rounded-sm gap-3 w-full p-[5px] hover:bg-white/10" >
       <img
         className="w-10  h-10 rounded-md"
         src={data?.avatar}
         alt=""
       />
       {hideNav ? null : (
-        <div className="text-sm uppercase w-full ">
+        <div className="text-sm uppercase w-full flex flex-col justify-between gap-1 ">
           <div className="flex font-medium gap-2  text-md">
-            <p className="text-[16px]">{data?.name}</p>
+            <p className="text-[18px]">{data?.name}</p>
             {/* <div
-              className="rounded-xs bg-primary text-[#000] gap-1 p-1 py-0  text-xs h-max flex justify-center items-center font-bold
+              className="rounded-xs h-min  bg-primary text-[#000] gap-1 p-1 py-[2px]  text-[10px]  flex justify-center items-center font-bold
             "
             >
-              <div className="w-2 rounded-[50%] h-2 bg-[#000]"></div>
-              <p className="pt-[2px]">Live</p>
+              <div className="w-1 rounded-[50%] h-1 bg-[#000]"></div>
+              <p className="pt-[2px] leading-[80%] text-[10px]  ">Live</p>
             </div> */}
           </div>
-          <div className="flex text-[#D4D4D4] w-full font-normal text-sm justify-between ">
-            <div className="flex">
+          <div className="flex text-[#D4D4D4] w-full font-normal text-[14px] justify-between ">
+            <div className="flex leading-[100%]">
               <p>MC: ${formatBigNumber(data?.marketCap)}</p>
             </div>
-            {/* <div className="flex">
-              <p>mindshare: 23%</p>
-            </div> */}
+            <div className="flex gap-2">
+              {
+                hasSkill(data, "social")
+                  ?
+
+                  <DYNAMICICONS.socialSkil w={"16px"} color={hasSkill(data, "social") ? "#89FC96" : "#959595"} />
+                  : null
+              }
+              {
+                hasSkill(data, "terminal")
+                  ?
+
+                  <DYNAMICICONS.terminalSkil w={"16px"} color={hasSkill(data, "terminal") ? "#89FC96" : "#959595"} />
+
+                  : null
+              }
+              {
+                hasSkill(data, "audio")
+                  ?
+
+                  <DYNAMICICONS.audioSkil w={"16px"} color={hasSkill(data, "audio") ? "#89FC96" : "#959595"} />
+
+
+                  : null
+              }
+              {
+                hasSkill(data, "visual")
+                  ?
+
+                  <DYNAMICICONS.visualSkil w={"16px"} color={hasSkill(data, "visual") ? "#89FC96" : "#959595"} />
+
+
+                  : null
+              }
+              {
+                hasSkill(data, "immersive")
+                  ?
+
+                  <DYNAMICICONS.immearsivelSkil w={"16px"} color={hasSkill(data, "immersive") ? "#89FC96" : "#959595"} />
+
+                  : null
+              }
+
+
+
+            </div>
           </div>
         </div>
       )}

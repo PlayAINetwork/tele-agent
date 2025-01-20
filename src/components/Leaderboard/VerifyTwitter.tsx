@@ -79,7 +79,7 @@ function VerifyTwitter({ data }: { data: Agent }) {
                     onPointerDownOutside={(e) => e.preventDefault()}
                 >
                     <div className="flex justify-between">
-                        <DialogDescription className="px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer bg-[#181818] text-[#fff]">
+                        <DialogDescription className="px-4 w-full uppercase text-md  py-2 cursor-pointer bg-[#181818] text-[#fff]">
                             {">> verify agents"}
                         </DialogDescription>
 

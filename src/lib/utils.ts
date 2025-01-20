@@ -212,3 +212,36 @@ export const hasSkill = (agent:Agent, skillToCheck:any) => {
       typeof skill === 'string' && skill.toLowerCase() === normalizedSkill
   );
 };
+
+export const processGraphData = (data:any , removeCount = 20) => {
+  if (!data || !Array.isArray(data)) return [];
+  
+  // Clone the array to avoid mutating original data
+  const processedData = [];
+  
+  // Keep first value
+  if (data.length > 0) {
+    processedData.push(data[0]);
+  }
+  
+  // Process rest of the data
+  let currentIndex = 1;
+  while (currentIndex < data.length) {
+    // Skip 4 elements
+    currentIndex += removeCount;
+    
+    // Add the next element if available
+    if (currentIndex < data.length) {
+      processedData.push(data[currentIndex]);
+    }
+    
+    // Move to next position
+    currentIndex += 1;
+  }
+
+  // Format the data based on type
+  return processedData.map(item => ({
+    date: new Date(item.date).toLocaleString(),
+    value:  Number(item.value)
+  }));
+};
