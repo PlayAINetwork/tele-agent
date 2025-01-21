@@ -40,7 +40,7 @@ const Agent = () => {
       <Navbar />
       <div className="w-full h-full overflow-y-scroll ">
         <div className="flex h-full justify-between w-full flex-col md:flex-row ">
-          <div className="p-4  md:px-10 w-full flex flex-col gap-3 ">
+          <div className="p-4   w-full flex flex-col gap-3 ">
             <div
               className=" py-2 flex text-lg cursor-pointer items-center gap-1  uppercase"
               onClick={() => navigate("/")}

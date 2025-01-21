@@ -263,12 +263,12 @@ const TeerminalBox = () => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col gap-0  h-full binaria ">
-      <div className="border-b-[1px] border-primary py-2 px-2 flex uppercase justify-end w-full">
+    <div className="flex flex-col gap-0  h-[400px] binaria ">
+      {/* <div className="border-b-[1px] border-[#E8E8E8] py-2 px-2 flex uppercase justify-end w-full">
         <p className="text-[14px] text-[#B6B6B6]">
           topic_injc_cost_20,000_$ROGUE.
         </p>
-      </div>
+      </div> */}
       <div
         ref={boxRef}
         className="flex flex-col relative flex-1  realtive  gap-0 overflow-hidden h-full bg-[#131314] "
@@ -351,7 +351,7 @@ const TeerminalBox = () => {
       </div> */}
       {connected ? (
         <div className="flex flex-col gap-2 ">
-          <div className="flex w-full  border-t-[1px] border-primary">
+          <div className="flex w-full  border-t-[1px] border-[#E8E8E8]">
             {/* <Textarea
               className="h-[50px]  binaria uppercase placeholder-white"
               value={topic}

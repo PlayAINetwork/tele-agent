@@ -219,11 +219,11 @@ const CharacterBox = () => {
 
   return (
     <div className="flex flex-col  gap-0 h-full">
-      <div className="border-b-[1px] border-primary py-2 px-2 flex uppercase justify-end w-full">
+      {/* <div className="border-b-[1px] border-primary py-2 px-2 flex uppercase justify-end w-full">
         <p className="text-[13px] text-[#B6B6B6]">
           characteer_injc_cost_30,000_$ROGUE. added for hour only.
         </p>
-      </div>
+      </div> */}
       <div className="relative flex-1 bg-muted overflow-auto h-full ">
         {isLive ? null : (
           <div className="absolute w-full h-full z-10">
@@ -241,24 +241,32 @@ const CharacterBox = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-[1px] overflow-auto h-full ">
+        <div className="grid grid-cols-1 gap-[1px] overflow-auto h-full ">
           {characterList?.map((item: any) => (
             <div
-              className={`w-full   border border-input  relative ${item.active ? " " : "cursor-pointer"} ${selectedCharacter?.name === item.name ? "bg-primary text-primary-foreground" : "bg-[transparant]"} `}
+              className={`w-full flex  gap-2 items-center  border-b border-input  relative  p-2 ${item.active ? " " : "cursor-pointer"} ${selectedCharacter?.name === item.name ? "bg-[#00120A]" : "bg-[transparant]"} `}
               onClick={() =>
-                disableAction || item.active ? null : setSelectedCharacter(item)
+                disableAction || item.active ? null :
+                setSelectedCharacter(item)
               }
             >
               {item?.active ? (
                 <>
-                  <div className="absolute w-full h-full">
+                  <div className="absolute w-full left-0 h-full">
                     <img
                       src={`${IMAGES.notshow}`}
                       alt=""
                       className="h-full  w-full "
                     />
                     <div className="flex items-center  absolute  top-[0] h-full gap-1 w-full   justify-center ">
-                      <div className="bg-primary py-6 w-full">
+                      <div className="   py-6 w-full">
+                        <p className="text-xs uppercase py-[3px] text-center  text-[#010101]">
+                          <span className="">
+                            this_character_already_Active
+                          </span>
+                        </p>
+                      </div>
+                      <div className="bg-primary absolute  opacity-50 py-6 w-full">
                         <p className="text-xs uppercase py-[3px] text-center  text-[#010101]">
                           <span className="">
                             this_character_already_Active
@@ -274,10 +282,12 @@ const CharacterBox = () => {
                   </div>
                 </>
               ) : null}
-              <img src={`/src/assets/character${item?.avatar_url}`} alt="" className="h-[180px] w-full" />
-              <div className=" flex flex-col items-center   ">
+              <div className=" ">
+                <img src={`/src/assets/character${item?.avatar_url}`} alt="" className="h-[50px]  w-[70px]" />
+              </div>            
+                <div className=" flex   flex-col  ">
                 <div
-                  className={`flex items-center gap-1  justify-center  w-full ${selectedCharacter?.name === item.name ? "bg-[#F1F6F2]" : ""} `}
+                  className={`flex items-center gap-1  w-full ${selectedCharacter?.name === item.name ? '' : ""} `}
                 >
                   <img
                     src={ICONS.icon_textarrow}
@@ -290,7 +300,7 @@ const CharacterBox = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-1 w-full   justify-center">
-                  <p className="text-sm uppercase py-[3px] text-center">
+                  <p className="text-xs uppercase py-[3px] font-normal text-[#B6B6B6] ">
                     {"> cost:"}
                     <span className="font-bold">30,000 $ROGUE </span>
                   </p>
@@ -304,7 +314,7 @@ const CharacterBox = () => {
         {connected ? (
           <div className="relative w-full">
             <Button
-              disabled={disableAction || !connected}
+              disabled={disableAction || !connected ||!isLive}
               onClick={updateChacter}
               //   variant={"ghost"}
               className="w-full"

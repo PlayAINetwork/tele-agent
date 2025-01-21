@@ -1,16 +1,18 @@
 
 import GlobelBox from "./GlobelBox";
-import { useWallet } from "@solana/wallet-adapter-react";
+
 
 
 import Collapsible from "../app/Collapsible";
 
 import TerminalDemo from "./TerminalLogs";
+import TeerminalBox from "./TeerminalBox";
+import CharacterBox from "./CharacterBox";
 
 
 
 const Sidebar = () => {
-  const { connected } = useWallet();
+  // const { connected } = useWallet();
 
   // const config = genConfig(address);
 
@@ -20,15 +22,14 @@ const Sidebar = () => {
       className="relative h-full max-w-[100%] md:max-w-[420px] min-w-[100%] md:min-w-[420px] "
 
     >
+     
+     
+      <div className=" relative z-[10] binaria flex flex-col gap-4 py-2 md:py-12 px-4 md:px-0  md:pr-4 ">
       <div
-        className={`flex  ${connected ? " justify-between" : "justify-end"}  `}
-      >
-
-      </div>
-      {/* <div className="absolute h-full w-[1800px] top-0 z-[1] opacity-[.4]">
-        <img src={IMAGES.bg} alt="" className="h-full" />
-      </div> */}
-      <div className=" relative z-[10] binaria flex flex-col gap-4 py-2 md:py-12 px-4 md:pr-6">
+              className=" py-2 pt-5 flex text-lg cursor-pointer items-center gap-1  uppercase"
+            >
+              <p>Agent services</p>
+            </div>
         <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
           <GlobelBox />
 
@@ -41,12 +42,12 @@ const Sidebar = () => {
           <TerminalDemo/>
         </Collapsible>
 
-        {/* <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
-          <TerminalLogs />
+        <Collapsible titel={"topic injection"} subtext={"add custom topics or links for agents."}>
+          <TeerminalBox />
         </Collapsible>
-        <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
+        <Collapsible titel={"character injection"} subtext={"add custom topics or links for agents."}>
           <CharacterBox />
-        </Collapsible> */}
+        </Collapsible>
 
         {/* <div className="flex flex-col gap-0 h-full">
             <Tabs />
