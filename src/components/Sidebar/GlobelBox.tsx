@@ -70,7 +70,7 @@ const GlobelBox = () => {
     }
   }, [messages, messagesAgent]);
   return (
-    <div className="   flex flex-col gap-4  h-[400px] justify-between ">
+    <div className="   flex flex-col gap-4  h-[400px] justify-between w-full ">
       <div
         ref={boxRef}
         className="flex flex-col flex-1   gap-4 overflow-auto h-full   p-4 bg-[#131314] "
@@ -111,7 +111,7 @@ const GlobelBox = () => {
       {connected ? (
         <>
           <div className="flex gap-0">
-            <div className="relative w-full  border-t-[1px] border-primary">
+            <div className="relative w-full  border-t-[1px] border-[#F1F6F2]">
               <Input
                 className="pr-[40px] binaria border-none  hover:bg-[#303030]"
                 value={message}

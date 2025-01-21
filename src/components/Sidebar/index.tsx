@@ -5,6 +5,8 @@ import { useWallet } from "@solana/wallet-adapter-react";
 
 import Collapsible from "../app/Collapsible";
 
+import TerminalDemo from "./TerminalLogs";
+
 
 
 const Sidebar = () => {
@@ -15,7 +17,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className="relative h-full max-w-[100%] md:max-w-[380px] min-w-[100%] md:min-w-[380px] "
+      className="relative h-full max-w-[100%] md:max-w-[420px] min-w-[100%] md:min-w-[420px] "
 
     >
       <div
@@ -35,11 +37,11 @@ const Sidebar = () => {
           </div> */}
         </Collapsible>
 
-        {/* <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
-          <TeerminalBox />
+        <Collapsible titel={"terminal"} subtext={"brain of the agent to verify rag, memory, and automated tasks."}>
+          <TerminalDemo/>
         </Collapsible>
 
-        <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
+        {/* <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
           <TerminalLogs />
         </Collapsible>
         <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>

@@ -6,9 +6,9 @@ const Collapsible = ({ children, titel, subtext }: { children: ReactNode, titel:
     const [show, setShow] = useState(false);
 
     return (
-        <div className='border-[1px] border-primary bg-card   '>
+        <div className='border-[0.5px] border-[#F1F6F2] bg-card  '>
 
-            <div className={`flex cursor-pointer px-4 gap-3 py-2 ${show ? "border-b-[1px]" : ""} border-primary `} onClick={() => setShow(!show)}>
+            <div className={`flex cursor-pointer px-4 gap-3 py-2 ${show ? "border-b-[1px] " : ""} border-[#F1F6F2] `} onClick={() => setShow(!show)}>
                 {
                     show ?
                         <SquareChevronUp />
@@ -19,7 +19,7 @@ const Collapsible = ({ children, titel, subtext }: { children: ReactNode, titel:
                 </p>
             </div>
             {
-                show ? <div className=''>
+                show ? <div className='max-h-[400px] overflow-y-scroll'>
 
                     {children}
                 </div>
