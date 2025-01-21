@@ -9,11 +9,12 @@ import TerminalDemo from "./TerminalLogs";
 import TeerminalBox from "./TeerminalBox";
 import CharacterBox from "./CharacterBox";
 import StackBox from "./StackBox";
+import { useParams } from "react-router-dom";
 
 
 
 const Sidebar = () => {
-  // const { connected } = useWallet();
+  const { id } = useParams();
 
   // const config = genConfig(address);
 
@@ -39,20 +40,50 @@ const Sidebar = () => {
           </div> */}
         </Collapsible>
 
-        <Collapsible titel={"terminal"} subtext={"brain of the agent to verify rag, memory, and automated tasks."}>
+     
+        
+        {
+          id === "def99ef5-2a4c-4f03-9614-b91ff3503217" || id === "795fe77a-14b2-45f7-84c7-1bc532dd766d"
+
+          ?
+          <Collapsible titel={"terminal"} subtext={"brain of the agent to verify rag, memory, and automated tasks."}>
           <TerminalDemo />
         </Collapsible>
 
-        <Collapsible titel={"topic injection"} subtext={"add custom topics or links for agents."}>
+          :null
+        }
+       
+        {
+          id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
+
+          ?
+          <Collapsible titel={"topic injection"} subtext={"add custom topics or links for agents."}>
           <TeerminalBox />
         </Collapsible>
-        <Collapsible titel={"character injection"} subtext={"add custom topics or links for agents."}>
+
+          :null
+        }
+
+        {
+          id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
+
+          ?
+          <Collapsible titel={"character injection"} subtext={"add custom topics or links for agents."}>
           <CharacterBox />
         </Collapsible>
 
-        <Collapsible titel={"Staking $ROGUE"} subtext={"Stake $Rogue to earn rewards."}>
+          :null
+        }
+        {
+          id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
+
+          ?
+          <Collapsible titel={"Staking $ROGUE"} subtext={"Stake $Rogue to earn rewards."}>
           <StackBox />
         </Collapsible>
+          :null
+        }
+      
 
         {/* <div className="flex flex-col gap-0 h-full">
             <Tabs />
