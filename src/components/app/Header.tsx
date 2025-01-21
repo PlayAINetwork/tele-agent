@@ -11,7 +11,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
 import useLogout from "@/hooks/api/useLogout";
 import getWalletSignMessage from "@/hooks/api/auth/getWalletSignMessage";
-import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import connectWallet from "@/hooks/api/auth/connectWallet";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -57,21 +56,21 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
             {"> Leaderboard <"}
           </Button>
 
-          {/* <Button 
+          <Button 
             variant="ghost"
             onClick={() => {
-              navigate("/rogue");
+              
+              navigate("/agent/def99ef5-2a4c-4f03-9614-b91ff3503217")
               onClose();
             }}
             className="w-full uppercase"
           >
-            Watch Rogue
-          </Button> */}
+        {"> Watch_Rogue <"}
+          </Button>
           <div onClick={() => {
             // onClose();
 
           }}>
-            <VideoGenertionPopup />
 
           </div>
 

@@ -252,7 +252,7 @@ const LeaderboardTable = () => {
 
                   <TableCell className="text-center">
                     <div className="flex justify-around">
-                      {formatBigNumber(getTimeBaseData(time.value, agent).tokenMarketCap)}
+                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenMarketCap ??0)}
 
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
@@ -287,13 +287,13 @@ const LeaderboardTable = () => {
                       )} %`}
                     </TableCell> */}
                   <TableCell className="text-center">
-                    ${getTimeBaseData(time.value, agent).tokenPrice.toFixed(8)}
+                    ${getTimeBaseData(time?.value, agent)?.tokenPrice.toFixed(8)??0}
 
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex justify-around">
 
-                      {formatBigNumber(getTimeBaseData(time.value, agent).tokenHoldersCount)}
+                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenHoldersCount??0)}
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
                           data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.holdersGraph,7) : agent?.holdersGraph}
@@ -322,7 +322,7 @@ const LeaderboardTable = () => {
       </div>
       {
         agents?.result && agents.result.length > 0 && (
-          <div className="flex gap-2 items-center justify-end p-2 ">
+          <div className="flex gap-2 items-center justify-center md:justify-end p-2 ">
             <Button
               variant={"ghost"}
               className="text-[0.7rem] p-[1px]  h-fit gap-0 items-center"
