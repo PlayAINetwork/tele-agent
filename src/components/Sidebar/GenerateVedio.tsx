@@ -432,7 +432,7 @@ export const VideoPlayer = ({
 
         <div className="h-full flex">
           <div className="  flex flex-col items-end gap-0 text-black uppercase px-3 border-l border-primary">
-            <div>{truncateText(text)}</div>
+            <div className="hidden md:flex">{truncateText(text)}</div>
             <div className="text-sm">{">>BY:" + trimAddress(user, 4)}</div>
           </div>
         </div>

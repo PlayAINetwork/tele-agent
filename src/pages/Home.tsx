@@ -14,15 +14,15 @@ const Home = () => {
     <div className="h-full w-full flex binaria relative">
       <Navbar />
       <div className="w-full h-full overflow-y-scroll">
-        <div className="h-[450px] relative">
+        <div className="h-[330px] md:h-[450px] relative">
           <CourseCarousel />
         </div>
 
-        <div className="px-4  py-6">
+        <div className="px-4  md:py-6">
           <div className=" py-4 text-lg font-bold  uppercase">
             <p>new agents</p>
           </div>
-          <div className="grid grid-cols-4 gap-3  ">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-3  ">
 
            
             {

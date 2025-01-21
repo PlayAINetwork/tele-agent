@@ -44,7 +44,23 @@ const VideoGenertionPopup = () => {
   const injectAmount = 30000;
 
   const amount = BigInt(injectAmount * 10 ** 6);
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    // Function to check if screen width is mobile
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Check initially
+    checkIsMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIsMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
   useEffect(() => {
     (async () => {
       const response = await axios.get(
@@ -216,10 +232,12 @@ const VideoGenertionPopup = () => {
     <Dialog>
       <DialogTrigger asChild>
         <div
-          className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
+          className="w-full  px-4 md:pr-8 font-700 cursor-pointer h-full md:bg-[#383838] text-nowrap flex justify-center items-center "
           style={{
-            clipPath: "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
-          }}
+            clipPath: isMobile
+            ? ""
+            : "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
+        }}
         >
           {"> Create w/ Rogue <"}
         </div>
@@ -227,7 +245,7 @@ const VideoGenertionPopup = () => {
 
       <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[70%] gap-0 h-[70vh] border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
         <div className="flex justify-between">
-          <DialogDescription className=" px-4 uppercase text-md text-gray-200 py-2   bg-primary text-[#010101]">
+          <DialogDescription className=" px-4 uppercase text-sm md:text-md text-gray-200 py-2   bg-primary text-[#010101]">
             {">> create_video_with_rogue"}
           </DialogDescription>
 
@@ -256,7 +274,7 @@ const VideoGenertionPopup = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-5 ">
+            <div className="grid grid-cols-2 md:grid-cols-5 ">
               {videoGeneraing ? (
                 <div className="h-[180px]  w-[100%]  bg-foreground animate-pulse"></div>
               ) : null}
@@ -307,10 +325,10 @@ const VideoGenertionPopup = () => {
                     <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[55%] gap-0  border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
                       <div className="flex justify-between  border-b-[1px] border-primary">
                        <div className="flex items-center">
-                       <DialogDescription className=" px-4 uppercase text-sm text-gray-200 py-2   text-[#fff]">
+                       <DialogDescription className=" px-4 uppercase text-xs md:text-sm text-gray-200 py-2   text-[#fff]">
                           {">> create_video_with_rogue"}
                         </DialogDescription>
-                        <DialogDescription className=" px-4 uppercase text-sm text-gray-200 py-2   bg-primary text-[#010101]">
+                        <DialogDescription className=" px-4 uppercase text-xs md:text-sm text-gray-200 py-2   bg-primary text-[#010101]">
                           {">> video_player"}
                         </DialogDescription>
                        </div>
@@ -321,7 +339,7 @@ const VideoGenertionPopup = () => {
                       </div>
                       <div className="flex justify-between">
                         {selectedFile !== null ? (
-                          <DialogDescription className=" px-4 text-md text-gray-200 py-2   border-b-[1px] w-full  border-primary text-[#fff] text-xs">
+                          <DialogDescription className=" px-4 text-xs md:text-xs text-gray-200 py-2   border-b-[1px] w-full  border-primary text-[#fff] ">
                             {">> " + selectedFile[2]}
                           </DialogDescription>
                         ) : null}

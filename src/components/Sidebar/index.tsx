@@ -2,7 +2,7 @@
 import GlobelBox from "./GlobelBox";
 import { useWallet } from "@solana/wallet-adapter-react";
 
-import { IMAGES } from "@/assets";
+
 import Collapsible from "../app/Collapsible";
 
 
@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className="relative overflow-hidden h-full  max-w-[380px] min-w-[380px] "
+      className="relative h-full max-w-[100%] md:max-w-[380px] min-w-[100%] md:min-w-[380px] "
 
     >
       <div
@@ -23,10 +23,10 @@ const Sidebar = () => {
       >
 
       </div>
-      <div className="absolute h-full w-[1800px] top-0 z-[1] opacity-[.4]">
+      {/* <div className="absolute h-full w-[1800px] top-0 z-[1] opacity-[.4]">
         <img src={IMAGES.bg} alt="" className="h-full" />
-      </div>
-      <div className=" relative z-[10] binaria flex flex-col gap-4 py-12 pr-6">
+      </div> */}
+      <div className=" relative z-[10] binaria flex flex-col gap-4 py-2 md:py-12 px-4 md:pr-6">
         <Collapsible titel={"GLObal chat"} subtext={"chat with the community."}>
           <GlobelBox />
 

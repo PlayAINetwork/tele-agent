@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/table";
 import { formatBigNumber, hasSkill, processGraphData } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import useGetAgents from "@/hooks/api/agents/useGetAgents";
 import DYNAMICICONS from "@/assets/DynamicIcon";
 import VerifyTwitter from "./VerifyTwitter";
@@ -81,7 +80,6 @@ const LeaderboardTable = () => {
 
   const [totalPage, setTotalPage] = useState(1);
 
-  const navigate = useNavigate();
   const { agents, loadingAgent } = useGetAgents({
     page: page,
     time: time?.value ?? 'week',
@@ -113,7 +111,7 @@ const LeaderboardTable = () => {
 
   return (
     <div className=" w-full overflow-hidden relative">
-      <div className="flex items-center gap-6 mb-2">
+      <div className="flex items-center md:justify-start justify-between  gap-6 mb-2">
         <div className=" py-3 text-2xl">
           <p className="leading-[100%] pt-1">RANKINGS</p>
         </div>
@@ -130,7 +128,7 @@ const LeaderboardTable = () => {
 
         </div>
       </div>
-      <div className="border-[.5px] max-w-full w-full min-h-[400px] max-h-[680px] overflow-x-auto overflow-y-auto">
+      <div className="border-[.5px] max-w-full w-full min-h-[400px] max-h-[680px] overflow-x-auto overflow-y-hidden">
         <Table
           containerClassname="w-full
               [&_th]:bg-[#1A1F20] 
@@ -186,16 +184,16 @@ const LeaderboardTable = () => {
                 <TableRow className="text-sm " key={agent?.address}>
                   <TableCell
                     className="sticky min-w-[100px] max-w-[150px] truncate cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (agent?.address)
-                        navigate(
-                          `/agent/${agent?.address}`,
-                          {
-                            state: agent,
-                          }
-                        );
-                    }}
+                    // onClick={(e) => {
+                    //   e.stopPropagation();
+                    //   if (agent?.address)
+                    //     navigate(
+                    //       `/agent/${agent?.address}`,
+                    //       {
+                    //         state: agent,
+                    //       }
+                    //     );
+                    // }}
                   >
                     <img
                       src={agent?.avatar}

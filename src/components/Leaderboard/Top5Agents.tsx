@@ -43,7 +43,7 @@ const trendColor = (data:any, dataKey:string) => {
         console.log(filertdatares)
     }, [agents]);
     return (
-        <div className="grid  grid-cols-5 gap-4  ">
+        <div className="grid   grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4  ">
 
 
 
@@ -75,7 +75,7 @@ const trendColor = (data:any, dataKey:string) => {
                         </div>
 
 
-                        <div className={cn("absolute bottom-0 px-4 py-2 bg-[#1A1F20]  left-0 w-full text-white text-[0.9rem]")}>
+                        <div className={cn("absolute bottom-0 px-2 md:px-4 py-2 bg-[#1A1F20]  left-0 w-full text-white text-[0.9rem]")}>
                             <div className="grid grid-cols-5 gap-4  ">
                                 <DYNAMICICONS.socialSkil w={"22px"} h={"22px"} color={hasSkill(event, "social") ? "#89FC96" : "#959595"} />
 

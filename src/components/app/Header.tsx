@@ -1,36 +1,104 @@
-import { IMAGES } from "@/assets";
-import { useEffect, useRef, useState } from "react";
-import StackPopup from "./StackPopup";
+import { useState, useRef, useEffect } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { Connection, PublicKey } from "@solana/web3.js";
+import { Menu, X } from "lucide-react";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
 import { Program, Provider } from "@project-serum/anchor";
 import { formatBigNumber, trimAddress } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { IMAGES } from "@/assets";
+import StackPopup from "./StackPopup";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
-import getWalletSignMessage from "@/hooks/api/auth/getWalletSignMessage";
 import { useAuthState } from "@/context/auth.context";
-import connectWallet from "@/hooks/api/auth/connectWallet";
 import { useToast } from "@/hooks/use-toast";
-import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
-import useLogout from "@/hooks/api/useLogout";
 import { Button } from "../ui/button";
-// import { useNavigate } from "react-router-dom";
+import useLogout from "@/hooks/api/useLogout";
+import getWalletSignMessage from "@/hooks/api/auth/getWalletSignMessage";
+import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
+import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
+import connectWallet from "@/hooks/api/auth/connectWallet";
+
+const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, navigate }:{ isOpen:boolean, onClose:any, connected:any, address:string, logout:any, setVisible:any, navigate:any }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+      <div className="fixed right-0 top-0 h-full w-64 bg-secondary border-l border-primary p-4">
+        <div className="flex justify-end">
+          <Button variant="ghost" onClick={onClose} className="p-2">
+            <X className="h-6 w-6" />
+          </Button>
+        </div>
+        
+        <div className="flex flex-col gap-4 mt-4">
+          {connected ? (
+            <>
+              <StackPopup />
+              <Button onClick={logout} className="w-full uppercase">
+                {trimAddress(address, 4) + " "}
+                {"[Disconnect]"}
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => {
+              setVisible(true);
+              onClose();
+            }} className="w-full uppercase">
+              Connect Wallet
+            </Button>
+          )}
+          
+          <Button 
+            variant="ghost" 
+            onClick={() => {
+              navigate("/rogueagent");
+              onClose();
+            }}
+            className="w-full uppercase text-white"
+          >
+            {"> Leaderboard <"}
+          </Button>
+          
+          {/* <Button 
+            variant="ghost"
+            onClick={() => {
+              navigate("/rogue");
+              onClose();
+            }}
+            className="w-full uppercase"
+          >
+            Watch Rogue
+          </Button> */}
+          <div onClick={()=>{
+              // onClose();
+
+          }}>
+          <VideoGenertionPopup />
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [tokenData, setTokenData] = useState<any>(null);
+  const [totalStaked, setTotalStaked] = useState(0);
   const { connection } = useConnection();
-  // const [search, setSearch] = useState("")
   const { connected, publicKey, disconnect, signMessage } = useWallet();
-  const { auth, setAuth } = useAuthState();
+  const { auth,setAuth } = useAuthState();
   const { setVisible } = useWalletModal();
+  const navigate = useNavigate();
+  const logout = useLogout();
+  const address = publicKey?.toString() ?? "";
+
   const isSigningRef = useRef(false);
   const { toast } = useToast();
-  const logout = useLogout();
-  const address: any = publicKey?.toString();
 
-  const [totalStaked, setTotalStaked] = useState<number>(0);
   const getTotalStakedBalance = async (
     connection: Connection
   ): Promise<number> => {
@@ -101,8 +169,7 @@ const Header = () => {
     const interval = setInterval(fetchTokenData, 300000);
     return () => clearInterval(interval);
   }, []);
-  const navigate = useNavigate();
-  // const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchTotalStaked = async () => {
@@ -150,6 +217,7 @@ const Header = () => {
         // Sign the message
         const signature = await signMessage(messageBytes);
         console.log('Signature dsds:', signature);
+        console.log('Signature dsds:', isSigningRef.current);
 
 
         if (signature && !isSigningRef.current) {
@@ -192,18 +260,22 @@ const Header = () => {
     }
   };
 
-
   return (
-    <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary relative z-10">
-      <div className="flex gap-3">
+    <div className="flex justify-between w-full bg-secondary border-b-[1px] border-primary relative z-10">
+         <div className="flex gap-3">
         {/* <img src={IMAGES.logo} alt="" className="w-[100px] lg:w-[200px]"/> */}
         <div
           className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: "polygon(0 0, 96.3% 2%, 100% 100%, 0% 100%)",
+            clipPath:connected ? "polygon(0 0, 96.3% 2%, 100% 100%, 0% 100%)": "polygon(0 0, 96.1% 2%, 100% 100%, 0% 100%)",
+
+      
           }}
         >
-          <div className="flex h-full text-sm gap-[1px] ">
+            <div className="md:hidden flex cursor-pointer" onClick={() => navigate("/")}>
+              <img src={IMAGES.logo} alt="" className="max-w-[10rem]" />
+            </div>
+          <div className="hidden md:flex h-full text-sm gap-[1px] ">
             <div className="cursor-pointer" onClick={() => navigate("/")}>
               <img src={IMAGES.logo} alt="" className="min-w-[12rem]" />
             </div>
@@ -243,7 +315,7 @@ const Header = () => {
                 onClick={() => setVisible(true)}
                 className="px-4 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
                 style={{
-                  clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
+                  clipPath:connected ? "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)": "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
                 }}
               >
                 <span className="text-white relative transition-transform duration-300 ease-in-out">
@@ -262,7 +334,7 @@ const Header = () => {
                 {" > Leaderboard <"}
               </span>
             </div>
-            <div
+            {/* <div
               onClick={() => navigate("/rogue")}
 
               className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
@@ -271,8 +343,8 @@ const Header = () => {
               }}
             >
               {"> Watch_Rogue <"}
-            </div>
-            {/* <VideoGenertionPopup /> */}
+            </div> */}
+            <VideoGenertionPopup />
           </div>
         </div>
 
@@ -287,28 +359,26 @@ const Header = () => {
           Learn more
         </Button> */}
       </div>
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <div className="flex  gap-1 text-md pt-1">
-            <p className="text-primary">STAKED:</p>
-            <p>
-              {`${formatBigNumber(totalStaked) ?? 0}`}
-              <span className="text-xs font-medium">{` $ROGUE`}</span>
-            </p>
+
+      {/* Stats and Wallet Section */}
+      <div className="hidden md:flex items-center gap-4">
+        <div className="flex flex-col md:flex-row gap-2 text-sm md:text-base">
+          <div className="flex items-center gap-1">
+            <span className="text-primary">STAKED:</span>
+            <span>{`${formatBigNumber(totalStaked) ?? 0} $ROGUE`}</span>
           </div>
-          <div className="flex  gap-1 text-md pt-1">
-            <p className="text-primary">$ROGUE:</p>
-            <p>
-              {" "}
+          <div className="flex items-center gap-1">
+            <span className="text-primary">$ROGUE:</span>
+            <span>
               {tokenData?.priceUsd
                 ? parseFloat(tokenData?.priceUsd).toFixed(6)
                 : 0.0}
-            </p>
+            </span>
           </div>
         </div>
-        <div className="h-full flex uppercase">
 
-          {/* <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
+        <div className="border-l border-primary h-full">
+           {/* <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
             <Search />
             <Input
               className="pr-[5px] binaria border-none  uppercase bg-transparent w-[220px]"
@@ -337,65 +407,44 @@ const Header = () => {
             }
 
           </div> */}
-
-          {connected ?
-            <Button
-              onClick={logout}
-              className="w-full text-md py-1 px-6 h-auto uppercase "
-            >
-              <div className="mt-1">
-                {" "}
-                {trimAddress(address, 4) + " "}
-                {"[Disconnect]"}
-              </div>
+          {connected ? (
+            <Button onClick={logout}   className="min-w-full text-sm py-1  h-full uppercase ">
+              {trimAddress(address, 4) + " "}
+              {"[Disconnect]"}
             </Button>
-            :
-
-            (
-              <div
-                className="border-x-[1px] border-primary cursor-pointer  flex items-center"
-
-              >
-                <CustomSolanaButton
-
-                  connectText="Connect Wallet"
-                  disconnectText="Disconnect Wallet"
-                  buttonStyle="primary"
-                  size="medium"
-                />
-              </div>
-            )}
-
-          {/* <div
-            onClick={() =>
-              open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
-            }
-            className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center"
-          >
-            <img src={ICONS.icon_coingecko} alt="" className="w-[37px]" />
-          </div>
-          <div
-            onClick={() =>
-              open("https://www.cookie.fun/en/agent/agent-rogue", "_brace")
-            }
-            className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center"
-          >
-            <img src={ICONS.icon_cooki} alt="" className="w-[41px]" />
-          </div>
-          <div
-            onClick={() => open("https://t.me/AgentRogue_Official", "_brace")}
-            className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center"
-          >
-            telegram
-          </div>
-          <div
-            onClick={() => open("https://x.com/0xRogueAgent", "_brace")}
-            className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center"
-          >
-            Twitter
-          </div> */}
+          ) : (
+            <CustomSolanaButton
+            
+              connectText="Connect Wallet"
+              disconnectText="Disconnect Wallet"
+              buttonStyle="primary"
+              size="medium"
+            />
+          )}
         </div>
       </div>
+
+      {/* Mobile Menu Button */}
+      <div className="md:hidden flex items-center">
+        <Button 
+          variant="ghost" 
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="p-2"
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+      </div>
+
+      {/* Mobile Menu */}
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        connected={connected}
+        address={address}
+        logout={logout}
+        setVisible={setVisible}
+        navigate={navigate}
+      />
     </div>
   );
 };

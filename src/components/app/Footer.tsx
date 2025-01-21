@@ -10,7 +10,7 @@ const Footer = () => {
     <div>
       {
         pathname == "/" ?
-        <div className="flex">
+        <div className="hidden md:flex">
         <div className=" w-[280px]  ">
           <Button variant={"outline"} className="w-full text-primary hover:text-primary"
           onClick={()=>navigate("/rogueagent")}
@@ -27,7 +27,7 @@ const Footer = () => {
       }
       
 
-      <div className="flex  justify-between w-full border-t-[1px] border-[#959595] items-center bg-secondary p-4 py-2">
+      <div className="flex  justify-between w-full border-t-[1px] border-[#959595] items-center bg-secondary  p-2 md:p-4  py-2">
         <div>
           {/* <Button
             className="text-md"
@@ -39,7 +39,7 @@ const Footer = () => {
           </Button> */}
 
           <div
-          className="text-[#959595] text-md "
+          className="text-[#959595] text-[10px] md:text-sm" 
           >
           Copyright © 2025 agentexperience • All Rights Reserved
           </div>
@@ -53,7 +53,7 @@ const Footer = () => {
               )
             }
             variant={"ghost"}
-            className="w-full text-md  py-1 px-6 h-auto uppercase rounded-[40px]"
+            className="w-full text-xs  md:text-sm  py-1 md:px-6 h-auto uppercase rounded-[40px]"
           >
             <div className="mt-1">BUY $ROGUE</div>
           </Button>

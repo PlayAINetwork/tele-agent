@@ -18,7 +18,7 @@ const GraphSection = ({ data, isLoading }: { data: Agent, isLoading: Boolean }) 
   //     { name: '10', marketCap: 23, mindshare: 2 }
   //   ];
   return (
-    <div className="grid grid-cols-2  ">
+    <div className="grid grid-cols-1 md:grid-cols-2  ">
       {
         isLoading ?
 

@@ -13,7 +13,7 @@ const CourseCarousel = () => {
   const [orders, setOrders] = useState([1, 2, 0]);
 
   const navigate = useNavigate();
-  const { agents,loadingAgent } = useGetAgents({ page: 1,time:"week" });
+  const { agents, loadingAgent } = useGetAgents({ page: 1, time: "week" });
   const [filterAgents, setFilterAgents] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const CourseCarousel = () => {
     setFilterAgents(filteredData);
   }, [agents]);
 
-  
+
 
   const handlePrev = () => {
     setOrders((prevOrders) => {
@@ -55,22 +55,21 @@ const CourseCarousel = () => {
   //       return baseClasses;
   //   }
   // };
-  const getItemClasses = (order:number) => {
-    const baseClasses =
-      "absolute transition-all duration-500 ease-in-out cursor-pointer";
+  const getItemClasses = (order: number) => {
+    const baseClasses = "absolute transition-all duration-500 ease-in-out cursor-pointer";
+
     switch (order) {
       case 0: // Center (Focus)
-        return `${baseClasses} z-30 h-[85%] w-[60%] top-[7.5%] left-[20%]`;
+        return `${baseClasses} z-30 h-4/5 w-full md:w-3/5 top-[7.5%] md:left-[20%]`;
       case 1: // Left
-        return `${baseClasses} z-20 h-[75%] w-[45%] top-[12.5%] left-[5%] opacity-75`;
+        return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] top-[12.5%] left-0 md:left-[5%] opacity-75`;
       case 2: // Right
-        return `${baseClasses} z-20 h-[75%] w-[45%] top-[12.5%] left-[50%] opacity-75`;
+        return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] top-[12.5%] right-0 md:left-[50%] opacity-75`;
       default:
         return baseClasses;
     }
   };
 
-  
   return (
     <div className="  h-full w-full  overflow-hidden">
       <div className="h-full w-full  mx-auto px-4 py-3  items-center">
@@ -88,132 +87,132 @@ const CourseCarousel = () => {
           </button>
 
           {/* Carousel Items */}
-          
+
           <div className="relative w-full h-full">
             {
-            loadingAgent ?
-            [...Array(5)].map((_, index) => (
-              <div key={index} className={getItemClasses(orders[index]) + " bg-gray-800"}>
-                 <Skeleton className="w-full h-full  border-primary border-[0.5px] rounded-[0px] " />
+              loadingAgent ?
+                [...Array(5)].map((_, index) => (
+                  <div key={index} className={getItemClasses(orders[index]) + " bg-gray-800"}>
+                    <Skeleton className="w-full h-full  border-primary border-[0.5px] rounded-[0px] " />
 
 
-                <div className={`absolute bottom-0 left-0 right-0 p-3 py-2 bg-card border-primary border-[0.5px] max-h-[60px] min-h-[30px]`}>
-                  <div className="flex justify-between">
-                    <div className="flex gap-2 items-center">
-                      <div className="w-10 h-10 rounded-md bg-gray-700 animate-pulse" />
-                      <div className="flex flex-col gap-1">
-                        <div className="h-4 w-24 bg-gray-700 rounded animate-pulse" />
-                      </div>
-                    </div>
-
-                    <div className="flex gap-6 text-sm h-full">
-                      <div className="flex gap-2">
-                        <div>
-                          <div className="h-4 w-20 bg-gray-700 rounded animate-pulse mb-1" />
-                          <div className="h-3 w-16 bg-gray-700 rounded animate-pulse" />
+                    <div className={`absolute bottom-0 left-0 right-0 p-3 py-2 bg-card border-primary border-[0.5px] max-h-[60px] min-h-[30px]`}>
+                      <div className="flex justify-between">
+                        <div className="flex gap-2 items-center">
+                          <div className="w-10 h-10 rounded-md bg-gray-700 animate-pulse" />
+                          <div className="flex flex-col gap-1">
+                            <div className="h-4 w-24 bg-gray-700 rounded animate-pulse" />
+                          </div>
                         </div>
-                        <div className="w-[60px] h-full bg-gray-700 rounded animate-pulse" />
-                      </div>
-                      <div className="flex">
-                        <div>
-                          <div className="h-3 w-20 bg-gray-700 rounded animate-pulse mb-2" />
-                          <div className="flex gap-3">
-                            {[...Array(5)].map((_, i) => (
-                              <div key={i} className="w-4 h-4 bg-gray-700 rounded animate-pulse" />
-                            ))}
+
+                        <div className="flex gap-6 text-sm h-full">
+                          <div className="flex gap-2">
+                            <div>
+                              <div className="h-4 w-20 bg-gray-700 rounded animate-pulse mb-1" />
+                              <div className="h-3 w-16 bg-gray-700 rounded animate-pulse" />
+                            </div>
+                            <div className="w-[60px] h-full bg-gray-700 rounded animate-pulse" />
+                          </div>
+                          <div className="flex">
+                            <div>
+                              <div className="h-3 w-20 bg-gray-700 rounded animate-pulse mb-2" />
+                              <div className="flex gap-3">
+                                {[...Array(5)].map((_, i) => (
+                                  <div key={i} className="w-4 h-4 bg-gray-700 rounded animate-pulse" />
+                                ))}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))
-            :
-            filterAgents?.map((data: any, index: any) => (
-              <div key={index} className={getItemClasses(orders[index])} onClick={() => navigate(`/agent/${data?.address}`)}>
-                <div className={` relative w-full h-full object-cover r\ overflow-hidden shadow-lg ${orders[index] == 0 ?  "border-[#F1F6F2] " : 'border-primary'}   border-[0.5px] transition-all duration-500`}>
-                  <div
-                    className="absolute
+                ))
+                :
+                filterAgents?.map((data: any, index: any) => (
+                  <div key={index} className={getItemClasses(orders[index])} onClick={() => navigate(`/agent/${data?.address}`)}>
+                    <div className={` relative w-full h-full object-cover r\ overflow-hidden shadow-lg ${orders[index] == 0 ? "border-[#F1F6F2] " : 'border-primary'}   border-[0.5px] transition-all duration-500`}>
+                      <div
+                        className="absolute
                  blackshade
                  w-full h-full
                   
                   
                   "
-                  >
-                    <img
-                      className="w-full h-full object-cover   "
-                      src={IMAGES.blackshard}
-                      alt={data?.name}
-                    />
-                  </div>
-                  <img
-                    className="w-full h-full object-cover   "
-                    src={data?.avatar}
-                    alt={data?.name}
-                  />
-                </div>
-
-                {/* {orders[index] === 0 && ( */}
-                <div className={`absolute bottom-0 left-0 right-0 p-3 py-2 bg-card  ${orders[index]  == 0 ?  "border-[#F1F6F2] " : 'border-primary'}   border-[0.5px] max-h-[60px] min-h-[30px]`}>
-                  <div className="flex justify-between">
-                    <div className="flex gap-2 items-center">
-                      <img
-                        className="w-10  h-10 rounded-md"
-                        src={data?.avatar}
-                        alt=""
-                      />
-                      <div className="flex flex-col gap-0">
-                        <p className="text-white text-md font-semibold capitalize ">
-                          {data?.name}
-                        </p>
-                        {/* <p className="text-white/80 text-sm  font-normal line-clamp-2">
-                          $ROGUE
-                        </p> */}
+                      >
+                        <img
+                          className="w-full h-full object-cover   "
+                          src={IMAGES.blackshard}
+                          alt={data?.name}
+                        />
                       </div>
+                      <img
+                        className="w-full h-full object-cover   "
+                        src={data?.avatar}
+                        alt={data?.name}
+                      />
                     </div>
 
-                    <div className="flex gap-6 text-sm text-[#F1F6F2] h-full ">
-                      <div className="flex">
-                        <div>
-                          <p>${formatBigNumber(data?.marketCap) ?? 0}</p>
-                          <p className="font-normal text-xs uppercase text-[#D4D4D4]">
-                            market cap
-                          </p>
-                        </div>
-                        <div className="w-[60px] h-full">
-                          <SimpleAgentLineChart
-                            data={processGraphData(data?.marketCapGraph)}
-                            dataKey="value"
-                            color="#3b82f6"
+                    {/* {orders[index] === 0 && ( */}
+                    <div className={`absolute bottom-0 left-0 right-0 p-3 py-2 bg-card  ${orders[index] == 0 ? "border-[#F1F6F2] " : 'border-primary'}   border-[0.5px] max-h-[60px] min-h-[30px]`}>
+                      <div className="flex justify-between">
+                        <div className="flex gap-2 items-center">
+                          <img
+                            className="w-10  h-10 rounded-md"
+                            src={data?.avatar}
+                            alt=""
                           />
-                        </div>
-                      </div>
-                      <div className="flex">
-                        <div>
-
-                          <p className="font-normal  uppercase text-[#D4D4D4]">
-                            Skill Traits
-                          </p>
-                          <div className="flex gap-3">
-                            <DYNAMICICONS.socialSkil color={hasSkill(data, "social") ? "#89FC96" : "#959595"} />
-
-                            <DYNAMICICONS.terminalSkil color={hasSkill(data, "terminal") ? "#89FC96" : "#959595"} />
-
-                            <DYNAMICICONS.audioSkil color={hasSkill(data, "audio") ? "#89FC96" : "#959595"} />
-                            <DYNAMICICONS.visualSkil color={hasSkill(data, "visual") ? "#89FC96" : "#959595"} />
-                            <DYNAMICICONS.immearsivelSkil color={hasSkill(data, "immersive") ? "#89FC96" : "#959595"} />
-
+                          <div className="flex flex-col gap-0">
+                            <p className="text-white text-md font-semibold capitalize ">
+                              {data?.name}
+                            </p>
+                            {/* <p className="text-white/80 text-sm  font-normal line-clamp-2">
+                          $ROGUE
+                        </p> */}
                           </div>
                         </div>
 
+                        <div className="flex gap-6 text-sm text-[#F1F6F2] h-full  ">
+                          <div className="flex items-center md:items-start ">
+                            <div>
+                              <p>${formatBigNumber(data?.marketCap) ?? 0}</p>
+                              <p className="font-normal text-xs uppercase text-[#D4D4D4]">
+                                market cap
+                              </p>
+                            </div>
+                            <div className="w-[60px] h-full">
+                              <SimpleAgentLineChart
+                                data={processGraphData(data?.marketCapGraph)}
+                                dataKey="value"
+                                color="#3b82f6"
+                              />
+                            </div>
+                          </div>
+                          <div className="hidden md:flex ">
+                            <div>
+
+                              <p className="font-normal  uppercase text-[#D4D4D4]">
+                                Skill Traits
+                              </p>
+                              <div className="flex gap-3">
+                                <DYNAMICICONS.socialSkil color={hasSkill(data, "social") ? "#89FC96" : "#959595"} />
+
+                                <DYNAMICICONS.terminalSkil color={hasSkill(data, "terminal") ? "#89FC96" : "#959595"} />
+
+                                <DYNAMICICONS.audioSkil color={hasSkill(data, "audio") ? "#89FC96" : "#959595"} />
+                                <DYNAMICICONS.visualSkil color={hasSkill(data, "visual") ? "#89FC96" : "#959595"} />
+                                <DYNAMICICONS.immearsivelSkil color={hasSkill(data, "immersive") ? "#89FC96" : "#959595"} />
+
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
                       </div>
                     </div>
+                    {/* )} */}
                   </div>
-                </div>
-                {/* )} */}
-              </div>
-            ))}
+                ))}
           </div>
 
           <button

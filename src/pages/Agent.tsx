@@ -3,6 +3,7 @@ import GraphSection from "@/components/AgentPage/GraphSection";
 import Navbar from "@/components/Home/Navbar";
 import Sidebar from "@/components/Sidebar";
 import SimpleCardSkeleton from "@/components/Skeleton/SimpleCardSkeleton";
+import AgentTv from "@/components/TvPanel/AgentTv";
 import { Skeleton } from "@/components/ui/skeleton";
 import useGetAgentDetails from "@/hooks/api/agents/useGetAgentDetails";
 import useGetAgentVideo from "@/hooks/api/agents/useGetAgentVideo";
@@ -38,8 +39,8 @@ const Agent = () => {
     <div className="h-full w-full flex binaria relative">
       <Navbar />
       <div className="w-full h-full overflow-y-scroll ">
-        <div className="flex h-full justify-between w-full ">
-          <div className="p-4 px-10 w-full flex flex-col gap-3 ">
+        <div className="flex h-full justify-between w-full flex-col md:flex-row ">
+          <div className="p-4  md:px-10 w-full flex flex-col gap-3 ">
             <div
               className=" py-2 flex text-lg cursor-pointer items-center gap-1  uppercase"
               onClick={() => navigate("/")}
@@ -47,15 +48,15 @@ const Agent = () => {
               <ArrowLeft size={"18px"} />
               <p>explore all</p>
             </div>
-            {/* <div className="min-h-[400px]">
+            <div className="min-h-[400px]">
               <AgentTv />
             </div>
             <p className="text-lg  ">
               Volodymyr Zelenskyy: Ukraine, War, Peace, Putin, Trump, NATO, and
               Freedom | Lex Fridman Podcast
-            </p> */}
+            </p>
 
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col md:flex-row justify-between md:items-center  items-start gap-3">
               {
                 loadingAgent ?
 
@@ -152,7 +153,7 @@ const Agent = () => {
                   </div>
 
                   :
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     {
                       !hasSkill(agent, "social") && !hasSkill(agent, "terminal") && !hasSkill(agent, "audio") && !hasSkill(agent, "visual") && !hasSkill(agent, "immersive") ?
                         <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
@@ -213,7 +214,7 @@ const Agent = () => {
 
 
 
-            <div className="pb-8">
+            <div className=" pb-0 md:pb-8">
               {/* <div className=" py-2 flex text-mditems-center gap-1 font-normal  uppercase">
                 <p>about:</p>
               </div>
