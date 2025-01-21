@@ -245,3 +245,42 @@ export const processGraphData = (data:any , removeCount = 20) => {
     value:  Number(item.value)
   }));
 };
+
+export const processGraphDataToSeven = (data: any[],lengthValue: number): any[] => {
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return [];
+  }
+
+  // If data length is 7 or less, return all points
+  if (data.length <= lengthValue) {
+    return data.map(item => ({
+      date: new Date(item.date).toLocaleString(),
+      value: Number(item.value)
+    }));
+  }
+
+  const processedData = [];
+  
+  // Always include first and last points
+  processedData.push(data[0]);
+  
+  // Calculate the step size to get 5 points between first and last
+  const step = Math.floor((data.length - 1) / 6);
+  
+  // Get 5 evenly distributed points between first and last
+  for (let i = 1; i <= 5; i++) {
+    const index = Math.min(i * step, data.length - 1);
+    processedData.push(data[index]);
+  }
+  
+  // Add the last point if not already included
+  if (processedData.length < lengthValue) {
+    processedData.push(data[data.length - 1]);
+  }
+
+  // Format the data
+  return processedData.map(item => ({
+    date: new Date(item.date).toLocaleString(),
+    value: Number(item.value)
+  }));
+};

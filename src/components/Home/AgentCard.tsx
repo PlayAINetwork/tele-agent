@@ -1,12 +1,13 @@
 import { IMAGES } from "@/assets";
 import DYNAMICICONS from "@/assets/DynamicIcon";
 import { hasSkill } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 function AgentCard({ data }: { data: any }) {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   return (
     <div
-      // onClick={() => navigate(`/agent/${data?.address}`)}
+      onClick={() => navigate(`/agent/${data?.id}`)}
       className="relative
       cursor-pointer
           h-[200px]"

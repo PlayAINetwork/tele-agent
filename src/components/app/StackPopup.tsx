@@ -21,6 +21,8 @@ import { Button } from "../ui/button";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useToast } from "@/hooks/use-toast";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
+import { handleUserTx } from "@/axios/axios";
+
 
 const TOKEN_MINT = new PublicKey(
   "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL"
@@ -54,7 +56,7 @@ const StakePopup = () => {
   const [vaultBalanceofUser, setVaultBalanceofUser] = useState(0);
   const [balance, setBalance] = useState(0);
   const [error, setError] = useState(null);
-
+  const [isMobile, setIsMobile] = useState(false);
   const fetchBalance = async (wallet: any) => {
     try {
       setLoading(true);
@@ -198,7 +200,7 @@ const StakePopup = () => {
       );
 
       // Execute deposit transaction
-      await program.methods
+      const txSignature = await program.methods
         .deposit(new BN(parseFloat(depositAmount) * 10 ** tokenDecimals))
         .accounts({
           user: wallet.publicKey,
@@ -212,11 +214,27 @@ const StakePopup = () => {
         })
         .rpc();
 
+      // Wait for transaction confirmation
+      // Wait for transaction confirmation
+      const confirmation = await connection.confirmTransaction(
+        txSignature,
+        "confirmed"
+      );
+      await connection.getBlock(confirmation.context.slot, {
+        maxSupportedTransactionVersion: 0,
+      });
+
+      await handleUserTx({
+        amount: Number(depositAmount),
+        action: "stake",
+        address: wallet.publicKey.toString(),
+        hash: txSignature,
+      });
       // Update UI state
       setBalance(computeFloatVals(String(balance), depositAmount));
       setDepositAmount("");
       toast({
-        title: "Deposited Successfully",
+        title: "Staked Successfully",
       });
     } catch (error) {
       console.error("Error depositing tokens:", error);
@@ -259,7 +277,7 @@ const StakePopup = () => {
       );
 
       // Execute withdrawal transaction
-      await program.methods
+      const txSignature = await program.methods
         .withdraw(new BN(parseFloat(withdrawAmount) * 10 ** tokenDecimals))
         .accounts({
           user: wallet.publicKey,
@@ -273,6 +291,21 @@ const StakePopup = () => {
         })
         .rpc();
 
+      // Wait for transaction confirmation
+      const confirmation = await connection.confirmTransaction(
+        txSignature,
+        "confirmed"
+      );
+      await connection.getBlock(confirmation.context.slot, {
+        maxSupportedTransactionVersion: 0,
+      });
+
+      await handleUserTx({
+        amount: Number(withdrawAmount),
+        action: "unstake",
+        address: wallet.publicKey.toString(),
+        hash: txSignature,
+      });
       // Update UI state
       await fetchBalance(wallet);
       setWithdrawAmount("");
@@ -290,6 +323,22 @@ const StakePopup = () => {
     }
   };
 
+  useEffect(() => {
+    // Function to check if screen width is mobile
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Check initially
+    checkIsMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIsMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
+
   return (
     <Dialog
       onOpenChange={() => {
@@ -300,10 +349,14 @@ const StakePopup = () => {
       <DialogTrigger asChild>
         <div
           className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-          style={{ clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
+          style={{
+            clipPath: isMobile
+              ? ""
+              : "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
+          }}
         >
           <span className="text-white relative transition-transform duration-300 ease-in-out">
-            <span className="block transition-all duration-300 opacity-100 translate-y-0">
+            <span className="block uppercase transition-all duration-300 opacity-100 translate-y-0">
               {"> stake now <"}
             </span>
           </span>
@@ -320,7 +373,7 @@ const StakePopup = () => {
               setDepositAmount("");
               fetchBalance(wallet);
             }}
-            className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
+            className={`px-4 w-full uppercase text-sm md:text-md text-gray-200 py-2 cursor-pointer ${
               isStake ? "bg-primary text-[#010101]" : "bg-[#181818] text-[#fff]"
             }`}
           >
@@ -332,7 +385,7 @@ const StakePopup = () => {
               setWithdrawAmount("");
               getUserBalance(wallet);
             }}
-            className={`px-4 w-full uppercase text-md text-gray-200 py-2 cursor-pointer ${
+            className={`px-4 w-full uppercase text-sm md:text-md text-gray-200 py-2 cursor-pointer ${
               isStake ? "bg-[#181818] text-[#fff]" : "bg-primary text-[#010101]"
             }`}
           >

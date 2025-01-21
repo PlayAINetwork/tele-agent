@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatBigNumber, hasSkill, processGraphData } from "@/lib/utils";
+import { formatBigNumber, hasSkill, processGraphDataToSeven } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import useGetAgents from "@/hooks/api/agents/useGetAgents";
 import DYNAMICICONS from "@/assets/DynamicIcon";
@@ -76,7 +76,7 @@ const RenderPageBtns = ({
 };
 const LeaderboardTable = () => {
   const [page, setPage] = useState(1);
-  const [time, setTime] = useState({type: '7D', value: 'week'});
+  const [time, setTime] = useState({ type: '7D', value: 'week' });
 
   const [totalPage, setTotalPage] = useState(1);
 
@@ -90,20 +90,20 @@ const LeaderboardTable = () => {
     setTotalPage(agents?.total / 10);
     return agents ? agents : [];
   }, [agents]);
-  const timeInterval = [{type: '1H', value: 'hour'},{type: '6H', value: '6hour'},{type: '24H', value: 'day'}, {type: '7D', value: 'week'}, {type: '30D', value: 'month'}]
+  const timeInterval = [{ type: '1H', value: 'hour' }, { type: '6H', value: '6hour' }, { type: '24H', value: 'day' }, { type: '7D', value: 'week' }, { type: '30D', value: 'month' }]
 
-  const getTimeBaseData = (time: string, data:any) => {
+  const getTimeBaseData = (time: string, data: any) => {
 
-    if(time === 'week'){
+    if (time === 'week') {
       return data?.dataPoints?._7DaysAgo
-    }else if(time === 'month'){
+    } else if (time === 'month') {
       return data?.dataPoints?._30DaysAgo
 
-    }else if(time === 'day'){
+    } else if (time === 'day') {
       return data?.dataPoints?._24HoursAgo
-    }else if(time === 'hour'){
+    } else if (time === 'hour') {
       return data?.dataPoints?._1HourAgo
-    }else if(time === '6hour'){
+    } else if (time === '6hour') {
       return data?.dataPoints?._6HoursAgo
     }
 
@@ -137,6 +137,7 @@ const LeaderboardTable = () => {
               [&_th]:px-2 
               [&_th]:py-3 
 
+
               [&_th]:text-nowrap
               first:[&_th]:sticky 
               first:[&_th]:bg-bg 
@@ -145,6 +146,8 @@ const LeaderboardTable = () => {
               first:[&_th]:z-10
               first:[&_td]:sticky 
               first:[&_td]:bg-[#00120A]
+               [&_th]:hover:bg-[#1C1C1C]
+              
 
               first:[&_td]:z-10 
               first:[&_td]:left-0 
@@ -181,26 +184,37 @@ const LeaderboardTable = () => {
           ) : (
             <TableBody>
               {agentsData?.result?.map((agent: any) => (
-                <TableRow className="text-sm " key={agent?.address}>
+                <TableRow className="text-sm hover:bg-[#1C1C1C]" key={agent?.address}>
                   <TableCell
-                    className="sticky min-w-[100px] max-w-[150px] truncate cursor-pointer"
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   if (agent?.address)
-                    //     navigate(
-                    //       `/agent/${agent?.address}`,
-                    //       {
-                    //         state: agent,
-                    //       }
-                    //     );
-                    // }}
+                    className="sticky  min-w-[100px] max-w-[150px] truncate cursor-pointer "
+                  // onClick={(e) => {
+                  //   e.stopPropagation();
+                  //   if (agent?.address)
+                  //     navigate(
+                  //       `/agent/${agent?.address}`,
+                  //       {
+                  //         state: agent,
+                  //       }
+                  //     );
+                  // }}
                   >
-                    <img
-                      src={agent?.avatar}
-                      alt={agent?.name}
-                      className="w-8 h-8 inline-flex mr-1 mb-1"
-                    />
-                    {agent?.name}
+                    <div className="flex ">
+
+                      <img
+                        src={agent?.avatar}
+                        alt={agent?.name}
+                        className="w-9 h-9 inline-flex mr-1 mb-1"
+                      />
+                      <div className="uppercase">
+                        {agent?.name}
+                        <p className="text-[#C4C4C4] text-[12px]">
+                          @{agent?.twitter}
+
+                        </p>
+                      </div>
+                    </div>
+
+
                   </TableCell>
                   <TableCell className="text-center  justify-center items-center flex">
                     <DYNAMICICONS.socialSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
@@ -238,11 +252,11 @@ const LeaderboardTable = () => {
 
                   <TableCell className="text-center">
                     <div className="flex justify-around">
-                      {formatBigNumber(getTimeBaseData( time.value ,agent).tokenMarketCap)}
+                      {formatBigNumber(getTimeBaseData(time.value, agent).tokenMarketCap)}
 
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
-                          data={time.value == "week" || time.value == "month"|| time.value == "day" ? processGraphData(agent?.marketCapGraph):agent?.marketCapGraph}
+                          data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.marketCapGraph,7) : agent?.marketCapGraph}
 
                           dataKey="value"
                           color="#3b82f6"
@@ -273,16 +287,16 @@ const LeaderboardTable = () => {
                       )} %`}
                     </TableCell> */}
                   <TableCell className="text-center">
-                    ${getTimeBaseData( time.value ,agent).tokenPrice.toFixed(8)}
+                    ${getTimeBaseData(time.value, agent).tokenPrice.toFixed(8)}
 
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex justify-around">
 
-                      {formatBigNumber(getTimeBaseData( time.value ,agent).tokenHoldersCount)}
+                      {formatBigNumber(getTimeBaseData(time.value, agent).tokenHoldersCount)}
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
-                          data={time.value == "week" || time.value == "month"|| time.value == "day" ? processGraphData(agent?.holdersGraph):agent?.holdersGraph}
+                          data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.holdersGraph,7) : agent?.holdersGraph}
 
                           dataKey="value"
                           color="#3b82f6"
@@ -308,48 +322,48 @@ const LeaderboardTable = () => {
       </div>
       {
         agents?.result && agents.result.length > 0 && (
-      <div className="flex gap-2 items-center justify-center p-2 ">
-        <Button
-          variant={"ghost"}
-          className="text-[0.7rem] p-[1px]  h-fit gap-0 items-center"
-          disabled={page === 1}
-          onClick={() => {
-            if (page === 1) return;
-            setPage((prev) => prev - 1);
-          }}
-        >
-          <ChevronLeft className="p-[1px] pb-[2px]" />
-          <span className="pr-2">Previous</span>
-        </Button>
-        <RenderPageBtns
-          totalPages={totalPage}
-          setPage={setPage}
-          page={
-            page > 2 && page < agents?.page - 1
-              ? page - 1
-              : page > 2 &&
-                page <= totalPage - 1 &&
-                page < totalPage
-                ? page - 2
-                : page === totalPage
-                  ? page - 3
-                  : 1
-          }
-          currentPage={page}
-        />
-        <Button
-          variant={"ghost"}
-          className="text-[0.7rem] p-[1px] h-fit gap-0 items-center"
-          disabled={page >= totalPage}
-          onClick={() => {
-            if (page >= totalPage) return;
-            setPage((prev) => prev + 1);
-          }}
-        >
-          <span className="pl-2">Next</span>
-          <ChevronRight className="p-[1px] pb-[2px]" />
-        </Button>
-      </div>
+          <div className="flex gap-2 items-center justify-end p-2 ">
+            <Button
+              variant={"ghost"}
+              className="text-[0.7rem] p-[1px]  h-fit gap-0 items-center"
+              disabled={page === 1}
+              onClick={() => {
+                if (page === 1) return;
+                setPage((prev) => prev - 1);
+              }}
+            >
+              <ChevronLeft className="p-[1px] pb-[2px]" />
+              <span className="pr-2">Previous</span>
+            </Button>
+            <RenderPageBtns
+              totalPages={totalPage}
+              setPage={setPage}
+              page={
+                page > 2 && page < agents?.page - 1
+                  ? page - 1
+                  : page > 2 &&
+                    page <= totalPage - 1 &&
+                    page < totalPage
+                    ? page - 2
+                    : page === totalPage
+                      ? page - 3
+                      : 1
+              }
+              currentPage={page}
+            />
+            <Button
+              variant={"ghost"}
+              className="text-[0.7rem] p-[1px] h-fit gap-0 items-center"
+              disabled={page >= totalPage}
+              onClick={() => {
+                if (page >= totalPage) return;
+                setPage((prev) => prev + 1);
+              }}
+            >
+              <span className="pl-2">Next</span>
+              <ChevronRight className="p-[1px] pb-[2px]" />
+            </Button>
+          </div>
         )
       }
     </div>

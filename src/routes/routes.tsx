@@ -8,6 +8,7 @@ import AppLayout from '@/layouts/AppLayout'
 import Agent from '@/pages/Agent'
 import Rogue from '@/pages/Rogue'
 import ErrorBoundary from '@/components/app/ErrorBoundary'
+import StakersDashboard from '@/components/app/GetStakingInfo'
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,10 @@ const router = createBrowserRouter([
         path: ROUTES.nodes.rogue,
         element: <Rogue />,
       },
-      
+      {
+        path: ROUTES.nodes.info,
+        element: <StakersDashboard />,
+      },
       
     ],
   },

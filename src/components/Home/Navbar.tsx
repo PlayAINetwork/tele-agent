@@ -15,7 +15,7 @@ const Navbar = () => {
 
 
   useEffect(() => {
-    const filertdatares = agents?.result?.slice(0, 5)
+    const filertdatares = agents?.result?.slice(0, 7)
     setTopAgents(filertdatares)
 
     const filertnewgent = agents && agents.result
@@ -25,7 +25,7 @@ const Navbar = () => {
           const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
           return dateB.getTime() - dateA.getTime();
         })
-        .slice(0, 5)
+        .slice(0, 7)
       : [];
     setNewAgents(filertnewgent)
     console.log(filertdatares)
@@ -64,16 +64,16 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex-1 px-4 overflow-y-scroll">
-          <div className="flex flex-col gap-4 ">
+          <div className="flex flex-col gap-3 ">
             <div className="flex-1 ">
               {!hideSidebar && (
-                <div className="flex text-xl font-bold uppercase underline">
+                <div className="flex text-md font-bold uppercase underline">
                   <p>Top_agents</p>
                 </div>
               )}
 
               <div
-                className={`mt-4 flex flex-col gap-0  ${hideSidebar ? "pt-6" : ""}`}
+                className={`mt-2 flex flex-col gap-0  ${hideSidebar ? "pt-6" : ""}`}
               >
                 {
 
@@ -102,8 +102,8 @@ const Navbar = () => {
               >
                 {!hideSidebar ? (
                   <>
-                    <div className="flex text-xl font-bold uppercase underline">
-                      <p>new_agents</p>
+                    <div className="flex text-md font-bold uppercase underline">
+                      <p className="">new_agents</p>
                     </div>
                     <div className="w-full h-[1px] bg-[#fff]"></div>
                   </>
@@ -112,7 +112,7 @@ const Navbar = () => {
                 )}
               </div>
 
-              <div className="mt-4 flex flex-col gap-0 ">
+              <div className="mt-2 flex flex-col gap-0 ">
                 {
 
 
@@ -184,14 +184,14 @@ export const AgentItem = ({
       // onClick={() => navigate(`/agent/${data?.address}`)}
       className="flex cursor-pointer rounded-sm gap-3 w-full p-[5px] hover:bg-white/10" >
       <img
-        className="w-10  h-10 rounded-md"
+        className="min-w-8  min-h-8 max-w-8  max-h-8 rounded-md"
         src={data?.avatar}
         alt=""
       />
       {hideNav ? null : (
-        <div className="text-sm uppercase w-full flex flex-col justify-between gap-1 ">
+        <div className="text-sm uppercase w-full flex flex-col justify-between gap-0 ">
           <div className="flex font-medium gap-2  text-md">
-            <p className="text-[18px]">{data?.name}</p>
+            <p className="text-[16px]">{data?.name}</p>
             {/* <div
               className="rounded-xs h-min  bg-primary text-[#000] gap-1 p-1 py-[2px]  text-[10px]  flex justify-center items-center font-bold
             "
@@ -200,7 +200,7 @@ export const AgentItem = ({
               <p className="pt-[2px] leading-[80%] text-[10px]  ">Live</p>
             </div> */}
           </div>
-          <div className="flex text-[#D4D4D4] w-full font-normal text-[14px] justify-between ">
+          <div className="flex text-[#D4D4D4] w-full font-normal text-[12px] justify-between ">
             <div className="flex leading-[100%]">
               <p>MC: ${formatBigNumber(data?.marketCap)}</p>
             </div>

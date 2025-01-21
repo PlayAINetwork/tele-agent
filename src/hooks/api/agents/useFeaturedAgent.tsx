@@ -3,13 +3,13 @@ import { Agents } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 
-const getAgents = async (page: number, time: any, ) => {
-    const res = await axiosPrivate.get("/agent?time=" + time + "&page=" + page + "&limit=" + 10 );
+const getAgents = async (page: number, time: any,) => {
+    const res = await axiosPrivate.get("/agent?featured="+true  +"&time=" + time + "&page=" + page + "&limit=" + 10 );
     return res.data;
 };
 
 
-const useGetAgents = ({ page, time }: { page?: number, time?: string}) => {
+const useGetFeaturedAgents = ({ page, time }: { page?: number, time?: string }) => {
 
     console.log(page, time)
     const {
@@ -17,17 +17,17 @@ const useGetAgents = ({ page, time }: { page?: number, time?: string}) => {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["agents", page,time,"notfeatured"],
+        queryKey: ["agents", page,time,"featured"],
         queryFn: () => getAgents(page ?? 1, time ?? 'week'), // Pass `id` to `queryFn`
         // Optional: configure staleTime, refetchInterval, etc.
-        staleTime: 1 * 60 * 1000, // 5 minutes
-        refetchInterval: 3000, //5 min
+        // staleTime: 5 * 60 * 1000, // 5 minutes
+        // refetchInterval: 300000, //5 min
     });
     return {
-        agents: res as Agents,
+        featuredAgents: res as Agents,
         loadingAgent: isLoading,
         isError,
     };
 }
 
-export default useGetAgents
+export default useGetFeaturedAgents

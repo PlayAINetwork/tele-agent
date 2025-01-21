@@ -45,7 +45,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex">
-          <Button
+          {/* <Button
             onClick={() =>
               open(
                 "https://raydium.io/swap/?outputMint=27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL&inputMint=sol",
@@ -56,7 +56,7 @@ const Footer = () => {
             className="w-full text-xs  md:text-sm  py-1 md:px-6 h-auto uppercase rounded-[40px]"
           >
             <div className="mt-1">BUY $ROGUE</div>
-          </Button>
+          </Button> */}
           
         </div>{" "}
       </div>

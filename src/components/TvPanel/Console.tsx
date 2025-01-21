@@ -19,7 +19,7 @@ declare global {
   interface Window {
     Twitch: {
       Player: {
-        new (
+        new(
           node: HTMLElement,
           options: {
             channel: string;
@@ -97,7 +97,7 @@ const TvConsole = () => {
   const [isServerError, setIsServerError] = useState(false);
   const [isShowingErrorMessage, setIsShowingErrorMessage] = useState(false);
   const [twitchPlayer, setTwitchPlayer] = useState<any>(null);
-  const {setIsLive} = useAppCtx()
+  const { setIsLive } = useAppCtx()
 
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
@@ -117,17 +117,22 @@ const TvConsole = () => {
       url: "https://player.twitch.tv/?channel=theagentexperience&parent=localhost&parent=dev.podcastslanding-fe.pages.dev&parent=podcastslanding-fe.pages.dev&parent=agentexperience.live",
       title: "rogue live",
     },
-   
+
     3: {
       type: "rec",
       url: "https://assets.podcast.playai.network/master.m3u8",
-
       // url: "https://playai-lambda.s3.amazonaws.com/8e807889d07ce61ef692bce58ccf029097d4652496c06b020c017417ecc2b2d8.mp4",
       title: "Rogue in conversation with CZ and Saylor.",
     },
-    
-  
+
   };
+  // data?.forEach((channel, i) => {
+  //   channels[i + 1] = {
+  //     type: channel.live ? "live" : "rec",
+  //     url: channel.url,
+  //     title: channel.name,
+  //   };
+  // });
 
   const initializeHLS = (videoElement: HTMLVideoElement) => {
     setPower(true)
@@ -152,7 +157,7 @@ const TvConsole = () => {
         }
       });
 
-      hls.on(Hls.Events.ERROR, ( data:any) => {
+      hls.on(Hls.Events.ERROR, (data: any) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
@@ -194,42 +199,42 @@ const TvConsole = () => {
     }
   };
   useEffect(() => {
-    if ( currentChannel?.type !== "live") {
+    if (currentChannel?.type !== "live") {
       const initTimeout = setTimeout(() => {
-      const video = videoRef.current;
+        const video = videoRef.current;
 
-      console.log(video,"videovideovideo")
-      if (!video) return;
+        console.log(video, "videovideovideo")
+        if (!video) return;
 
-      // Cleanup previous channel
-      cleanupCurrentChannel();
+        // Cleanup previous channel
+        cleanupCurrentChannel();
 
-      // Initialize new channel
-      initializeHLS(video);
+        // Initialize new channel
+        initializeHLS(video);
 
-      const timeUpdate = () => setCurrentTime(video.currentTime);
-      const durationChange = () => setDuration(video.duration);
-      const loadedMetadata = () => setDuration(video.duration);
-      const playHandler = () => setIsPlaying(true);
-      const pauseHandler = () => setIsPlaying(false);
+        const timeUpdate = () => setCurrentTime(video.currentTime);
+        const durationChange = () => setDuration(video.duration);
+        const loadedMetadata = () => setDuration(video.duration);
+        const playHandler = () => setIsPlaying(true);
+        const pauseHandler = () => setIsPlaying(false);
 
-      video.addEventListener("timeupdate", timeUpdate);
-      video.addEventListener("durationchange", durationChange);
-      video.addEventListener("loadedmetadata", loadedMetadata);
-      video.addEventListener("play", playHandler);
-      video.addEventListener("pause", pauseHandler);
+        video.addEventListener("timeupdate", timeUpdate);
+        video.addEventListener("durationchange", durationChange);
+        video.addEventListener("loadedmetadata", loadedMetadata);
+        video.addEventListener("play", playHandler);
+        video.addEventListener("pause", pauseHandler);
 
-      return () => {
-        video.removeEventListener("timeupdate", timeUpdate);
-        video.removeEventListener("durationchange", durationChange);
-        video.removeEventListener("loadedmetadata", loadedMetadata);
-        video.removeEventListener("play", playHandler);
-        video.removeEventListener("pause", pauseHandler);
-      };
+        return () => {
+          video.removeEventListener("timeupdate", timeUpdate);
+          video.removeEventListener("durationchange", durationChange);
+          video.removeEventListener("loadedmetadata", loadedMetadata);
+          video.removeEventListener("play", playHandler);
+          video.removeEventListener("pause", pauseHandler);
+        };
 
-    }, 1000);
+      }, 1000);
 
-    return () => clearTimeout(initTimeout);
+      return () => clearTimeout(initTimeout);
     }
   }, [channel]);
 
@@ -300,22 +305,22 @@ const TvConsole = () => {
   // Server status check
   useEffect(() => {
     const checkServerStatus = async () => {
-      if (channel === 2) {
+      if (channel === 1) {
         try {
           const response = await fetch("https://rogue-paywall.playai.network");
           if (response.status === 502) {
             setIsServerError(true);
             setIsShowingErrorMessage(true);
             setTimeout(() => {
-              if (channel === 2) {
-              setIsLive(false)
-              setChannel(1);
-              setIsShowingErrorMessage(false);
-              setIsServerError(false);
+              if (channel === 1) {
+                setIsLive(false)
+                setChannel(1);
+                setIsShowingErrorMessage(false);
+                setIsServerError(false);
               }
             }, 5000);
           } else {
-            
+
             setIsLive(true)
 
             setIsServerError(false);
@@ -324,16 +329,16 @@ const TvConsole = () => {
             setIsShowingErrorMessage(false);
           }
         } catch (error) {
-          
+
           setIsServerError(true);
           setIsShowingErrorMessage(true);
           setTimeout(() => {
-            if (channel === 2) {
+            if (channel === 1) {
 
-            setChannel(1);
-            setIsShowingErrorMessage(false);
-            setIsServerError(false);
-            setIsLive(false)
+              setChannel(1);
+              setIsShowingErrorMessage(false);
+              setIsServerError(false);
+              setIsLive(false)
             }
 
           }, 5000);
@@ -429,7 +434,7 @@ const TvConsole = () => {
     // if (!power) return null;
     // if (staticEffect) return null;
 
-    if (channel === 2 && isShowingErrorMessage) {
+    if (channel === 1 && isShowingErrorMessage) {
       return (
         <div className="w-full h-full relative">
           <div className="absolute top-0 h-full w-full flex items-center">
@@ -609,13 +614,13 @@ const TvConsole = () => {
               <div className="h-full flex items-center gap-2 text-primary uppercase px-3 border-l border-primary">
                 <ChevronRight className="w-4 h-4" color="#89FC96" />
                 {channel === 1 ?
-                "live right now"
-                :
-                isServerError
-                  ? "not live right now"
-                  : isLoading
-                    ? "Loading..."
-                    : "not live right now"}
+                  "live right now"
+                  :
+                  isServerError
+                    ? "not live right now"
+                    : isLoading
+                      ? "Loading..."
+                      : "not live right now"}
               </div>
             </div>
           </div>

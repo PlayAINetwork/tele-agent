@@ -1,12 +1,12 @@
 import { SquareChevronDown, SquareChevronUp } from 'lucide-react';
-import  { ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
-const Collapsible = ({ children, titel, subtext }: { children: ReactNode, titel: string, subtext: string }) => {
+const Collapsible = ({ children, titel, subtext, showD }: { children: ReactNode, titel: string, subtext: string, showD?: boolean }) => {
 
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(showD ?? false);
 
     return (
-        <div className='border-[0.5px] border-[#F1F6F2] bg-card  '>
+        <div className='relative border-[0.5px] border-[#F1F6F2] bg-card  '>
 
             <div className={`flex cursor-pointer px-4 gap-3 py-2 ${show ? "border-b-[1px] " : ""} border-[#F1F6F2] `} onClick={() => setShow(!show)}>
                 {
@@ -19,7 +19,7 @@ const Collapsible = ({ children, titel, subtext }: { children: ReactNode, titel:
                 </p>
             </div>
             {
-                show ? <div className='max-h-[400px] overflow-y-scroll'>
+                show ? <div className='max-h-[400px] '>
 
                     {children}
                 </div>

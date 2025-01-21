@@ -3,23 +3,24 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import SimpleAgentLineChart from "../Leaderboard/graphs/SimpleAgentLineChart";
 import { useNavigate } from "react-router-dom";
-import useGetAgents from "@/hooks/api/agents/useGetAgents";
-import { formatBigNumber, hasSkill, processGraphData } from "@/lib/utils";
+
+import { formatBigNumber, hasSkill, processGraphDataToSeven } from "@/lib/utils";
 import DYNAMICICONS from "@/assets/DynamicIcon";
 import { Skeleton } from "../ui/skeleton";
+import useGetFeaturedAgents from "@/hooks/api/agents/useFeaturedAgent";
 
 const CourseCarousel = () => {
   // const [orders, setOrders] = useState([3, 4, 0, 1, 2]);
   const [orders, setOrders] = useState([1, 2, 0]);
 
   const navigate = useNavigate();
-  const { agents, loadingAgent } = useGetAgents({ page: 1, time: "week" });
+  const { featuredAgents, loadingAgent } = useGetFeaturedAgents({ page: 1, time: "week" });
   const [filterAgents, setFilterAgents] = useState([]);
 
   useEffect(() => {
-    const filteredData: any = agents?.result?.slice(0, 3);
+    const filteredData: any = featuredAgents?.result?.slice(0, 3);
     setFilterAgents(filteredData);
-  }, [agents]);
+  }, [featuredAgents]);
 
 
 
@@ -60,7 +61,7 @@ const CourseCarousel = () => {
 
     switch (order) {
       case 0: // Center (Focus)
-        return `${baseClasses} z-30 h-4/5 w-full md:w-3/5 top-[7.5%] md:left-[20%]`;
+        return `${baseClasses} z-30 h-4/5 w-full md:w-3/5 top-[9.5%] md:left-[20%]`;
       case 1: // Left
         return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] top-[12.5%] left-0 md:left-[5%] opacity-75`;
       case 2: // Right
@@ -72,7 +73,7 @@ const CourseCarousel = () => {
 
   return (
     <div className="  h-full w-full  overflow-hidden">
-      <div className="h-full w-full  mx-auto px-4 py-3  items-center">
+      <div className="h-full w-full  mx-auto px-4 py-0  items-center">
         {/* <div className=" py-0 px-4 text-xl  uppercase">
           <p>featured agents</p>
         </div> */}
@@ -130,7 +131,7 @@ const CourseCarousel = () => {
                 ))
                 :
                 filterAgents?.map((data: any, index: any) => (
-                  <div key={index} className={getItemClasses(orders[index])} onClick={() => navigate(`/agent/${data?.address}`)}>
+                  <div key={index} className={getItemClasses(orders[index])} onClick={() => navigate(`/agent/${data?.id}`)}>
                     <div className={` relative w-full h-full object-cover r\ overflow-hidden shadow-lg ${orders[index] == 0 ? "border-[#F1F6F2] " : 'border-primary'}   border-[0.5px] transition-all duration-500`}>
                       <div
                         className="absolute
@@ -173,21 +174,28 @@ const CourseCarousel = () => {
                         </div>
 
                         <div className="flex gap-6 text-sm text-[#F1F6F2] h-full  ">
-                          <div className="flex items-center md:items-start ">
-                            <div>
-                              <p>${formatBigNumber(data?.marketCap) ?? 0}</p>
-                              <p className="font-normal text-xs uppercase text-[#D4D4D4]">
-                                market cap
-                              </p>
-                            </div>
-                            <div className="w-[60px] h-full">
-                              <SimpleAgentLineChart
-                                data={processGraphData(data?.marketCapGraph)}
-                                dataKey="value"
-                                color="#3b82f6"
-                              />
-                            </div>
-                          </div>
+
+                          {
+                            data?.address ?
+                              <div className="flex items-center md:items-start ">
+                                <div>
+                                  <p>${formatBigNumber(data?.marketCap) ?? 0}</p>
+                                  <p className="font-normal text-xs uppercase text-[#D4D4D4]">
+                                    market cap
+                                  </p>
+                                </div>
+                                <div className="w-[60px] h-full">
+                                  <SimpleAgentLineChart
+                                    data={processGraphDataToSeven(data?.marketCapGraph, 7)}
+                                    dataKey="value"
+                                    color="#3b82f6"
+                                  />
+                                </div>
+                              </div>
+                              :
+                              null
+                          }
+
                           <div className="hidden md:flex ">
                             <div>
 

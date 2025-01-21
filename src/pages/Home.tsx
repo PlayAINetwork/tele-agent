@@ -1,12 +1,12 @@
 import Navbar from "@/components/Home/Navbar";
 import AgentCard from "@/components/Home/AgentCard";
 import CourseCarousel from "@/components/Home/Carousel";
-import useGetAgents from "@/hooks/api/agents/useGetAgents";
 import { Skeleton } from "@/components/ui/skeleton";
+import useGetFeaturedAgents from "@/hooks/api/agents/useFeaturedAgent";
 
 
 const Home = () => {
-  const {agents,loadingAgent}= useGetAgents({ page: 1,time:"week" });
+  const {featuredAgents,loadingAgent}= useGetFeaturedAgents({ page: 1,time:"week" });
 
 
 
@@ -18,8 +18,8 @@ const Home = () => {
           <CourseCarousel />
         </div>
 
-        <div className="px-4  md:py-6">
-          <div className=" py-4 text-lg font-bold  uppercase">
+        <div className="px-4  ">
+          <div className=" pb-4 text-lg font-bold  uppercase">
             <p>new agents</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-3  ">
@@ -62,7 +62,7 @@ const Home = () => {
 
             )):
             
-            agents?.result?.map((agent, index) => (
+            featuredAgents?.result?.map((agent, index) => (
               <AgentCard key={index} data={agent} />
             ))}
           </div>

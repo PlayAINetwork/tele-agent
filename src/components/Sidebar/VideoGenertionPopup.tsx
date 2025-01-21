@@ -245,7 +245,7 @@ const VideoGenertionPopup = () => {
 
       <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[70%] gap-0 h-[70vh] border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
         <div className="flex justify-between">
-          <DialogDescription className=" px-4 uppercase text-sm md:text-md text-gray-200 py-2   bg-primary text-[#010101]">
+          <DialogDescription className=" px-4 uppercase text-sm md:text-md py-2   bg-primary text-[#010101]">
             {">> create_video_with_rogue"}
           </DialogDescription>
 
@@ -325,10 +325,10 @@ const VideoGenertionPopup = () => {
                     <DialogContent className=" flex flex-col sm:max-w-md md:max-w-[55%] gap-0  border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto ">
                       <div className="flex justify-between  border-b-[1px] border-primary">
                        <div className="flex items-center">
-                       <DialogDescription className=" px-4 uppercase text-xs md:text-sm text-gray-200 py-2   text-[#fff]">
+                       <DialogDescription className=" px-4 uppercase text-xs md:text-smpy-2   text-[#fff]">
                           {">> create_video_with_rogue"}
                         </DialogDescription>
-                        <DialogDescription className=" px-4 uppercase text-xs md:text-sm text-gray-200 py-2   bg-primary text-[#010101]">
+                        <DialogDescription className=" px-4 uppercase text-xs md:text-sm  py-2   bg-primary text-[#010101]">
                           {">> video_player"}
                         </DialogDescription>
                        </div>
@@ -339,7 +339,7 @@ const VideoGenertionPopup = () => {
                       </div>
                       <div className="flex justify-between">
                         {selectedFile !== null ? (
-                          <DialogDescription className=" px-4 text-xs md:text-xs text-gray-200 py-2   border-b-[1px] w-full  border-primary text-[#fff] ">
+                          <DialogDescription className=" px-4 text-xs md:text-xs  py-2   border-b-[1px] w-full  border-primary text-[#fff] ">
                             {">> " + selectedFile[2]}
                           </DialogDescription>
                         ) : null}

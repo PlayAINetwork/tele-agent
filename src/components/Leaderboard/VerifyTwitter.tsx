@@ -13,8 +13,8 @@ import { useToast } from '@/hooks/use-toast';
 function VerifyTwitter({ data }: { data: Agent }) {
     const [isOpen, setIsOpen] = useState(false);
     const { toast } = useToast();
-  const navigate = useNavigate();
-  const location = useLocation();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     // const from = location.state?.from?.pathname || "/";
 
@@ -29,10 +29,10 @@ function VerifyTwitter({ data }: { data: Agent }) {
     useEffect(() => {
         (async () => {
             try {
-                if (code && state && data?.address) {
+                if (code && state && data?.id) {
                     console.log("xConnected")
 
-                    const xConnected = await connectTwitter(code, state, data?.address);
+                    const xConnected = await connectTwitter(code, state, data?.id);
                     console.log(xConnected)
                     navigate('/rogueagent', { replace: true });
 

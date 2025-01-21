@@ -1,11 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { Connection, PublicKey } from "@solana/web3.js";
 import { Menu, X } from "lucide-react";
-import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
-import { Program, Provider } from "@project-serum/anchor";
-import { formatBigNumber, trimAddress } from "@/lib/utils";
+import {  trimAddress } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { IMAGES } from "@/assets";
 import StackPopup from "./StackPopup";
@@ -18,8 +14,9 @@ import getWalletSignMessage from "@/hooks/api/auth/getWalletSignMessage";
 import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import connectWallet from "@/hooks/api/auth/connectWallet";
+import { useWallet } from "@solana/wallet-adapter-react";
 
-const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, navigate }:{ isOpen:boolean, onClose:any, connected:any, address:string, logout:any, setVisible:any, navigate:any }) => {
+const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, navigate }: { isOpen: boolean, onClose: any, connected: any, address: string, logout: any, setVisible: any, navigate: any }) => {
   if (!isOpen) return null;
 
   return (
@@ -30,7 +27,7 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
             <X className="h-6 w-6" />
           </Button>
         </div>
-        
+
         <div className="flex flex-col gap-4 mt-4">
           {connected ? (
             <>
@@ -48,9 +45,9 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
               Connect Wallet
             </Button>
           )}
-          
-          <Button 
-            variant="ghost" 
+
+          <Button
+            variant="ghost"
             onClick={() => {
               navigate("/rogueagent");
               onClose();
@@ -59,7 +56,7 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
           >
             {"> Leaderboard <"}
           </Button>
-          
+
           {/* <Button 
             variant="ghost"
             onClick={() => {
@@ -70,11 +67,11 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
           >
             Watch Rogue
           </Button> */}
-          <div onClick={()=>{
-              // onClose();
+          <div onClick={() => {
+            // onClose();
 
           }}>
-          <VideoGenertionPopup />
+            <VideoGenertionPopup />
 
           </div>
 
@@ -86,11 +83,15 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [tokenData, setTokenData] = useState<any>(null);
-  const [totalStaked, setTotalStaked] = useState(0);
-  const { connection } = useConnection();
+  const [isHovered, setIsHovered] = useState(false);
+
+  
+
+  // const [tokenData, setTokenData] = useState<any>(null);
+  // const [totalStaked, setTotalStaked] = useState(0);
+  // const { connection } = useConnection();
   const { connected, publicKey, disconnect, signMessage } = useWallet();
-  const { auth,setAuth } = useAuthState();
+  const { auth, setAuth } = useAuthState();
   const { setVisible } = useWalletModal();
   const navigate = useNavigate();
   const logout = useLogout();
@@ -99,95 +100,95 @@ const Header = () => {
   const isSigningRef = useRef(false);
   const { toast } = useToast();
 
-  const getTotalStakedBalance = async (
-    connection: Connection
-  ): Promise<number> => {
-    const programId = HOST_CONTRACT.PROGRAM_ID;
-    try {
-      // Create program instance
-      const program = new Program(HOST_CONTRACT.IDL, new PublicKey(programId), {
-        connection,
-      } as Provider);
+  // const getTotalStakedBalance = async (
+  //   connection: Connection
+  // ): Promise<number> => {
+  //   const programId = HOST_CONTRACT.PROGRAM_ID;
+  //   try {
+  //     // Create program instance
+  //     const program = new Program(HOST_CONTRACT.IDL, new PublicKey(programId), {
+  //       connection,
+  //     } as Provider);
 
-      // Get PlatformConfig PDA
-      const [platformConfigPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("platform_config")],
-        new PublicKey(programId)
-      );
+  //     // Get PlatformConfig PDA
+  //     const [platformConfigPDA] = PublicKey.findProgramAddressSync(
+  //       [Buffer.from("platform_config")],
+  //       new PublicKey(programId)
+  //     );
 
-      // Get platform config data
-      await program.account.platformConfig.fetch(platformConfigPDA);
+  //     // Get platform config data
+  //     await program.account.platformConfig.fetch(platformConfigPDA);
 
-      // Get platform mint token account PDA
-      const [platformMintTokenAccountPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("platform_mint_token_account")],
-        new PublicKey(programId)
-      );
+  //     // Get platform mint token account PDA
+  //     const [platformMintTokenAccountPDA] = PublicKey.findProgramAddressSync(
+  //       [Buffer.from("platform_mint_token_account")],
+  //       new PublicKey(programId)
+  //     );
 
-      // Get token balance
-      const tokenBalance = await connection.getTokenAccountBalance(
-        platformMintTokenAccountPDA
-      );
-      // Return the balance as a number
-      return (
-        Number(tokenBalance.value.amount) /
-        Math.pow(10, tokenBalance.value.decimals)
-      );
-    } catch (error) {
-      console.error("Error getting total staked balance:", error);
-      throw error;
-    }
-  };
+  //     // Get token balance
+  //     const tokenBalance = await connection.getTokenAccountBalance(
+  //       platformMintTokenAccountPDA
+  //     );
+  //     // Return the balance as a number
+  //     return (
+  //       Number(tokenBalance.value.amount) /
+  //       Math.pow(10, tokenBalance.value.decimals)
+  //     );
+  //   } catch (error) {
+  //     console.error("Error getting total staked balance:", error);
+  //     throw error;
+  //   }
+  // };
   // const [isHovered, setIsHovered] = useState(false);
-  const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
-  useEffect(() => {
-    const fetchTokenData = async () => {
-      try {
-        const response = await fetch(
-          `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch token data");
-        }
-        const data = await response.json();
+  // const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
+  // useEffect(() => {
+  //   const fetchTokenData = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch token data");
+  //       }
+  //       const data = await response.json();
 
-        if (data.pairs && data.pairs.length > 0) {
-          // Sort by volume and get the most liquid pair
-          const mostLiquidPair = data.pairs.sort(
-            (a: any, b: any) => parseFloat(b.priceUsd) - parseFloat(a.priceUsd)
-          )[0];
-          setTokenData(mostLiquidPair);
-        } else {
-          console.log("No trading pairs found");
-        }
-      } catch (err: any) {
-        console.log(err.message);
-      }
-    };
+  //       if (data.pairs && data.pairs.length > 0) {
+  //         // Sort by volume and get the most liquid pair
+  //         const mostLiquidPair = data.pairs.sort(
+  //           (a: any, b: any) => parseFloat(b.priceUsd) - parseFloat(a.priceUsd)
+  //         )[0];
+  //         setTokenData(mostLiquidPair);
+  //       } else {
+  //         console.log("No trading pairs found");
+  //       }
+  //     } catch (err: any) {
+  //       console.log(err.message);
+  //     }
+  //   };
 
-    fetchTokenData();
-    const interval = setInterval(fetchTokenData, 300000);
-    return () => clearInterval(interval);
-  }, []);
+  //   fetchTokenData();
+  //   const interval = setInterval(fetchTokenData, 300000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
 
-  useEffect(() => {
-    const fetchTotalStaked = async () => {
-      try {
-        const balance = await getTotalStakedBalance(connection);
-        setTotalStaked(balance);
-      } catch (err) {
-        console.log(
-          err instanceof Error
-            ? err.message
-            : "Unknown error occurred while fetching platform stake count!"
-        );
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTotalStaked = async () => {
+  //     try {
+  //       const balance = await getTotalStakedBalance(connection);
+  //       setTotalStaked(balance);
+  //     } catch (err) {
+  //       console.log(
+  //         err instanceof Error
+  //           ? err.message
+  //           : "Unknown error occurred while fetching platform stake count!"
+  //       );
+  //     }
+  //   };
 
-    fetchTotalStaked();
-  }, []);
-  console.log("total staked", totalStaked);
+  //   fetchTotalStaked();
+  // }, []);
+  // console.log("total staked", totalStaked);
 
 
 
@@ -210,14 +211,11 @@ const Header = () => {
 
         // Convert message to Uint8Array
         const messageBytes = new TextEncoder().encode(message.message);
-        console.log("sdfd", messageBytes)
-
-        console.log("sdfd")
+       
 
         // Sign the message
         const signature = await signMessage(messageBytes);
-        console.log('Signature dsds:', signature);
-        console.log('Signature dsds:', isSigningRef.current);
+      
 
 
         if (signature && !isSigningRef.current) {
@@ -228,7 +226,6 @@ const Header = () => {
           isSigningRef.current = true;
           //login logic
           const user = await connectWallet(publicKey?.toString(), message?.nonce, signatureBase58);
-          console.log("user", user);
           if (user.jwt) {
             let jwt = user.jwt;
             //note: enable when auth bug is fixed
@@ -262,24 +259,24 @@ const Header = () => {
 
   return (
     <div className="flex justify-between w-full bg-secondary border-b-[1px] border-primary relative z-10">
-         <div className="flex gap-3">
+      <div className="flex gap-3">
         {/* <img src={IMAGES.logo} alt="" className="w-[100px] lg:w-[200px]"/> */}
         <div
           className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath:connected ? "polygon(0 0, 96.3% 2%, 100% 100%, 0% 100%)": "polygon(0 0, 96.1% 2%, 100% 100%, 0% 100%)",
+            clipPath: connected ? "polygon(0 0, 96.3% 2%, 100% 100%, 0% 100%)" : "polygon(0 0, 96.1% 2%, 100% 100%, 0% 100%)",
 
-      
+
           }}
         >
-            <div className="md:hidden flex cursor-pointer" onClick={() => navigate("/")}>
-              <img src={IMAGES.logo} alt="" className="max-w-[10rem]" />
-            </div>
+          <div className="md:hidden flex cursor-pointer" onClick={() => navigate("/")}>
+            <img src={IMAGES.logo} alt="" className="max-w-[10rem]" />
+          </div>
           <div className="hidden md:flex h-full text-sm gap-[1px] ">
             <div className="cursor-pointer" onClick={() => navigate("/")}>
               <img src={IMAGES.logo} alt="" className="min-w-[12rem]" />
             </div>
-            {/* <div
+            <div
               className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
               style={{
                 clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
@@ -307,24 +304,8 @@ const Header = () => {
                   {"> Coming soon <"}
                 </span>
               </span>
-            </div> */}
-            {connected ? (
-              <StackPopup />
-            ) : (
-              <div
-                onClick={() => setVisible(true)}
-                className="px-4 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-                style={{
-                  clipPath:connected ? "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)": "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
-                }}
-              >
-                <span className="text-white relative transition-transform duration-300 ease-in-out">
-                  <span className="block transition-all duration-300 opacity-100 translate-y-0">
-                    {"> stake now <"}
-                  </span>
-                </span>
-              </div>
-            )}
+            </div>
+            
 
             <div
               className="px-4 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
@@ -334,8 +315,8 @@ const Header = () => {
                 {" > Leaderboard <"}
               </span>
             </div>
-            {/* <div
-              onClick={() => navigate("/rogue")}
+            <div
+              onClick={() => navigate("/agent/def99ef5-2a4c-4f03-9614-b91ff3503217")}
 
               className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
               style={{
@@ -343,8 +324,8 @@ const Header = () => {
               }}
             >
               {"> Watch_Rogue <"}
-            </div> */}
-            <VideoGenertionPopup />
+            </div>
+            {/* <VideoGenertionPopup /> */}
           </div>
         </div>
 
@@ -363,22 +344,22 @@ const Header = () => {
       {/* Stats and Wallet Section */}
       <div className="hidden md:flex items-center gap-4">
         <div className="flex flex-col md:flex-row gap-2 text-sm md:text-base">
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <span className="text-primary">STAKED:</span>
             <span>{`${formatBigNumber(totalStaked) ?? 0} $ROGUE`}</span>
-          </div>
-          <div className="flex items-center gap-1">
+          </div> */}
+          {/* <div className="flex items-center gap-1">
             <span className="text-primary">$ROGUE:</span>
             <span>
               {tokenData?.priceUsd
                 ? parseFloat(tokenData?.priceUsd).toFixed(6)
                 : 0.0}
             </span>
-          </div>
+          </div> */}
         </div>
 
         <div className="border-l border-primary h-full">
-           {/* <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
+          {/* <div className="relative border-x-[1px] border-primary  h-full px-4 flex items-center">
             <Search />
             <Input
               className="pr-[5px] binaria border-none  uppercase bg-transparent w-[220px]"
@@ -408,13 +389,13 @@ const Header = () => {
 
           </div> */}
           {connected ? (
-            <Button onClick={logout}   className="min-w-full text-sm py-1  h-full uppercase ">
+            <Button onClick={logout} className="min-w-full text-sm py-1  h-full uppercase ">
               {trimAddress(address, 4) + " "}
               {"[Disconnect]"}
             </Button>
           ) : (
             <CustomSolanaButton
-            
+
               connectText="Connect Wallet"
               disconnectText="Disconnect Wallet"
               buttonStyle="primary"
@@ -426,8 +407,8 @@ const Header = () => {
 
       {/* Mobile Menu Button */}
       <div className="md:hidden flex items-center">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           onClick={() => setIsMobileMenuOpen(true)}
           className="p-2"
         >

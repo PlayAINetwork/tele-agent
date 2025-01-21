@@ -3,13 +3,14 @@ import GraphSection from "@/components/AgentPage/GraphSection";
 import Navbar from "@/components/Home/Navbar";
 import Sidebar from "@/components/Sidebar";
 import SimpleCardSkeleton from "@/components/Skeleton/SimpleCardSkeleton";
+import VideoPlayer from "@/components/TvPanel/AgentRecTv";
 import AgentTv from "@/components/TvPanel/AgentTv";
 import { Skeleton } from "@/components/ui/skeleton";
 import useGetAgentDetails from "@/hooks/api/agents/useGetAgentDetails";
 import useGetAgentVideo from "@/hooks/api/agents/useGetAgentVideo";
 import { useToast } from "@/hooks/use-toast";
 import { hasSkill, trimAddress } from "@/lib/utils";
-import { ArrowLeft, BadgeCheck, Copy, Globe, Twitter } from "lucide-react";
+import { ArrowLeft, BadgeCheck, Copy, Twitter } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -17,12 +18,14 @@ const Agent = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { id } = useParams()
-  const { agent ,loadingAgent} = useGetAgentDetails(id ?? "")
-  const { agentVideo } = useGetAgentVideo(id ?? "")
+  const { agent, loadingAgent } = useGetAgentDetails(id ?? "")
+  const { agentVideo, loadingAgentVideo } = useGetAgentVideo(id ?? "")
 
   // const loadingAgent = true
   useEffect(() => {
-    console.log(agentVideo, "agent")
+    console.log("agent")
+
+    console.log(agentVideo, "agent", agentVideo?.result[1]?.url)
 
   }, [agent, agentVideo]);
 
@@ -49,11 +52,34 @@ const Agent = () => {
               <p>explore all</p>
             </div>
             <div className="min-h-[400px]">
-              <AgentTv />
+              {agentVideo?.result?.length > 0 ?
+                loadingAgentVideo ?
+                  <div className="text-white/80 text-sm border h-full w-full  font-normal line-clamp-2 border-white/30">
+                    <Skeleton className="w-full h-full  border-primary border-[0.5px]  " />
+                  </div>
+                  :
+                  <>
+                    {
+                      agentVideo?.result.length > 1 && agentVideo?.result[0]?.live ?
+                        <VideoPlayer videoUrl={agentVideo?.result[1]?.url} />
+
+                        :
+                        <AgentTv videoUrl={agentVideo?.result[0]?.url} />
+
+                    }
+                    {/* <VideoPlayer videoUrl={'https://assets.podcast.playai.network/master.m3u8'}  title="My Video"/> */}
+
+
+                  </>
+                : null
+
+              }
             </div>
-            <p className="text-lg  ">
-              Volodymyr Zelenskyy: Ukraine, War, Peace, Putin, Trump, NATO, and
-              Freedom | Lex Fridman Podcast
+            <p className="text-lg  uppercase">
+              {agentVideo?.result.length > 1 && agentVideo?.result[0]?.live ?
+                agentVideo?.result[1]?.name :
+                agentVideo?.result[0]?.name
+              }
             </p>
 
             <div className="flex flex-col md:flex-row justify-between md:items-center  items-start gap-3">
@@ -86,14 +112,20 @@ const Agent = () => {
                         {/* <p className="text-white/80 text-xs  font-normal line-clamp-2">
                       $ROGUE
                     </p> */}
-                        <div
-                          onClick={() => copyAddress(agent?.addres)}
-                          className="flex gap-1 cursor-pointer items-center text-white/80 text-xs hover:text-white/100 font-normal "
-                        >
-                          {trimAddress(agent?.address)}
+                        {
+                          agent?.address ?
+                            <div
+                              onClick={() => copyAddress(agent?.addres)}
+                              className="flex gap-1 cursor-pointer items-center text-white/80 text-xs hover:text-white/100 font-normal "
+                            >
+                              {trimAddress(agent?.address)}
 
-                          <Copy size={"12px"} />
-                        </div>
+                              <Copy size={"12px"} />
+                            </div>
+
+                            : null
+                        }
+
                       </div>
                     </div>
 
@@ -112,9 +144,9 @@ const Agent = () => {
                       <div className="text-white/80 text-sm border h-6 w-8  font-normal line-clamp-2 border-white/30">
                         <Skeleton className="w-full h-full  border-primary border-[0.5px]  " />
                       </div>
-                      <div className="text-white/80 text-sm border h-6 w-8  font-normal line-clamp-2 border-white/30">
+                      {/* <div className="text-white/80 text-sm border h-6 w-8  font-normal line-clamp-2 border-white/30">
                         <Skeleton className="w-full h-full  border-primary border-[0.5px]  " />
-                      </div>
+                      </div> */}
                     </>
 
 
@@ -129,11 +161,11 @@ const Agent = () => {
                         <Twitter size={"20px"} />
                       </div>
 
-                      <div className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30 cursor-pointer hover:bg-white/10">
+                      {/* <div className="text-white/80 text-sm border h-max p-2 py-1 font-normal line-clamp-2 border-white/30 cursor-pointer hover:bg-white/10">
 
                         {" "}
                         <Globe size={"20px"} />
-                      </div>
+                      </div> */}
                     </>
                 }
 
@@ -207,7 +239,7 @@ const Agent = () => {
               }
 
             </div>{
-              agent?.name !== null ?
+              agent?.address ?
                 <GraphSection data={agent} isLoading={loadingAgent} />
                 : null
             }

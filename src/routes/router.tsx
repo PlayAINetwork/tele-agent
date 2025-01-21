@@ -5,7 +5,8 @@ export const ROUTES = {
         rogueagent: "/rogueagent",
         agent: "/agent/:id",
         rogue: "/rogue",
-        twitterAuth: "/auth/twitter/callback"
+        twitterAuth: "/auth/twitter/callback",
+        info: "/info",
 
 
 

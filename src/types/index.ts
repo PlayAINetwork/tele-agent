@@ -10,6 +10,7 @@ interface GraphData {
 
 }
 export interface Agent {
+  id:string;
   address: string;
   name: string;
   twitter: string;
