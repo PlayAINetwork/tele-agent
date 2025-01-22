@@ -1,7 +1,6 @@
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTrigger } from '../ui/dialog';
 import { ChevronRight, X } from 'lucide-react';
 import { Button } from '../ui/button';
-import { IMAGES } from '@/assets';
 import { Agent } from '@/types';
 import getTwitterAuthUrl from '@/hooks/api/auth/getTwitterAuthUrl';
 import { useEffect, useMemo, useState } from 'react';
