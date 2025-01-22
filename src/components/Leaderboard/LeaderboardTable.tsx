@@ -186,7 +186,7 @@ const LeaderboardTable = () => {
               {agentsData?.result?.map((agent: any) => (
                 <TableRow className="text-sm  hover:bg-[#1C1C1C]" key={agent?.address}>
                   <TableCell
-                    className="sticky  min-w-[100px] max-w-[150px] truncate cursor-pointer "
+                    className="sticky  min-w-[180px] max-w-[200px] truncate cursor-pointer "
                   // onClick={(e) => {
                   //   e.stopPropagation();
                   //   if (agent?.address)
@@ -252,11 +252,11 @@ const LeaderboardTable = () => {
 
                   <TableCell className="text-center">
                     <div className="flex justify-around">
-                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenMarketCap ??0)}
+                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenMarketCap ?? 0)}
 
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
-                          data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.marketCapGraph,7) : agent?.marketCapGraph}
+                          data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.marketCapGraph, 7) : agent?.marketCapGraph}
 
                           dataKey="value"
                           color="#3b82f6"
@@ -287,16 +287,16 @@ const LeaderboardTable = () => {
                       )} %`}
                     </TableCell> */}
                   <TableCell className="text-center">
-                    ${getTimeBaseData(time?.value, agent)?.tokenPrice.toFixed(8)??0}
+                    ${getTimeBaseData(time?.value, agent)?.tokenPrice.toFixed(8) ?? 0}
 
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex justify-around">
 
-                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenHoldersCount??0)}
+                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenHoldersCount ?? 0)}
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
-                          data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.holdersGraph,7) : agent?.holdersGraph}
+                          data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.holdersGraph, 7) : agent?.holdersGraph}
 
                           dataKey="value"
                           color="#3b82f6"
@@ -305,7 +305,7 @@ const LeaderboardTable = () => {
                     </div>
 
                   </TableCell>
-                  <TableCell className="text-center uppercase">
+                  <TableCell className="text-center text-xs md:text-sm uppercase">
                     {
                       agent?.verified ? <span className="text-[#89FC96]">verified</span> :
                         <VerifyTwitter data={agent} />

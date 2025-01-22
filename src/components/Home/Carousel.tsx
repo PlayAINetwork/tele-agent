@@ -18,7 +18,7 @@ const getItemClasses = (order: number) => {
 
   switch (order) {
     case 0: // Center (Focus)
-      return `${baseClasses} z-30 h-4/5 w-full md:w-3/6 top-[9.5%] md:left-[25%]`;
+      return `${baseClasses} z-30 h-4/5 w-full md:w-3/6 md:top-[9.5%] md:left-[25%]`;
     case 1: // Left
       return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] md:top-[12.5%] left-0 md:left-[10%] opacity-75`;
     case 2: // Right
@@ -103,7 +103,7 @@ const CourseCarousel = () => {
                     <Skeleton className="w-full h-full  border-primary border-[0.5px] rounded-[0px] " />
 
 
-                    <div className={` bottom-0 left-0 right-0 p-3 py-2 bg-card border-primary border-[0.5px] max-h-[60px] min-h-[30px]`}>
+                    <div className={` bottom- left-0 right-0 p-3 py-2 bg-card border-primary border-[0.5px] max-h-[60px] min-h-[30px]`}>
                       <div className="flex justify-between">
                         <div className="flex gap-2 items-center">
 

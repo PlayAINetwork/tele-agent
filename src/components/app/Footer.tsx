@@ -28,7 +28,7 @@ const Footer = () => {
       
 
       <div className="flex  justify-between w-full border-t-[1px] border-[#959595] items-center bg-secondary  p-2 md:p-4  py-2">
-        <div>
+        <div className="flex gap-4 justify-center  md:justify-start w-full">
           {/* <Button
             className="text-md"
             onClick={() => copy("27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL")}
@@ -44,7 +44,7 @@ const Footer = () => {
           Copyright © 2025 agentexperience • All Rights Reserved
           </div>
         </div>
-        <div className="flex">
+        {/* <div className="flex"> */}
           {/* <Button
             onClick={() =>
               open(
@@ -58,7 +58,7 @@ const Footer = () => {
             <div className="mt-1">BUY $ROGUE</div>
           </Button> */}
           
-        </div>{" "}
+        {/* </div>{" "} */}
       </div>
     </div>
   );
