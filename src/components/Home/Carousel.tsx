@@ -10,6 +10,7 @@ import { Skeleton } from "../ui/skeleton";
 import useGetFeaturedAgents from "@/hooks/api/agents/useFeaturedAgent";
 import useGetAgentVideo from "@/hooks/api/agents/useGetAgentVideo";
 import AgentTv from "../TvPanel/AgentTv";
+import VideoPlayer from "../TvPanel/AgentRecTv";
 
 
 const getItemClasses = (order: number) => {
@@ -181,8 +182,11 @@ const CarouselItem = ({ data, index, orders }: { data: any, index: number, order
         </div>
         {
           agentVideo?.result.length > 0 && orders[index] == 0 ?
+            agentVideo?.result.length > 1 ?
+              <VideoPlayer videoUrl={agentVideo?.result[1]?.url} />
 
-            <AgentTv videoUrl={agentVideo?.result[0]?.url} />
+              :
+              <AgentTv videoUrl={agentVideo?.result[0]?.url} />
 
             :
             <img
