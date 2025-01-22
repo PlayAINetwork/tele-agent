@@ -192,13 +192,18 @@ export const AgentItem = ({
         <div className="text-sm uppercase w-full flex flex-col justify-between gap-0 ">
           <div className="flex font-medium gap-2  text-md">
             <p className="text-[16px]">{data?.name}</p>
-            {/* <div
+            {/* {
+              data?.live ?
+              <div
               className="rounded-xs h-min  bg-primary text-[#000] gap-1 p-1 py-[2px]  text-[10px]  flex justify-center items-center font-bold
             "
             >
               <div className="w-1 rounded-[50%] h-1 bg-[#000]"></div>
               <p className="pt-[2px] leading-[80%] text-[10px]  ">Live</p>
-            </div> */}
+            </div>
+            :null
+            } */}
+           
           </div>
           <div className="flex text-[#D4D4D4] w-full font-normal text-[12px] justify-between ">
             <div className="flex leading-[100%]">

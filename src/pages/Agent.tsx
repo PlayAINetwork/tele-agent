@@ -51,7 +51,7 @@ const Agent = () => {
               <ArrowLeft size={"18px"} />
               <p>explore all</p>
             </div>
-            <div className="min-h-[230px] md:min-h-[400px]">
+            <div className="min-h-[20px] md:min-h-[400px]">
               {agentVideo?.result?.length > 0 ?
                 loadingAgentVideo ?
                   <div className="text-white/80 text-sm border h-full w-full  font-normal line-clamp-2 border-white/30">
@@ -60,11 +60,11 @@ const Agent = () => {
                   :
                   <div className="h-full border border-[rgba(241, 246, 242, 1)]">
                     {
-                      agentVideo?.result.length > 1 && agentVideo?.result[0]?.live ?
-                        <VideoPlayer videoUrl={agentVideo?.result[1]?.url} />
-
-                        :
-                        <AgentTv videoUrl={agentVideo?.result[0]?.url} />
+                     agent?.live?
+                     
+                     <AgentTv videoUrl={agentVideo?.result?.find((video: any) => video.live)?.url} />
+                     :
+                     <VideoPlayer videoUrl={agentVideo?.result?.find((video: any) => !video.live)?.url ?? agentVideo?.result[0]?.url} />
 
                     }
                     {/* <VideoPlayer videoUrl={'https://assets.podcast.playai.network/master.m3u8'}  title="My Video"/> */}

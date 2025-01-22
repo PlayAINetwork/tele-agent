@@ -98,7 +98,7 @@ const CourseCarousel = () => {
           <div className="relative w-full h-[85%] md:h-[90%] py-6">
             {
               loadingAgent ?
-                [...Array(5)].map((_, index) => (
+                [...Array(3)].map((_, index) => (
                   <div key={index} className={getItemClasses(orders[index]) + " bg-gray-800 "}>
                     <Skeleton className="w-full h-full  border-primary border-[0.5px] rounded-[0px] " />
 
@@ -160,6 +160,7 @@ export default CourseCarousel;
 
 const CarouselItem = ({ data, index, orders }: { data: any, index: number, orders: any }) => {
   const navigate = useNavigate();
+
   const { agentVideo } = useGetAgentVideo(data?.id ?? "")
 
   return (
@@ -182,11 +183,11 @@ const CarouselItem = ({ data, index, orders }: { data: any, index: number, order
         </div>
         {
           agentVideo?.result.length > 0 && orders[index] == 0 ?
-            agentVideo?.result.length > 1 ?
-              <VideoPlayer videoUrl={agentVideo?.result[1]?.url} />
+            data?.live ?
+              <AgentTv videoUrl={agentVideo?.result?.find((video: any) => video.live)?.url} />
 
               :
-              <AgentTv videoUrl={agentVideo?.result[0]?.url} />
+              <VideoPlayer videoUrl={agentVideo?.result?.find((video: any) => !video.live)?.url ?? agentVideo?.result[0]?.url} />
 
             :
             <img
@@ -207,10 +208,21 @@ const CarouselItem = ({ data, index, orders }: { data: any, index: number, order
               src={data?.avatar}
               alt=""
             />
-            <div className="flex flex-col gap-0">
+            <div className="flex items-center gap-2">
               <p className="text-white text-md font-semibold capitalize ">
                 {data?.name}
               </p>
+              {
+                data?.live ?
+                <div
+                className="rounded-xs h-min  bg-primary text-[#000] gap-1 p-1 py-[2px]  text-[10px]  flex justify-center items-center font-bold
+              "
+              >
+                <div className="w-1 rounded-[50%] h-1 bg-[#000]"></div>
+                <p className="pt-[2px] leading-[80%] text-[10px]  ">Live</p>
+              </div>:null
+              }
+              
               {/* <p className="text-white/80 text-sm  font-normal line-clamp-2">
           $ROGUE
         </p> */}
