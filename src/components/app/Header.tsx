@@ -63,16 +63,11 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
               navigate("/agent/def99ef5-2a4c-4f03-9614-b91ff3503217")
               onClose();
             }}
-            className="w-full uppercase"
+            className="w-full uppercase text-white"
           >
         {"> Watch_Rogue <"}
           </Button>
-          <div onClick={() => {
-            // onClose();
-
-          }}>
-
-          </div>
+         
 
         </div>
       </div>
