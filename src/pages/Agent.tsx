@@ -215,7 +215,7 @@ const Agent = () => {
                       hasSkill(agent, "audio") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
                         <DYNAMICICONS.audioSkil color={hasSkill(agent, "audio") ? "#89FC96" : "#89FC96"} />
 
-                        social
+                        audio
                       </div> : null
 
                     }
@@ -223,7 +223,7 @@ const Agent = () => {
                       hasSkill(agent, "visual") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
                         <DYNAMICICONS.visualSkil color={hasSkill(agent, "visual") ? "#89FC96" : "#89FC96"} />
 
-                        social
+                        visual
                       </div> : null
 
                     }
@@ -231,7 +231,7 @@ const Agent = () => {
                       hasSkill(agent, "immersive") ? <div className="items-center flex gap-1 bg-[#092D0D] border text-[#89FC96] border-[#D4D4D433] text-sm px-3 py-1 uppercase font-normal">
                         <DYNAMICICONS.immearsivelSkil color={hasSkill(agent, "immersive") ? "#89FC96" : "#89FC96"} />
 
-                        social
+                        immersive
                       </div> : null
 
                     }
