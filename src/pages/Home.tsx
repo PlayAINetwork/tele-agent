@@ -14,7 +14,7 @@ const Home = () => {
     <div className="h-full w-full flex binaria relative">
       <Navbar />
       <div className="w-full h-full overflow-y-scroll">
-        <div className="h-[330px] md:h-[450px] relative">
+        <div className="h-[330px] md:min-h-[450px] relative">
           <CourseCarousel />
         </div>
 

@@ -10,7 +10,7 @@ const Footer = () => {
     <div>
       {
         pathname == "/" ?
-        <div className="hidden md:flex">
+        <div className="hidden md:flex " >
         <div className=" w-[280px]  ">
           <Button variant={"outline"} className="w-full text-primary hover:text-primary"
           onClick={()=>navigate("/rogueagent")}

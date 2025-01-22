@@ -17,16 +17,15 @@ const getItemClasses = (order: number) => {
 
   switch (order) {
     case 0: // Center (Focus)
-      return `${baseClasses} z-30 h-4/5 w-full md:w-3/5 top-[9.5%] md:left-[20%]`;
+      return `${baseClasses} z-30 h-4/5 w-full md:w-3/6 top-[9.5%] md:left-[25%]`;
     case 1: // Left
-      return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] md:top-[12.5%] left-0 md:left-[5%] opacity-75`;
+      return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] md:top-[12.5%] left-0 md:left-[10%] opacity-75`;
     case 2: // Right
-      return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] md:top-[12.5%] right-0 md:left-[50%] opacity-75`;
+      return `${baseClasses} z-20 h-3/4 w-4/5 md:w-[45%] md:top-[12.5%] right-0 md:left-[45%] opacity-75`;
     default:
       return baseClasses;
   }
 };
-
 const CourseCarousel = () => {
   // const [orders, setOrders] = useState([3, 4, 0, 1, 2]);
   const [orders, setOrders] = useState([1, 2, 0]);
