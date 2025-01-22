@@ -242,7 +242,7 @@ const GenerateVedio = () => {
         )}
 
         <div className="flex gap-4 flex-wrap w-[100%] ">
-          {!videoGeneraing ? (
+          {videoGeneraing ? (
             <div className="h-[60px] rounded w-[100%] flex gap-2  ">
               <div className="h-[100%] rounded w-[90px] bg-foreground animate-pulse"></div>
               <div className="w-full flex flex-col justify-between">
