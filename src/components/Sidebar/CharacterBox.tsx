@@ -218,13 +218,13 @@ const CharacterBox = () => {
   };
 
   return (
-    <div className="flex flex-col  gap-0 h-full">
+    <div className="flex flex-col  gap-0 h-full ">
       {/* <div className="border-b-[1px] border-primary py-2 px-2 flex uppercase justify-end w-full">
         <p className="text-[13px] text-[#B6B6B6]">
           characteer_injc_cost_30,000_$ROGUE. added for hour only.
         </p>
       </div> */}
-      <div className="relative flex-1 bg-muted overflow-auto h-full ">
+      <div className="relative flex-1 bg-muted overflow-auto h-full min-h-[400px] ">
         {isLive ? null : (
           <div className="absolute w-full h-full z-10">
             <img src={`${IMAGES.notshow}`} alt="" className="h-full  w-full " />

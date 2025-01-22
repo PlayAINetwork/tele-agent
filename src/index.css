@@ -271,7 +271,7 @@ textarea:focus-visible {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 4px;
 }
 
 /* Track */
@@ -289,4 +289,14 @@ textarea:focus-visible {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #89FC9699;
+}
+
+.hideScrollbrar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hideScrollbrar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

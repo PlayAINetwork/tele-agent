@@ -167,7 +167,7 @@ const VideoPlayer = ({ videoUrl}: VideoPlayerProps) => {
 //   };
 
   return (
-    <div className="binaria w-full h-full overflow-hidden border border-[rgba(241, 246, 242, 1)]">
+    <div className="binaria w-full h-full overflow-hidden ">
       <div className="h-full">
        
 

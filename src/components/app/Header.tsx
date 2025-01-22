@@ -269,7 +269,7 @@ const Header = () => {
           }}
         >
           <div className="md:hidden flex cursor-pointer" onClick={() => navigate("/")}>
-            <img src={IMAGES.logo} alt="" className="max-w-[10rem]" />
+            <img src={IMAGES.logo} alt="" className="max-w-[11rem]" />
           </div>
           <div className="hidden md:flex h-full text-sm gap-[1px] ">
             <div className="cursor-pointer" onClick={() => navigate("/")}>
@@ -406,12 +406,13 @@ const Header = () => {
 
       {/* Mobile Menu Button */}
       <div className="md:hidden flex items-center">
+      
         <Button
           variant="ghost"
           onClick={() => setIsMobileMenuOpen(true)}
           className="p-2"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="min-h-7 min-w-7" />
         </Button>
       </div>
 

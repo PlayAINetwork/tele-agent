@@ -30,7 +30,7 @@ function AgentCard({ data }: { data: any }) {
         <img
           src={data?.avatar}
           alt={data?.name}
-          className="w-full h-full object-cover shadow-lg  transition-all duration-500"
+          className="w-full h-full object-cover object-top  md:object-center shadow-lg  transition-all duration-500"
         />
       </div>
 

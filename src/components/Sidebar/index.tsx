@@ -10,14 +10,77 @@ import TeerminalBox from "./TeerminalBox";
 import CharacterBox from "./CharacterBox";
 import StackBox from "./StackBox";
 import { useParams } from "react-router-dom";
+import { formatBigNumber } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
+import { Program, Provider } from "@project-serum/anchor";
+import { useConnection } from "@solana/wallet-adapter-react";
 
 
 
 const Sidebar = () => {
   const { id } = useParams();
+  const [totalStaked, setTotalStaked] = useState(0);
+  const { connection } = useConnection();
 
   // const config = genConfig(address);
 
+  const getTotalStakedBalance = async (
+    connection: Connection
+  ): Promise<number> => {
+    const programId = HOST_CONTRACT.PROGRAM_ID;
+    try {
+      // Create program instance
+      const program = new Program(HOST_CONTRACT.IDL, new PublicKey(programId), {
+        connection,
+      } as Provider);
+
+      // Get PlatformConfig PDA
+      const [platformConfigPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_config")],
+        new PublicKey(programId)
+      );
+
+      // Get platform config data
+      await program.account.platformConfig.fetch(platformConfigPDA);
+
+      // Get platform mint token account PDA
+      const [platformMintTokenAccountPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_mint_token_account")],
+        new PublicKey(programId)
+      );
+
+      // Get token balance
+      const tokenBalance = await connection.getTokenAccountBalance(
+        platformMintTokenAccountPDA
+      );
+      // Return the balance as a number
+      return (
+        Number(tokenBalance.value.amount) /
+        Math.pow(10, tokenBalance.value.decimals)
+      );
+    } catch (error) {
+      console.error("Error getting total staked balance:", error);
+      throw error;
+    }
+  };
+  useEffect(() => {
+    const fetchTotalStaked = async () => {
+      try {
+        const balance = await getTotalStakedBalance(connection);
+        setTotalStaked(balance);
+      } catch (err) {
+        console.log(
+          err instanceof Error
+            ? err.message
+            : "Unknown error occurred while fetching platform stake count!"
+        );
+      }
+    };
+
+    fetchTotalStaked();
+  }, []);
 
   return (
     <aside
@@ -40,50 +103,55 @@ const Sidebar = () => {
           </div> */}
         </Collapsible>
 
-     
-        
-        {
-          id === "def99ef5-2a4c-4f03-9614-b91ff3503217" || id === "795fe77a-14b2-45f7-84c7-1bc532dd766d"
 
-          ?
-          <Collapsible titel={"terminal"} subtext={"brain of the agent to verify rag, memory, and automated tasks."}>
-          <TerminalDemo />
-        </Collapsible>
 
-          :null
-        }
-       
         {
           id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
 
-          ?
-          <Collapsible titel={"topic injection"} subtext={"add custom topics or links for agents."}>
-          <TeerminalBox />
-        </Collapsible>
+            ?
+            <Collapsible titel={"terminal"} subtext={"brain of the agent to verify rag, memory, and automated tasks."}>
+              <TerminalDemo />
+            </Collapsible>
 
-          :null
+            : null
         }
 
         {
           id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
 
-          ?
-          <Collapsible titel={"character injection"} subtext={"add custom topics or links for agents."}>
-          <CharacterBox />
-        </Collapsible>
+            ?
+            <Collapsible titel={"topic injection"} subtext={"add custom topics or links for agents."}>
+              <TeerminalBox />
+            </Collapsible>
 
-          :null
+            : null
+        }
+
+        {
+          id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
+
+            ?
+            <Collapsible titel={"character injection"} subtext={"add custom topics or links for agents."}>
+              <CharacterBox />
+            </Collapsible>
+
+            : null
         }
         {
           id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
 
-          ?
-          <Collapsible titel={"Staking $ROGUE"} subtext={"Stake $Rogue to earn rewards."}>
-          <StackBox />
-        </Collapsible>
-          :null
+            ?
+            <Collapsible titel={"Staking $ROGUE"} subtext={"Stake $Rogue to earn rewards."} rightSide={<div className="">
+              <div className="flex items-center gap-1">
+                <span>{`${formatBigNumber(totalStaked) ?? 0}`}</span>
+                <span >STAKED</span>
+              </div>
+            </div>}>
+              <StackBox />
+            </Collapsible>
+            : null
         }
-      
+
 
         {/* <div className="flex flex-col gap-0 h-full">
             <Tabs />

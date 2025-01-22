@@ -39,7 +39,7 @@ const Footer = () => {
           </Button> */}
 
           <div
-          className="text-[#959595] text-[10px] md:text-sm" 
+          className="text-[#959595] text-[10px] md:text-sm uppercase" 
           >
           Copyright © 2025 agentexperience • All Rights Reserved
           </div>

@@ -128,7 +128,7 @@ const LeaderboardTable = () => {
 
         </div>
       </div>
-      <div className="border-[.5px] max-w-full w-full min-h-[400px] max-h-[680px] overflow-x-auto overflow-y-hidden">
+      <div className="border-[.5px] max-w-full w-full min-h-[400px] max-h-[680px] overflow-x-auto hideScrollbrar overflow-y-hidden">
         <Table
           containerClassname="w-full
               [&_th]:bg-[#1A1F20] 
@@ -184,7 +184,7 @@ const LeaderboardTable = () => {
           ) : (
             <TableBody>
               {agentsData?.result?.map((agent: any) => (
-                <TableRow className="text-sm hover:bg-[#1C1C1C]" key={agent?.address}>
+                <TableRow className="text-sm  hover:bg-[#1C1C1C]" key={agent?.address}>
                   <TableCell
                     className="sticky  min-w-[100px] max-w-[150px] truncate cursor-pointer "
                   // onClick={(e) => {

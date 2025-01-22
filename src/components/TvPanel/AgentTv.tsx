@@ -1,7 +1,7 @@
 
 const AgentTv = ({videoUrl}:{videoUrl:string}) => {
   return (
-    <div className="binaria w-full h-full overflow-hidden border border-[rgba(241, 246, 242, 1)]">
+    <div className="binaria w-full h-full overflow-hidden ">
       <div className=" relative w-full h-full">
 
         {/* <div className="absolute font-thin left-2 top-2 uppercase">
@@ -12,6 +12,7 @@ const AgentTv = ({videoUrl}:{videoUrl:string}) => {
         <iframe
           width="100%"
           height="100%"
+          
           src={
             videoUrl
           }

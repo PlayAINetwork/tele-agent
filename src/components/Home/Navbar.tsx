@@ -44,7 +44,7 @@ const Navbar = () => {
       <div className="flex h-full  flex-col justify-between">
         <div
           className={cn(
-            "flex  items-center gap-2   w-full px-4 pb-2",
+            "flex  items-center gap-2   w-full px-4 pb-0",
             hideSidebar ? "justify-center" : "justify-between "
           )}
         >
@@ -60,10 +60,10 @@ const Navbar = () => {
             className="w-6 h-6  cursor-pointer bg-[#00120A]"
             onClick={() => setHideSidebar((prev) => !prev)}
           >
-            {hideSidebar ? <LogIn absoluteStrokeWidth /> : <LogOut />}
+            {hideSidebar ? <LogIn absoluteStrokeWidth size={"1.2rem"} /> : <LogOut size={"1.2rem"}  />}
           </div>
         </div>
-        <div className="flex-1 px-4 overflow-y-scroll">
+        <div className="flex-1 px-4 overflow-y-scroll hideScrollbrar">
           <div className="flex flex-col gap-3 ">
             <div className="flex-1 ">
               {!hideSidebar && (
