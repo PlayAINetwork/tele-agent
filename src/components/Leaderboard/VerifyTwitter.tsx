@@ -110,7 +110,7 @@ function VerifyTwitter({ data }: { data: Agent }) {
                                         </div>
                                     </div>
 
-                                    <div className="flex gap-2">
+                                    {/* <div className="flex gap-2">
                                         <img
                                             className="w-10 h-10 rounded-md"
                                             src={IMAGES.playaidrop}
@@ -120,7 +120,7 @@ function VerifyTwitter({ data }: { data: Agent }) {
                                             <p className="text-[20px]">20</p>
                                             <p className="text-[12px]">$PLAI</p>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
