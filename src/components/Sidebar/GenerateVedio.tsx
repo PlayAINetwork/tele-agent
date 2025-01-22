@@ -14,8 +14,7 @@ import {
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
-import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+
 import {
   Dialog,
   DialogContent,
@@ -26,7 +25,7 @@ import {
 import { trimAddress, truncateText } from "@/lib/utils";
 import {
   Play,
- 
+
   Square,
   Voicemail,
   Volume2,
@@ -45,7 +44,7 @@ const GenerateVedio = () => {
   const [status, setStatus] = useState<any>(null);
   // const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const createVedio = useMutation(api.functions.createVedio.create);
+  // const createVedio = useMutation(api.functions.createVedio.create);
   const [recentlist, setRecentlist] = useState<any>(null);
 
   const injectAmount = 30000;
@@ -169,8 +168,8 @@ const GenerateVedio = () => {
       setStatus("Generating Video...");
 
       const response = await axios.post(
-        // "https://render-video.agentexperience.live/generate",
-        "https://aaac-2a01-4f8-c012-6c7-00-1.ngrok-free.app/generate",
+        "https://render-video.agentexperience.live/generate",
+        // "https://aaac-2a01-4f8-c012-6c7-00-1.ngrok-free.app/generate",
         // "https://render.dhanush29.me/generate",
         { prompt: prompt, signature: signature, wallet: publicKey?.toString() },
         {
@@ -187,11 +186,11 @@ const GenerateVedio = () => {
         });
       }
       if (response.status == 200) {
-        createVedio({
-          url: response.data.url,
-          user: publicKey?.toString(),
-          prompt: prompt,
-        });
+        // createVedio({
+        //   url: response.data.url,
+        //   user: publicKey?.toString(),
+        //   prompt: prompt,
+        // });
         setSelectedFile([1, response.data.url, response.data.title]);
         setIsOpen(true);
 
@@ -220,16 +219,14 @@ const GenerateVedio = () => {
     }
   };
   return (
-    <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
-     
-      <div className="flex flex-col flex-1   border-primary border-[1px]  gap-4 overflow-auto h-full  p-4 rounded-md bg-[#131314] ">
-        {recentlist?.length > 0 ? (
-          <p className="text-[15px] font-600 ">Recent</p>
-        ) : (
-          <div className="flex gap-2 flex-wrap w-[100%] animate-pulse">
-            <div className="h-[20px] rounded w-2/5  bg-foreground"></div>
+    <div className="   flex flex-col gap-4  h-[400px] justify-between  ">
 
-            <div className="grid grid-cols-2 w-[100%]  gap-2">
+      <div className="flex flex-col flex-1     overflow-auto h-full  p-2 rounded-md  ">
+        {recentlist?.length > 0 ? (
+          null) : (
+          <div className="flex gap-2 flex-wrap w-[100%] animate-pulse">
+
+            <div className="grid grid-cols-1 w-[100%]  gap-2">
               <div className="h-[80px] rounded w-[100%]  bg-foreground"></div>
               <div className="h-[80px] rounded w-[100%] bg-foreground"></div>
               <div className="h-[80px] rounded w-[100%] bg-foreground"></div>
@@ -244,9 +241,19 @@ const GenerateVedio = () => {
           </div>
         )}
 
-        <div className="flex gap-2 flex-wrap w-[100%] ">
-          {videoGeneraing ? (
-            <div className="h-[100px] rounded w-[48%]  bg-foreground animate-pulse"></div>
+        <div className="flex gap-4 flex-wrap w-[100%] ">
+          {!videoGeneraing ? (
+            <div className="h-[60px] rounded w-[100%] flex gap-2  ">
+              <div className="h-[100%] rounded w-[90px] bg-foreground animate-pulse"></div>
+              <div className="w-full flex flex-col justify-between">
+                <div className="w-full h-full flex gap-2 flex-col">
+                  <div className="h-[30%] rounded w-[100%] bg-foreground animate-pulse"></div>
+                  <div className="h-[30%] rounded w-[80%] bg-foreground animate-pulse"></div>
+                </div>
+                <div className="h-[20%] rounded w-[40%] bg-foreground animate-pulse"></div>
+
+              </div>
+            </div>
           ) : null}
 
           {recentlist?.map((recent: any) => (
@@ -254,20 +261,24 @@ const GenerateVedio = () => {
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
                   <div
-                    className={`w-[48%]  max-h-[100px] cursor-pointer   relative rounded-md overflow-hidden ${recent[3] === publicKey?.toString() ? "border-4" : null}`}
+                    className={`w-[100%] flex cursor-pointer    overflow-hidden ${recent[3] === publicKey?.toString() ? "border-4" : null}`}
                     onClick={() => setSelectedFile(recent)}
                   >
                     <img
-                      width={"100%"}
-                      height={"100%"}
-                      className="object-contain"
+
+                      className=" w-[115px] h-[57px] object-cover object-top "
                       src="https://pbs.twimg.com/profile_images/1859652186025885696/cPRtjjm9_400x400.jpg"
                       alt=""
                     />
-                    <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/50  group-hover:opacity-100 transition-opacity flex justify-center gap-4">
-                      <p className="text-[12px] ">
+                    <div className="p-1  w-full group-hover:opacity-100 transition-opacity flex flex-col justify-between  gap-4">
+                      <p className="text-md uppercase ">
                         {truncateText(recent[2]?.toString())}{" "}
                       </p>
+                      <div className="flex">
+                        <div className="text-sm text-[#B6B6B6]">{">>BY:" + trimAddress(recent[3], 4)}</div>
+
+
+                      </div>
                     </div>
                   </div>
                 </DialogTrigger>
@@ -284,7 +295,7 @@ const GenerateVedio = () => {
                     ) : null}
                     {selectedFile !== null ? (
                       <div className="py-4">
-                                                   <VideoPlayer videoUrl={selectedFile[1]}  user={selectedFile[3]} text={selectedFile[2]}/>
+                        <VideoPlayer videoUrl={selectedFile[1]} user={selectedFile[3]} text={selectedFile[2]} />
 
                       </div>
                     ) : null}
@@ -297,16 +308,16 @@ const GenerateVedio = () => {
         <div className="flex gap-3 flex-wrap"></div>
       </div>
       {connected ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-0">
           <Textarea
             disabled={disableAction}
-            className="h-[100px] rounded-lg  placeholder-white"
+            className="h-[50px] rounded-[0] text-[#B6B6B6] uppercase  placeholder-[#B6B6B6] bg-transparent"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Enter your prompt to create video"
           />
           <Button
-            className="w-full uppercase rounded-[40px]"
+            className="w-full uppercase rounded-[0] bg-[#E8E8E8]"
             onClick={transferTokens}
             disabled={videoGeneraing || !connected || disableAction}
           >
@@ -376,8 +387,8 @@ export const VideoPlayer = ({
         controls
         className="w-full rounded-lg"
         src={videoUrl}
-        // muted={muted}
-        // onEnded={() => setIsPlaying(false)}
+      // muted={muted}
+      // onEnded={() => setIsPlaying(false)}
       />
       <div className="flex font-[500] h- items-center bg-primary justify-between  border-t border-primary">
         <div className="flex gap-0 h-[40px] text-md  ">

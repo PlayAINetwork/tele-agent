@@ -16,6 +16,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
 import { Program, Provider } from "@project-serum/anchor";
 import { useConnection } from "@solana/wallet-adapter-react";
+import GenerateVedio from "./GenerateVedio";
 
 
 
@@ -122,6 +123,17 @@ const Sidebar = () => {
             ?
             <Collapsible titel={"topic injection"} subtext={"add custom topics or links for agents."}>
               <TeerminalBox />
+            </Collapsible>
+
+            : null
+        }
+
+{
+          id === "def99ef5-2a4c-4f03-9614-b91ff3503217"
+
+            ?
+            <Collapsible titel={"video creation"} subtext={"create custom videos with the agent by using simple prompts."}>
+              <GenerateVedio />
             </Collapsible>
 
             : null
