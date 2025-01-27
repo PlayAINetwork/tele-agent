@@ -92,22 +92,22 @@ const LeaderboardTable = () => {
   }, [agents]);
   const timeInterval = [{ type: '1H', value: 'hour' }, { type: '6H', value: '6hour' }, { type: '24H', value: 'day' }, { type: '7D', value: 'week' }, { type: '30D', value: 'month' }]
 
-  const getTimeBaseData = (time: string, data: any) => {
+  // const getTimeBaseData = (time: string, data: any) => {
 
-    if (time === 'week') {
-      return data?.dataPoints?._7DaysAgo
-    } else if (time === 'month') {
-      return data?.dataPoints?._30DaysAgo
+  //   if (time === 'week') {
+  //     return data?.dataPoints?._7DaysAgo
+  //   } else if (time === 'month') {
+  //     return data?.dataPoints?._30DaysAgo
 
-    } else if (time === 'day') {
-      return data?.dataPoints?._24HoursAgo
-    } else if (time === 'hour') {
-      return data?.dataPoints?._1HourAgo
-    } else if (time === '6hour') {
-      return data?.dataPoints?._6HoursAgo
-    }
+  //   } else if (time === 'day') {
+  //     return data?.dataPoints?._24HoursAgo
+  //   } else if (time === 'hour') {
+  //     return data?.dataPoints?._1HourAgo
+  //   } else if (time === '6hour') {
+  //     return data?.dataPoints?._6HoursAgo
+  //   }
 
-  }
+  // }
 
   return (
     <div className=" w-full overflow-hidden relative">
@@ -116,7 +116,7 @@ const LeaderboardTable = () => {
           <p className="leading-[100%] pt-1">RANKINGS</p>
         </div>
 
-        <div className="flex border-[.5px] h-max">
+     <div className="flex border-[.5px] h-max">
           {
             timeInterval?.map((el, index) => (
               <div key={index} onClick={() => setTime(el)} className={`p-1 px-2 text-sm cursor-pointer border-r-[.5px] ${time.type === el.type ? 'bg-primary text-black' : 'text-white'}`}>
@@ -126,7 +126,7 @@ const LeaderboardTable = () => {
             ))
           }
 
-        </div>
+        </div> 
       </div>
       <div className="border-[.5px] max-w-full w-full min-h-[400px] max-h-[680px] overflow-x-auto hideScrollbrar overflow-y-hidden">
         <Table
@@ -224,27 +224,27 @@ const LeaderboardTable = () => {
                     className="text-center"
                   >
                     <div className="w-full justify-center items-center flex ">
-                      <DYNAMICICONS.terminalSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+                      <DYNAMICICONS.terminalSkil w={"24px"} h={"24px"} color={hasSkill(agent, "terminal") ? "#89FC96" : "#959595"} />
 
                     </div>
 
                   </TableCell>
                   <TableCell className="text-center ">
                     <div className="w-full justify-center items-center flex ">
-                      <DYNAMICICONS.audioSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+                      <DYNAMICICONS.audioSkil w={"24px"} h={"24px"} color={hasSkill(agent, "audio") ? "#89FC96" : "#959595"} />
 
                     </div>
 
                   </TableCell>
                   <TableCell className="text-center ">
                     <div className="w-full justify-center items-center flex ">
-                      <DYNAMICICONS.visualSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+                      <DYNAMICICONS.visualSkil w={"24px"} h={"24px"} color={hasSkill(agent, "visual") ? "#89FC96" : "#959595"} />
 
                     </div>
                   </TableCell>
                   <TableCell className="text-center  justify-center items-center flex">
                     <div className="w-full justify-center items-center flex ">
-                      <DYNAMICICONS.immearsivelSkil w={"24px"} h={"24px"} color={hasSkill(agent, "social") ? "#89FC96" : "#959595"} />
+                      <DYNAMICICONS.immearsivelSkil w={"24px"} h={"24px"} color={hasSkill(agent, "immersive") ? "#89FC96" : "#959595"} />
 
                     </div>
                   </TableCell>
@@ -252,7 +252,8 @@ const LeaderboardTable = () => {
 
                   <TableCell className="text-center">
                     <div className="flex justify-around">
-                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenMarketCap ?? 0)}
+                      {/* {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenMarketCap ?? 0)} */}
+                      {formatBigNumber(Number(agent?.marketCap).toFixed(8)) ?? 0}
 
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
@@ -287,13 +288,16 @@ const LeaderboardTable = () => {
                       )} %`}
                     </TableCell> */}
                   <TableCell className="text-center">
-                    ${getTimeBaseData(time?.value, agent)?.tokenPrice.toFixed(8) ?? 0}
+                    ${Number(agent?.price).toFixed(8) ?? 0}
 
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex justify-around">
 
-                      {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenHoldersCount ?? 0)}
+                      {/* {formatBigNumber(getTimeBaseData(time?.value, agent)?.tokenHoldersCount ?? 0)} */}
+                    {/* ${Number(agent?.holders).toFixed(8) ?? 0} */}
+                    {formatBigNumber(agent?.holders)??0}
+
                       <div className="w-[60px] h-[35px]">
                         <SimpleAgentLineChart
                           data={time.value == "week" || time.value == "month" || time.value == "day" ? processGraphDataToSeven(agent?.holdersGraph, 7) : agent?.holdersGraph}

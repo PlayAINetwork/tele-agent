@@ -4,7 +4,6 @@ import { Menu, X } from "lucide-react";
 import {  trimAddress } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { IMAGES } from "@/assets";
-import StackPopup from "./StackPopup";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useAuthState } from "@/context/auth.context";
 import { useToast } from "@/hooks/use-toast";
@@ -30,7 +29,7 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
         <div className="flex flex-col gap-4 mt-4">
           {connected ? (
             <>
-              <StackPopup />
+              {/* <StackPopup /> */}
               <Button onClick={logout} className="w-full uppercase">
                 {trimAddress(address, 4) + " "}
                 {"[Disconnect]"}
@@ -56,7 +55,7 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
             {"> Leaderboard <"}
           </Button>
 
-          <Button 
+          {/* <Button 
             variant="ghost"
             onClick={() => {
               
@@ -66,7 +65,7 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
             className="w-full uppercase text-white"
           >
         {"> Watch_Rogue <"}
-          </Button>
+          </Button> */}
          
 
         </div>
@@ -77,7 +76,7 @@ const MobileMenu = ({ isOpen, onClose, connected, address, logout, setVisible, n
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  // const [isHovered, setIsHovered] = useState(false);
 
   
 
@@ -258,7 +257,7 @@ const Header = () => {
         <div
           className="w-full h-full bg-primary p-[2px]  uppercase"
           style={{
-            clipPath: connected ? "polygon(0 0, 96.3% 2%, 100% 100%, 0% 100%)" : "polygon(0 0, 96.1% 2%, 100% 100%, 0% 100%)",
+            clipPath: connected ? "polygon(0 0, 92.3% 2%, 100% 100%, 0% 100%)" : "polygon(0 0, 92.1% 2%, 100% 100%, 0% 100%)",
 
 
           }}
@@ -270,7 +269,7 @@ const Header = () => {
             <div className="cursor-pointer" onClick={() => navigate("/")}>
               <img src={IMAGES.logo} alt="" className="min-w-[12rem]" />
             </div>
-            <div
+            {/* <div
               className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
               style={{
                 clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
@@ -298,18 +297,21 @@ const Header = () => {
                   {"> Coming soon <"}
                 </span>
               </span>
-            </div>
+            </div> */}
             
 
             <div
               className="px-4 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
               onClick={() => navigate("/rogueagent")}
+              style={{
+                clipPath: "polygon(0 0, 85% 0%, 100% 100%, 0% 100%)",
+              }}
             >
               <span className="text-white relative transition-transform duration-300 ease-in-out">
                 {" > Leaderboard <"}
               </span>
             </div>
-            <div
+            {/* <div
               onClick={() => navigate("/agent/def99ef5-2a4c-4f03-9614-b91ff3503217")}
 
               className="w-full  px-4 pr-8 font-700 cursor-pointer h-full bg-[#383838] text-nowrap flex justify-center items-center"
@@ -318,7 +320,7 @@ const Header = () => {
               }}
             >
               {"> Watch_Rogue <"}
-            </div>
+            </div> */}
             {/* <VideoGenertionPopup /> */}
           </div>
         </div>

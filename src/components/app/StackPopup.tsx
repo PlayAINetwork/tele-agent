@@ -348,7 +348,7 @@ const StakePopup = () => {
     >
       <DialogTrigger asChild>
         <div
-          className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
+          className="px-12 w-full h-full cursor-pointer md:bg-neutral-700 flex justify-center items-center overflow-hidden"
           style={{
             clipPath: isMobile
               ? ""

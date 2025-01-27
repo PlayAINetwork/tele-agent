@@ -51,7 +51,11 @@ const Agent = () => {
               <ArrowLeft size={"18px"} />
               <p>explore all</p>
             </div>
-            <div className="min-h-[20px] md:min-h-[400px]">
+            {
+              id === "795fe77a-14b2-45f7-84c7-1bc532dd766d" ?
+null
+              :
+              <div className="min-h-[20px] md:min-h-[400px]">
               {agentVideo?.result?.length > 0 ?
                 loadingAgentVideo ?
                   <div className="text-white/80 text-sm border h-full w-full  font-normal line-clamp-2 border-white/30">
@@ -75,6 +79,8 @@ const Agent = () => {
 
               }
             </div>
+            }
+           
             <p className="text-lg  uppercase">
               {agentVideo?.result.length > 1 && agentVideo?.result[0]?.live ?
                 agentVideo?.result[1]?.name :
