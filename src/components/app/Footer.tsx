@@ -15,10 +15,10 @@ const Footer = () => {
     });
   };
   return (
-    <div className="flex  justify-between w-full border-t-[1px] border-primary bg-secondary p-4 py-2">
+    <div className="flex  justify-between w-full border-t-[1px] border-primary bg-secondary p-4 py-1">
       <div>
         <Button
-          className="text-md"
+          className="text-sm"
           onClick={() => copy("27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL")}
           variant={"ghost"}
         >
@@ -35,7 +35,7 @@ const Footer = () => {
             )
           }
           variant={"ghost"}
-          className="w-full text-md  py-1 px-6 h-auto uppercase rounded-[40px]"
+          className="w-full text-sm  py-1 px-6 h-auto uppercase rounded-[40px]"
         >
           <div className="mt-1">BUY $ROGUE</div>
         </Button>

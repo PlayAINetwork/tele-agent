@@ -1,0 +1,125 @@
+import DYNAMICICONS from '@/assets/DynamicIcon';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const CreateWithRogue = () => {
+  const list = [
+    {
+      title: "Design",
+      description: "RETAINS CONVERSATIONS FOR MORE NATURAL DIALOG",
+      icon: <DYNAMICICONS.robot/>,
+      isActive: <DYNAMICICONS.robot color="#010101"/>,
+      link:"/create-vedio"
+    },
+    {
+      title: "Customize",
+      description: "Deploy your agent and make it social media ready instantly.",
+      icon: <DYNAMICICONS.robot/>,
+      isActive: <DYNAMICICONS.robot color="#010101"/>,
+    },
+    {
+      title: "Deploy",
+      description: "RETAINS CONVERSATIONS FOR MORE NATURAL DIALOG",
+      icon: <DYNAMICICONS.robot/>,
+      isActive: <DYNAMICICONS.robot color="#010101"/>,
+    },
+  ];
+
+  return (
+    <div className="flex flex-col gap-6 ">
+      {list.map((item, index) => (
+        <Card key={index} {...item} />
+      ))}
+    </div>
+  );
+};
+
+export default CreateWithRogue;
+
+const Card = ({
+  title,
+  icon,
+  description,
+  isActive,
+  link,
+  borderColor = "green",
+}: {
+  title: string;
+  icon: any;
+  isActive: any;
+  description: string;
+  link?:string;
+  borderColor?: string;
+}) => {
+  const borderClass = {
+    green: "bg-green-500",
+    blue: "bg-blue-500",
+  }[borderColor];
+
+  const [isHover, setHover] = useState(false);
+  const navigate = useNavigate();
+
+  return (
+    <div 
+      className="w-full max-w-[900px] cursor-pointer mx-auto overflow-hidden group px-4"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onClick={() => link ? navigate(link) : null}
+    >
+      <div className="relative w-full h-[130px] transform transition-transform duration-500 ease-out hover:scale-[1.02]">
+        <div
+          className={`absolute inset-[1px] ${borderClass} transition-all duration-500`}
+          style={{
+            clipPath: "polygon(5% 0, 100% 0%, 95% 100%, 0% 100%)",
+          }}
+        />
+
+        <div
+          className={`absolute inset-[2px] transition-all duration-500 ease-out ${
+            isHover ? "bg-[#89FC96]" : "bg-[#1A1F20]"
+          }`}
+          style={{
+            clipPath: "polygon(5% 0, 100% 0%, 95% 100%, 0% 100%)",
+          }}
+        >
+          <div className="w-full h-full flex justify-between items-center px-14 py-4">
+            <div className="flex items-center gap-2 transition-all duration-500">
+              <div 
+                className={`transition-all duration-500 ease-out rounded-full p-3 transform ${
+                  isHover ? "bg-[#0101011A] scale-110" : "bg-[#89FC961A]"
+                }`}
+              >
+                {isHover ? isActive : icon}
+              </div>
+
+              <div className="flex flex-col gap-1 transition-all duration-500">
+                <h2 
+                  className={`transition-all duration-500 ease-out ${
+                    isHover ? "text-black translate-x-1" : "text-white"
+                  } text-xl font-semibold uppercase tracking-wider max-w-[80%]`}
+                >
+                  {title}
+                </h2>
+                <p 
+                  className={`transition-all duration-500 ease-out ${
+                    isHover ? "text-[#01010199] translate-x-1" : "text-[#F1F6F299]"
+                  } text-md tracking-wide uppercase`}
+                >
+                  {description}
+                </p>
+              </div>
+            </div>
+
+            <div 
+              className={`rounded-full transition-all duration-500 ease-out transform ${
+                isHover ? "translate-x-2 scale-110" : ""
+              }`}
+            >
+              <DYNAMICICONS.BIgArrow color={isHover ? '#000' : '#89FC96'}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

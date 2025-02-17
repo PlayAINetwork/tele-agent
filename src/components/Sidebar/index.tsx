@@ -8,7 +8,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import CharacterBox from "./CharacterBox";
 
 import GenerateVedio from "./GenerateVedio";
-import TerminalLogs from "./TerminalLogs";
+
 import { IMAGES } from "@/assets";
 
 const Sidebar = () => {
@@ -60,8 +60,6 @@ const Sidebar = () => {
                 <GlobelBox />
               ) : sidebarMenu === "inject" ? (
                 <TeerminalBox />
-              ) : sidebarMenu === "terminal" ? (
-                <TerminalLogs />
               ) : sidebarMenu === "create" ? (
                 <GenerateVedio />
               ) : (
