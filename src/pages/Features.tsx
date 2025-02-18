@@ -114,7 +114,7 @@ const FeatureCard = ({
 const {isMobile} = useAppCtx()
 
   return (
-    <div className="w-full max-w-lg mx-auto overflow-hidden">
+    <div className="w-full max-w-lg mx-auto overflow-hidden transition-transform duration-500 ease-out hover:scale-[1.02]">
       {/* Border Container */}
       <div className="relative w-full  aspect-[2/1]">
         {/* Border Layer */}
