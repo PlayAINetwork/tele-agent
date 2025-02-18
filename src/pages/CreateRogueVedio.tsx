@@ -32,8 +32,10 @@ import { Button } from "@/components/ui/button";
 import { ICONS } from "@/assets";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const CreateRogueVedio = () => {
+  const { setVisible } = useWalletModal();
   const { disableAction, setDisableAction, videoGeneraing, setVideoGeneraing } =
     useAppCtx();
   const { connected, publicKey, signTransaction } = useWallet();
@@ -517,7 +519,14 @@ const CreateRogueVedio = () => {
               </div>
             </div>
           </div>
-        ) : null}
+        ) : 
+        <div className="flex justify-center">
+
+        <Button 
+         onClick={() => setVisible(true)}
+        className="uppercase !font-semibold px-20">connect to start creating</Button>
+        </div>
+        }
     </div>
   );
 };

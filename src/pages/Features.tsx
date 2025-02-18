@@ -33,14 +33,14 @@ const Features = () => {
     },
   ];
   return (
-    <div className="flex flex-col  md:gap-14 gap-6 justify-center items-center h-full w-full py-4 md:py-10">
+    <div className="flex flex-col   md:gap-10 gap-6 justify-start items-center h-full w-full py-4 md:py-0">
       <div
         className="md:text-lg uppercase  bg-primary md:w-[570px] px-10 font-semibold py-2 flex justify-center items-center text-black
         "
       >
         <p>{">> Main Pillars of ROGUE <<"}</p>
       </div>
-      <div className="w-full h-full flex flex-col md:hidden  gap-[230px]">
+      <div className="w-full h-full flex flex-col md:hidden ">
         <div className="flex justify-between mb-4  ">
           <div className="w-[100%] flex flex-col gap-3 relative">
             {
@@ -54,8 +54,8 @@ const Features = () => {
          
         </div>
       </div>
-      <div className="hidden w-full h-full md:flex flex-col  gap-[230px]">
-        <div className="flex justify-between mb-4  ">
+      <div className="hidden w-full h-full md:flex flex-col gap-0 ">
+        <div className="flex justify-between mb-4 h-[230px] ">
           <div className="w-[100%]  relative">
             <div className="absolute w-full left-16 ">
               <FeatureCard {...features[0]} />
@@ -74,8 +74,8 @@ const Features = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center mb-4">
-          <div className="w-1/3  relative">
+        <div className="flex justify-center mb-4 h-[230px]">
+          <div className="w-1/3   relative">
             <div className="absolute w-full left-16 ">
               <FeatureCard {...features[3]} />
             </div>

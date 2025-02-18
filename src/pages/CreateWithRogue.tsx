@@ -17,12 +17,15 @@ const CreateWithRogue = () => {
       description: "customize your agent according to your needs. explore different voices, emotional preferences etc",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
+      commingSoon: true
     },
     {
       title: "Deploy",
       description: "Deploy your agent and make it social media ready instantly.",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
+      commingSoon: true
+
     },
   ];
 
@@ -40,20 +43,21 @@ const CreateWithRogue = () => {
 };
 
 export default CreateWithRogue;
-
 const Card = ({
   title,
   icon,
   description,
   isActive,
   link,
+  commingSoon = false,
   borderColor = "green",
 }: {
   title: string;
   icon: any;
   isActive: any;
   description: string;
-  link?:string;
+  link?: string;
+  commingSoon?: boolean;
   borderColor?: string;
 }) => {
   const borderClass = {
@@ -69,7 +73,7 @@ const Card = ({
       className="w-full md:max-w-[900px] cursor-pointer mx-auto overflow-hidden group md:px-4"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      onClick={() => link ? navigate(link) : null}
+      onClick={() => link && !commingSoon ? navigate(link) : null}
     >
       <div className="relative w-full h-[130px] transform transition-transform duration-500 ease-out hover:scale-[1.02]">
         <div
@@ -90,7 +94,7 @@ const Card = ({
           <div className="w-full h-full flex justify-between items-center md:px-14 px-6 py-4">
             <div className="flex items-center gap-4 transition-all duration-500">
               <div 
-                className={`transition-all duration-500 ease-out rounded-full p-3 transform  ${
+                className={`transition-all duration-500 ease-out rounded-full p-3 transform ${
                   isHover ? "bg-[#0101011A] scale-110" : "bg-[#89FC961A]"
                 }`}
               >
@@ -103,7 +107,7 @@ const Card = ({
                     isHover ? "text-black translate-x-1" : "text-white"
                   } text-xl md:text-2xl font-semibold uppercase tracking-wider max-w-[80%]`}
                 >
-                  {title}
+                  {isHover && commingSoon ? "COMING SOON" : title}
                 </h2>
                 <p 
                   className={`transition-all duration-500 ease-out ${

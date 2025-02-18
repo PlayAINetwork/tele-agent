@@ -366,7 +366,7 @@ const StakePopup = () => {
         </div>
       </div>
 
-      <div className="flex-1   w-full pb-4">
+      <div className="flex-1   w-full pb-6">
         <div className="flex flex-col h-full py-6 px-6 w-full border-primary border-t-[1px] justify-center items-center gap-4 ]">
           <div className="flex gap-3 w-full flex-wrap">
             <div className="flex w-full flex-col gap-2 text-[#F1F6F2]">
@@ -474,7 +474,7 @@ const StakePopup = () => {
           )}
         </div>
 
-        <div className="flex md:justify-end justify-center mt-3 md:mt-0">
+        {/* <div className="flex md:justify-end justify-center mt-3 md:mt-0">
         <Button
         variant={"ghost"}
                 className="uppercase  px-10 h-auto py-0 !font-semibold"
@@ -483,7 +483,7 @@ const StakePopup = () => {
               >
                 {">> see staking history <<"}
               </Button>
-        </div>
+        </div> */}
         
           </div>
       </div>
