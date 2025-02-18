@@ -102,13 +102,25 @@ const Card = ({
               </div>
 
               <div className="flex flex-col gap-1 transition-all duration-500">
+                <div className="flex items-center gap-2">
                 <h2 
                   className={`transition-all duration-500 ease-out ${
                     isHover ? "text-black translate-x-1" : "text-white"
                   } text-xl md:text-2xl font-semibold uppercase tracking-wider max-w-[80%]`}
                 >
-                  {isHover && commingSoon ? "COMING SOON" : title}
+                  {/* {isHover && commingSoon ? "COMING SOON" : */}
+                  { title}
                 </h2>
+
+                {isHover && commingSoon ? 
+                  <h1
+                  className={`transition-all duration-500 ease-out ${
+                   isHover ? "text-black translate-x-1" : "text-white"
+                 }   uppercase tracking-wider`}
+                 >COMING SOON</h1>
+                : null}
+              
+                </div>
                 <p 
                   className={`transition-all duration-500 ease-out ${
                     isHover ? "text-[#01010199] translate-x-1" : "text-[#F1F6F299]"
