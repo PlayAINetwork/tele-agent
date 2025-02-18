@@ -27,13 +27,13 @@ export const Staking = () => {
         
       ];
   return (
-<div className="flex flex-col justify-start gap-20 items-center h-full">
+<div className="flex flex-col justify-start md:gap-20 gap-10 items-center h-full">
    <StakePopup/>
    
 
-      <div className='w-full flex flex-col justify-center items-center gap-10 px-20'>
+      <div className='w-full flex flex-col justify-center items-center gap-10 md:px-20'>
         <Button variant={"outline" }className="text-primary px-20 transform transition-transform duration-500 ease-out hover:scale-[1.02]" >WHY STAKE ROGUE?</Button>
-        <div className="grid grid-cols-4 w-[100%]  gap-0">
+        <div className="grid grid-cols-1 md:grid-cols-4 w-[100%]  md:gap-0 gap-3">
 
             <Card {...list[0]} />
             <Card {...list[1]} />
@@ -64,9 +64,9 @@ const Card = ({
       blue: "bg-blue-500",
     }[borderColor];
     return (
-      <div className="w-full max-w-lg mx-auto overflow-hidden">
+      <div className="w-full md:max-w-lg mx-auto overflow-hidden">
         {/* Border Container */}
-        <div className="relative w-full  aspect-[2/1]">
+        <div className="relative w-full h-[150px]  md:aspect-[2/1]">
           {/* Border Layer */}
           <div
             className={`absolute inset-[1px]  ${borderClass}`}

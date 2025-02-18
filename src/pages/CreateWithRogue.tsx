@@ -66,7 +66,7 @@ const Card = ({
 
   return (
     <div 
-      className="w-full max-w-[900px] cursor-pointer mx-auto overflow-hidden group px-4"
+      className="w-full md:max-w-[900px] cursor-pointer mx-auto overflow-hidden group md:px-4"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() => link ? navigate(link) : null}
@@ -87,10 +87,10 @@ const Card = ({
             clipPath: "polygon(5% 0, 100% 0%, 95% 100%, 0% 100%)",
           }}
         >
-          <div className="w-full h-full flex justify-between items-center px-14 py-4">
+          <div className="w-full h-full flex justify-between items-center md:px-14 px-6 py-4">
             <div className="flex items-center gap-4 transition-all duration-500">
               <div 
-                className={`transition-all duration-500 ease-out rounded-full p-3 transform ${
+                className={`transition-all duration-500 ease-out rounded-full p-3 transform  ${
                   isHover ? "bg-[#0101011A] scale-110" : "bg-[#89FC961A]"
                 }`}
               >
@@ -101,14 +101,14 @@ const Card = ({
                 <h2 
                   className={`transition-all duration-500 ease-out ${
                     isHover ? "text-black translate-x-1" : "text-white"
-                  } text-2xl font-semibold uppercase tracking-wider max-w-[80%]`}
+                  } text-xl md:text-2xl font-semibold uppercase tracking-wider max-w-[80%]`}
                 >
                   {title}
                 </h2>
                 <p 
                   className={`transition-all duration-500 ease-out ${
                     isHover ? "text-[#01010199] translate-x-1" : "text-[#F1F6F299]"
-                  } text-md tracking-wide uppercase max-w-[85%]`}
+                  } text-xs md:text-md tracking-wide uppercase md:max-w-[85%]`}
                 >
                   {description}
                 </p>
@@ -116,7 +116,7 @@ const Card = ({
             </div>
 
             <div 
-              className={`rounded-full transition-all duration-500 ease-out transform ${
+              className={`rounded-full hidden md:block transition-all duration-500 ease-out transform ${
                 isHover ? "translate-x-2 scale-110" : ""
               }`}
             >

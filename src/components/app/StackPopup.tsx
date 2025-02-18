@@ -333,7 +333,7 @@ const StakePopup = () => {
   // }, []);
 
   return (
-    <div className=" relative max-w-[70%] w-[70%]  gap-0 border-2 border-primary  bg-[#181818] p-0 pt-0">
+    <div className=" relative md:max-w-[70%] md:w-[70%]  gap-0 border-2 border-primary  bg-[#181818] p-0 pt-0">
       <div className="absolute w-4 h-4 bg-primary left-[-10px] top-[-10px]"></div>
       <div className="absolute w-4 h-4 bg-primary right-[-10px] top-[-10px]"></div>
       <div className="absolute w-4 h-4 bg-primary left-[-10px] bottom-[-10px]"></div>
@@ -346,7 +346,7 @@ const StakePopup = () => {
             setDepositAmount("");
             fetchBalance(wallet);
           }}
-          className={`px-4 w-full uppercase text-md py-2 text-center font-semibold cursor-pointer ${
+          className={`px-4 w-full uppercase text-sm md:text-md py-2 text-center font-semibold cursor-pointer ${
             isStake ? "bg-primary text-[#010101]" : "bg-[#181818] text-[#fff]"
           }`}
         >
@@ -358,7 +358,7 @@ const StakePopup = () => {
             setWithdrawAmount("");
             getUserBalance(wallet);
           }}
-          className={`px-4 w-full uppercase text-md text-center font-semibold py-2 cursor-pointer ${
+          className={`px-4 w-full uppercase text-sm md:text-md  text-center font-semibold py-2 cursor-pointer ${
             isStake ? "bg-[#181818] text-[#fff]" : "bg-primary text-[#010101]"
           }`}
         >
@@ -387,12 +387,12 @@ const StakePopup = () => {
                     </div>
                   )} */}
 
-                <div>enter amount of $ROGUE to unstake</div>
+                <div className="text-sm md:text-md ">enter amount of $ROGUE to unstake</div>
               </div>
 
               <div className="flex w-full border-[1px] border-primary">
                 <Input
-                  className=" border-none uppercase hover:bg-[#303030]"
+                  className=" border-none uppercase text-sm md:text-md  hover:bg-[#303030]"
                   value={isStake ? depositAmount : withdrawAmount}
                   onChange={(e) => {
                     const value = e.target.value;
@@ -424,11 +424,11 @@ const StakePopup = () => {
               </div>
             </div>
             <div className="flex flex-col items-end w-full">
-              <div>
-                <span className="text-[#B6B6B6]"> Available Balance:</span>{" "}
+              <div className="text-sm md:text-md ">
+                <span className="text-[#B6B6B6] "> Available Balance:</span>{" "}
                 {balance?.toFixed(5) ?? 0} ROGUE
               </div>
-              <div>
+              <div className="text-sm md:text-md ">
                 <span className="text-[#B6B6B6]"> Staked Balance:</span>{" "}
                 {vaultBalanceofUser.toFixed(5)} ROGUE
               </div>
@@ -444,7 +444,7 @@ const StakePopup = () => {
 
 
 
-        <div className="flex w-full   justify-center gap-0">
+        <div className="flex w-full   justify-center gap-2  md:gap-0">
           {wallet.connected ? (
             <>
               {/* <Button
@@ -474,7 +474,7 @@ const StakePopup = () => {
           )}
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex md:justify-end justify-center mt-3 md:mt-0">
         <Button
         variant={"ghost"}
                 className="uppercase  px-10 h-auto py-0 !font-semibold"

@@ -25,7 +25,7 @@ function AppLayout() {
   // }, []);
 
   return (
-    <main className={`h-[100vh]  realtive  flex flex-col overflow-hidden`}>
+    <main className={`min-h-[100vh] md:h-[100vh]  realtive  flex flex-col overflow-hidden`}>
 
       <div className="flex flex-col flex-1 h-full">
         <Header />
@@ -39,7 +39,7 @@ function AppLayout() {
             )
           }
          
-          <div className={`relative z-[1]  h-full w-full ${pathname === "/" ? "p-0" : "p-10"}`}>
+          <div className={`relative z-[1]  h-full w-full ${pathname === "/" ? "p-0" : "md:p-10 p-4"}`}>
           <Outlet />
 
           </div>

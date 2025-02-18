@@ -1,4 +1,5 @@
 import { ICONS } from "@/assets";
+import { useAppCtx } from "@/context/app.contex";
 
 
 const Features = () => {
@@ -32,14 +33,28 @@ const Features = () => {
     },
   ];
   return (
-    <div className="flex flex-col  gap-14 justify-center items-center h-full py-10">
+    <div className="flex flex-col  md:gap-14 gap-6 justify-center items-center h-full w-full py-4 md:py-10">
       <div
-        className="text-lg uppercase bg-primary w-[570px] font-semibold py-2 flex justify-center items-center text-black
+        className="md:text-lg uppercase  bg-primary md:w-[570px] px-10 font-semibold py-2 flex justify-center items-center text-black
         "
       >
         <p>{">> Main Pillars of ROGUE <<"}</p>
       </div>
-      <div className="w-full h-full flex flex-col  gap-[230px]">
+      <div className="w-full h-full flex flex-col md:hidden  gap-[230px]">
+        <div className="flex justify-between mb-4  ">
+          <div className="w-[100%] flex flex-col gap-3 relative">
+            {
+              features?.map((feature, index) => (
+                
+                <FeatureCard {...feature} key={index}/>
+              ))
+            }
+          </div>
+
+         
+        </div>
+      </div>
+      <div className="hidden w-full h-full md:flex flex-col  gap-[230px]">
         <div className="flex justify-between mb-4  ">
           <div className="w-[100%]  relative">
             <div className="absolute w-full left-16 ">
@@ -48,7 +63,7 @@ const Features = () => {
           </div>
 
           <div className="w-[100%]  relative">
-            <div className="absolute w-full left-4 ">
+            <div className="md:absolute w-full left-4 ">
               <FeatureCard {...features[1]} />
             </div>
           </div>
@@ -96,6 +111,8 @@ const FeatureCard = ({
     green: "bg-green-500",
     blue: "bg-blue-500",
   }[borderColor];
+const {isMobile} = useAppCtx()
+
   return (
     <div className="w-full max-w-lg mx-auto overflow-hidden">
       {/* Border Container */}
@@ -103,7 +120,9 @@ const FeatureCard = ({
         {/* Border Layer */}
         <div
           className={`absolute inset-[1px]  ${borderClass}`}
-          style={{
+          style={isMobile?{
+            clipPath: "polygon(5% 0, 100% 0%, 95% 100%, 0% 100%)",
+          }:{
             clipPath: "polygon(15% 0, 100% 0%, 85% 100%, 0% 100%)",
           }}
         />
@@ -111,7 +130,9 @@ const FeatureCard = ({
         {/* Main Content Layer */}
         <div
           className="absolute inset-[2px] bg-[#1A1F20] text-white"
-          style={{
+          style={isMobile?{
+            clipPath: "polygon(5% 0, 100% 0%, 95% 100%, 0% 100%)",
+          }:{
             clipPath: "polygon(15% 0, 100% 0%, 85% 100%, 0% 100%)",
           }}
         >
@@ -124,11 +145,11 @@ const FeatureCard = ({
             </div>
 
             {/* Text */}
-            <h2 className="text-lg sm:text-2xl  mb-2 tracking-wider text-center">
+            <h2 className="text-md md:text-2xl  mb-2 tracking-wider text-center">
               {title}
             </h2>
 
-            <p className="text-xs sm:text-xs text-gray-400 max-w-[80%] tracking-wide uppercase text-center">
+            <p className="text-[12px] md:text-xs text-gray-400 md:max-w-[80%] tracking-wide uppercase text-center">
               {description}
             </p>
           </div>

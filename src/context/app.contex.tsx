@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useContext, useState, useMemo, useEffect } from "react";
 
 interface AppContextType {
   hideSidebar: boolean;
@@ -6,6 +6,7 @@ interface AppContextType {
   disableAction:boolean;
   videoGeneraing:boolean;
   isLive:boolean;
+  isMobile:boolean;
 
 
   setIsLive: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,10 +29,27 @@ export const AppContextProvider: React.FC<{
   const [videoGeneraing, setVideoGeneraing] = useState(false);
   const [isLive, setIsLive] = useState(false);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Function to check if screen width is mobile
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Check initially
+    checkIsMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIsMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
 
   const value = useMemo(
-    () => ({ videoGeneraing,hideSidebar,sidebarMenu,disableAction,isLive, setIsLive, setHideSidebar,setSidebarMenu,setDisableAction ,setVideoGeneraing}),
-    [videoGeneraing,hideSidebar,sidebarMenu,disableAction, isLive, setIsLive,setHideSidebar,setSidebarMenu,setDisableAction,setVideoGeneraing]
+    () => ({isMobile, videoGeneraing,hideSidebar,sidebarMenu,disableAction,isLive, setIsLive, setHideSidebar,setSidebarMenu,setDisableAction ,setVideoGeneraing}),
+    [isMobile,videoGeneraing,hideSidebar,sidebarMenu,disableAction, isLive, setIsLive,setHideSidebar,setSidebarMenu,setDisableAction,setVideoGeneraing]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

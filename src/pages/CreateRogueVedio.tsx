@@ -481,15 +481,15 @@ const CreateRogueVedio = () => {
 
       
       {connected ? (
-          <div className="border-[1px] border-primary  uppercase  w-[60%] mx-auto">
+          <div className="border-[1px] border-primary  uppercase  md:w-[60%] mx-auto">
             <div className=" py-2 px-2 flex uppercase justify-end w-full">
-              <p className="text-[14px] text-[#B6B6B6]">
+              <p className="text-[10px] md:text-[14px] text-[#B6B6B6]">
                 video_generation_takes a bout_2-3
                 mins_once_payment_is_validated.
               </p>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex w-full  border-t-[1px] border-primary">
+              <div className="flex w-full  border-t-[1px] border-primary flex-col md:flex-row">
                 {/* <Textarea
               className="h-[50px]  binaria uppercase placeholder-white"
               value={topic}

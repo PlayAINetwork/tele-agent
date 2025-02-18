@@ -4,7 +4,7 @@ import TerminalLogs from "@/components/Sidebar/TerminalLogs";
 const Terminal = () => {
   return (
     <div className="flex flex-col justify-center items-center h-full ">
-      <div className=" relative border-[1px] border-primary  place-content-center place-items-center h-[70vh] w-[75%] flex flex-col">
+      <div className=" relative border-[1px] border-primary  place-content-center place-items-center h-[80vh] md:h-[70vh] md:w-[75%] flex flex-col">
         <div className="absolute w-4 h-4 bg-primary left-[-10px] top-[-10px]"></div>
         <div className="absolute w-4 h-4 bg-primary right-[-10px] top-[-10px]"></div>
         <div className="absolute w-4 h-4 bg-primary left-[-10px] bottom-[-10px]"></div>
