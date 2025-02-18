@@ -30,7 +30,7 @@ function AppLayout() {
       <div className="flex flex-col flex-1 h-full">
         <Header />
 
-        <div className="flex-1 flex flex-col relative z-[1] overflow-y-hidden w-[100%] mx-auto py-6 ">
+        <div className={`flex-1 flex flex-col relative z-[1] overflow-y-hidden w-[100%] ${pathname !== "/"  ?"max-w-[1500px] mx-auto" :""} py-6 `}>
           {
             pathname !== "/" && (
               <div className="absolute w-full h-full opacity-50">

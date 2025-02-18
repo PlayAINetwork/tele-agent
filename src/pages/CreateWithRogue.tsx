@@ -1,3 +1,4 @@
+import { IMAGES } from '@/assets';
 import DYNAMICICONS from '@/assets/DynamicIcon';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,27 +7,31 @@ const CreateWithRogue = () => {
   const list = [
     {
       title: "Design",
-      description: "RETAINS CONVERSATIONS FOR MORE NATURAL DIALOG",
+      description: "Design your agent. Give character traits, knowledge base, etc.",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
       link:"/create-vedio"
     },
     {
       title: "Customize",
-      description: "Deploy your agent and make it social media ready instantly.",
+      description: "customize your agent according to your needs. explore different voices, emotional preferences etc",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
     },
     {
       title: "Deploy",
-      description: "RETAINS CONVERSATIONS FOR MORE NATURAL DIALOG",
+      description: "Deploy your agent and make it social media ready instantly.",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
     },
   ];
 
   return (
-    <div className="flex flex-col gap-6 ">
+    <div className="flex flex-col justify-center gap-6 relative h-full ">
+
+      <div className="h-full absolute right-4 flex items-center">
+        <img src={IMAGES.ROGUE_V} alt="" className={"h-[80%]"}/>
+      </div>
       {list.map((item, index) => (
         <Card key={index} {...item} />
       ))}
@@ -83,7 +88,7 @@ const Card = ({
           }}
         >
           <div className="w-full h-full flex justify-between items-center px-14 py-4">
-            <div className="flex items-center gap-2 transition-all duration-500">
+            <div className="flex items-center gap-4 transition-all duration-500">
               <div 
                 className={`transition-all duration-500 ease-out rounded-full p-3 transform ${
                   isHover ? "bg-[#0101011A] scale-110" : "bg-[#89FC961A]"
@@ -96,14 +101,14 @@ const Card = ({
                 <h2 
                   className={`transition-all duration-500 ease-out ${
                     isHover ? "text-black translate-x-1" : "text-white"
-                  } text-xl font-semibold uppercase tracking-wider max-w-[80%]`}
+                  } text-2xl font-semibold uppercase tracking-wider max-w-[80%]`}
                 >
                   {title}
                 </h2>
                 <p 
                   className={`transition-all duration-500 ease-out ${
                     isHover ? "text-[#01010199] translate-x-1" : "text-[#F1F6F299]"
-                  } text-md tracking-wide uppercase`}
+                  } text-md tracking-wide uppercase max-w-[85%]`}
                 >
                   {description}
                 </p>

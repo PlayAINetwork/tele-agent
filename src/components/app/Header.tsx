@@ -1,6 +1,7 @@
 import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
 
 interface TokenData {
   priceUsd: string;
@@ -81,14 +82,15 @@ const Header = () => {
             </div>
             
             {menuItems?.map((item, index) => (
-              <div
+              <Button
+              variant={"ghost"}
               onClick={() => navigate(item.link)}
                 key={index}
-                className={`w-full mr-[1px] px-4 font-700 cursor-pointer h-full  text-nowrap text-sm flex justify-center items-center ${pathname == item?.link ? "bg-[#010101] text-primary" : "bg-[#383838]"} `}
+                className={`w-full mr-[1px] px-4 font-700 cursor-pointer h-full  text-nowrap text-sm flex justify-center items-center ${pathname == item?.link ? "bg-[#010101] text-primary" : "bg-[#383838] text-[#F1F6F2"} `}
                 style={item.clipPath ? { clipPath: item.clipPath } : undefined}
               >
                 {item.text}
-              </div>
+              </Button>
             ))}
             
           </div>

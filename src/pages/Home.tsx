@@ -16,18 +16,18 @@ const Home = () => {
       </div>
        <div className="relative">
        
-       <div  className="flex  flex-col gap-2">
-          <p className="text-[50px] leading-[50px]">
+       <div  className="flex  flex-col gap-2 uppercase">
+          <p className="text-4xl leading-[50px]">
           Create AI Agents That Sound Human
           </p>
           <div className="w-[340px] border border-solid [border-image-source:linear-gradient(90deg,#89FC96_0%,#FFFFFF_100%)] [border-image-slice:1]"></div>
-          <p className="text-[35px] ">
+          <p className="text-2xl ">
           The Very First No-Code Multilingual Audio AI Framework
           </p>
         </div>
 
         <div className="absolute bottom-[-77px]">
-          <Button>
+          <Button className="!font-semibold  transform transition-transform duration-500 ease-out hover:scale-[1.02]">
          <Play fill=""/> LEARN MORE
           </Button>
         </div>

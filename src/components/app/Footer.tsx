@@ -2,6 +2,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
 import { trimAddress } from "@/lib/utils";
 import { useWallet } from "@solana/wallet-adapter-react";
+import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 
 const Footer = () => {
   const { toast } = useToast();
@@ -39,6 +40,7 @@ const Footer = () => {
         >
           <div className="mt-1">BUY $ROGUE</div>
         </Button>
+        
         {connected ? (
           <Button
             onClick={disconnect}
@@ -50,7 +52,13 @@ const Footer = () => {
               {"[Disconnect]"}
             </div>
           </Button>
-        ) : null}
+        ) : 
+        <CustomSolanaButton
+          connectText="Connect Wallet"
+          disconnectText="Disconnect Wallet"
+          buttonStyle="primary"
+          size="medium"
+        />}
       </div>{" "}
     </div>
   );

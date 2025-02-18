@@ -10,12 +10,14 @@ import { Staking } from '@/pages/Staking'
 import Terminal from '@/pages/Terminal'
 import RoguePage from '@/pages/RoguePage'
 import CreateRogueVedio from '@/pages/CreateRogueVedio'
+import StakersDashboard from '@/components/app/GetStakingInfo'
+import ErrorBoundary from '@/components/app/ErrorBoundary'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <AppLayout />,
-    errorElement: <Home />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: ROUTES.nodes.global,
@@ -48,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES.nodes.createVedio,
         element: <CreateRogueVedio />,
+      },
+      {
+        path: ROUTES.nodes.info,
+        element: <StakersDashboard />,
       },
     ],
   },

@@ -11,30 +11,30 @@ const Features = () => {
     },
     {
       title: "MEMORY SYSTEMS",
-      description: "RETAINS CONVERSATIONS FOR MORE NATURAL DIALOG",
-      icon: ICONS.icon_tag,
+      description: "Natural conversations that build on past interactions",
+      icon: ICONS.icon_clock,
     },
     {
       title: "UNIQUE VOICE CREATION",
-      description: "GENERATE UNIQUE VOICE WITH VARIED EMOTIONS AND TONES",
+      description: 'Generate unique voices with simple prompts: "Warm, friendly male voice in his 30s" → Done',
       icon: ICONS.icon_microphone,
     },
     {
       title: "MULTILINGUAL SUPPORT",
-      description: "SPEAK WITH USERS IN ANY LANGUAGE EASILY",
+      description: "Create agents that speak and understand multiple languages fluently Real-time translation across conversations.",
       icon: ICONS.icon_translate,
     //   borderColor: "blue",
     },
     {
       title: "SOCIAL MEDIA INTEGRATION",
-      description: "ADAPTS AND RESPONDS TO SOCIAL MEDIA CONVERSATIONS",
+      description: "Agents that adapt tone and responses based on conversation context",
       icon: ICONS.icon_clock,
     },
   ];
   return (
-    <div className="flex flex-col  gap-16 justify-center items-center h-full py-10">
+    <div className="flex flex-col  gap-14 justify-center items-center h-full py-10">
       <div
-        className="bg-primary w-[570px] font-semibold py-2 flex justify-center items-center text-black
+        className="text-lg uppercase bg-primary w-[570px] font-semibold py-2 flex justify-center items-center text-black
         "
       >
         <p>{">> Main Pillars of ROGUE <<"}</p>

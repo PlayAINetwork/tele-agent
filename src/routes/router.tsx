@@ -7,7 +7,7 @@ export const ROUTES = {
         features: "/features",
         terminal: "/terminal",
         createVedio: "/create-vedio",
-
+        info: "/info",
         adminGenerate: "/admin-generate",
     },
 };
