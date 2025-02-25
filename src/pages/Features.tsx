@@ -27,8 +27,8 @@ const Features = () => {
     //   borderColor: "blue",
     },
     {
-      title: "SOCIAL MEDIA INTEGRATION",
-      description: "Agents that adapt tone and responses based on conversation context",
+      title: "INTEGRATE ANYWHERE",
+      description: "INTEGRATE VOICE ACROSS DIFFERENT APPLICATIONS AND SOCIAL CHANNELS.",
       icon: ICONS.icon_clock,
     },
   ];
