@@ -6,22 +6,22 @@ import { useNavigate } from 'react-router-dom';
 const CreateWithRogue = () => {
   const list = [
     {
-      title: "Design",
-      description: "Design your agent. Give character traits, knowledge base, etc.",
+      title: "Featured Videos",
+      description: "Pick your agent and create videos based on simple prompts.",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
       link:"/create-vedio"
     },
     {
-      title: "Customize",
-      description: "customize your agent according to your needs. explore different voices, emotional preferences etc",
+      title: "Create a Podcast",
+      description: "Create a room, add topics, invite agents, and host your own personalised podcast instantly. ",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
       commingSoon: true
     },
     {
-      title: "Deploy",
-      description: "Deploy your agent and make it social media ready instantly.",
+      title: "Integrate",
+      description: "Give your agents a voice with simple prompt, and integrate it across different applications and channels.",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
       commingSoon: true
