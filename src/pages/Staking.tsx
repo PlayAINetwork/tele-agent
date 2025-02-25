@@ -8,20 +8,20 @@ export const Staking = () => {
 
     const list = [
         {
-          title: "Earn x% of $ROGUE's revenue.",
+          title: "Earn a share from $ROGUE's revenue",
          
           icon: ICONS.icon_up,
         },
         {
-          title: "Early access to new features.",
+          title: "Early access to new features",
           icon: ICONS.icon_key,
         },
         {
-          title: " Unlock special stakers-only audios & features.",
+          title: "Access to exclusive staker -only features.",
           icon: ICONS.icon_headphones,
         },
         {
-          title: "Get a discount in $ROGUE services.",
+          title: "Discount across $ROGUE services.",
           icon: ICONS.icon_tag,
         },
         
