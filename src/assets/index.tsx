@@ -19,7 +19,7 @@ import mobile from "./images/mobile.png";
 
 import ROGUE_V from "./images/$ROGUE.png";
 import homebgLine from "./images/homebg-line.png";
-import homehero from "./images/homehero.png";
+import homehero from "./images/rougehero.png";
 
 
 

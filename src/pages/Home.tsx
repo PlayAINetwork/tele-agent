@@ -10,7 +10,7 @@ const Home = () => {
       </div>
 
       <div className=" flex flex-col items-center md:items-start relative border-y-4 py-14 w-full bg-[#01010180] px-4 md:px-20 border-[#89FC96] border-solid [border-image-source:linear-gradient(90deg,#89FC96_0%,rgba(137,252,150,0)_100%)] [border-image-slice:1]">
-        <div className="md:absolute mb-6 md:mb-0 right-20 bottom-0 w-[300px]">
+        <div className="md:absolute mb-6 md:mb-0 right-0 bottom-0 w-[300px]">
           <img
             src={IMAGES.homehero}
             alt=""
