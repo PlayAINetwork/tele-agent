@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { Program, AnchorProvider, BN, web3 } from "@project-serum/anchor";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {  useWallet } from "@solana/wallet-adapter-react";
 import {
   getAccount,
   getAssociatedTokenAddress,
@@ -40,7 +40,10 @@ function computeFloatVals(
 const StakePopup = () => {
   const wallet: any = useWallet();
 
-  const { connection } = useConnection();
+  // const { connection } = useConnection();
+  const connection = new Connection(
+    "https://aged-clean-dream.solana-mainnet.quiknode.pro/51a78aa7597a179d9adb3aa72df855eff57fc23a"
+  );
   // const { balance } = useTokenBalance(wallet?.publicKey);
   const { toast } = useToast();
   const [isStake, setStake] = useState(true);
@@ -77,12 +80,14 @@ const StakePopup = () => {
   useEffect(() => {
     if (wallet?.publicKey) {
       fetchBalance(wallet);
+      getUserBalance(wallet);
     }
   }, [wallet?.publicKey, isStake, error]);
 
   const [loading, setLoading] = useState(false);
   const getProvider = () => {
     if (!wallet.publicKey) throw new Error("Wallet not connected!");
+    
     return new AnchorProvider(
       connection,
       wallet,
@@ -163,8 +168,8 @@ const StakePopup = () => {
 
   const depositTokens = async () => {
     if (!validateTransaction(depositAmount)) return;
-
     setLoading(true);
+
     try {
       const program = getProgram();
 
@@ -209,13 +214,24 @@ const StakePopup = () => {
 
       // Wait for transaction confirmation
       // Wait for transaction confirmation
-      const confirmation = await connection.confirmTransaction(
-        txSignature,
-        "confirmed"
-      );
-      await connection.getBlock(confirmation.context.slot, {
-        maxSupportedTransactionVersion: 0,
-      });
+      // const confirmation = await connection.confirmTransaction(
+      //   txSignature,
+      //   "confirmed"
+      // );
+      // await connection.getBlock(confirmation.context.slot, {
+      //   maxSupportedTransactionVersion: 0,
+      // });
+      // Wait for transaction confirmation using a more reliable method
+const latestBlockhash = await connection.getLatestBlockhash();
+await connection.confirmTransaction(
+  {
+    signature: txSignature,
+    blockhash: latestBlockhash.blockhash,
+    lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+  },
+  "confirmed"
+);
+
 
       await handleUserTx({
         amount: Number(depositAmount),
@@ -226,6 +242,8 @@ const StakePopup = () => {
       // Update UI state
       setBalance(computeFloatVals(String(balance), depositAmount));
       setDepositAmount("");
+      getUserBalance(wallet);
+
       toast({
         title: "Staked Successfully",
       });
@@ -285,13 +303,23 @@ const StakePopup = () => {
         .rpc();
 
       // Wait for transaction confirmation
-      const confirmation = await connection.confirmTransaction(
-        txSignature,
-        "confirmed"
-      );
-      await connection.getBlock(confirmation.context.slot, {
-        maxSupportedTransactionVersion: 0,
-      });
+      // const confirmation = await connection.confirmTransaction(
+      //   txSignature,
+      //   "confirmed"
+      // );
+      // await connection.getBlock(confirmation.context.slot, {
+      //   maxSupportedTransactionVersion: 0,
+      // });
+
+      const latestBlockhash = await connection.getLatestBlockhash();
+await connection.confirmTransaction(
+  {
+    signature: txSignature,
+    blockhash: latestBlockhash.blockhash,
+    lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+  },
+  "confirmed"
+);
 
       await handleUserTx({
         amount: Number(withdrawAmount),
