@@ -1,6 +1,5 @@
 import { ICONS } from '@/assets';
 import StakePopup from '@/components/app/StackPopup';
-import { Button } from '@/components/ui/button';
 
 
 export const Staking = () => {
@@ -32,7 +31,7 @@ export const Staking = () => {
    
 
       <div className='w-full flex flex-col justify-center items-center gap-10 md:px-20'>
-        <Button variant={"outline" }className="text-primary px-20 transform transition-transform duration-500 ease-out hover:scale-[1.02]" >WHY STAKE ROGUE?</Button>
+        <div className="text-primary border-2 border-primary py-1 px-20 transform transition-transform  pt-2" >WHY STAKE ROGUE?</div>
         <div className="grid grid-cols-1 md:grid-cols-4 w-[100%]  md:gap-0 gap-3">
 
             <Card {...list[0]} />
