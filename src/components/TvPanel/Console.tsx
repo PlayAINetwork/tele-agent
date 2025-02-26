@@ -502,7 +502,7 @@ const TvConsole = () => {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative w-full aspect-[1/1] md:aspect-none h-full overflow-hidden">
       <div className="relative w-full h-full">
         <div className="h-full grid grid-rows-[30px_1fr_40px] gap-0">
           <div className="w-full uppercase top-0">

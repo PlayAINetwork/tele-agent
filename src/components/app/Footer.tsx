@@ -2,10 +2,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
 import { trimAddress } from "@/lib/utils";
 import { useWallet } from "@solana/wallet-adapter-react";
+import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 
 const Footer = () => {
   const { toast } = useToast();
   const { connected, publicKey, disconnect } = useWallet();
+
   const address: any = publicKey?.toString();
   const copy = async (address: string) => {
     await navigator.clipboard.writeText(address);
@@ -14,10 +16,10 @@ const Footer = () => {
     });
   };
   return (
-    <div className="flex  justify-between w-full border-t-[1px] border-primary bg-secondary p-4 py-2">
+    <div className="flex  justify-between w-full border-t-[1px] border-primary bg-secondary p-4 py-1">
       <div>
         <Button
-          className="text-md"
+          className="text-sm"
           onClick={() => copy("27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL")}
           variant={"ghost"}
         >
@@ -34,10 +36,11 @@ const Footer = () => {
             )
           }
           variant={"ghost"}
-          className="w-full text-md  py-1 px-6 h-auto uppercase rounded-[40px]"
+          className="w-full text-sm  py-1 px-6 h-auto uppercase rounded-[40px]"
         >
           <div className="mt-1">BUY $ROGUE</div>
         </Button>
+        
         {connected ? (
           <Button
             onClick={disconnect}
@@ -49,7 +52,13 @@ const Footer = () => {
               {"[Disconnect]"}
             </div>
           </Button>
-        ) : null}
+        ) : 
+        <CustomSolanaButton
+          connectText="Connect Wallet"
+          disconnectText="Disconnect Wallet"
+          buttonStyle="primary"
+          size="medium"
+        />}
       </div>{" "}
     </div>
   );

@@ -29,14 +29,14 @@ const Tabs = () => {
 
       activeIcone: <DYNAMICICONS.injectTopic color="#010101" />,
     },
-    {
-      show_text :"terminal",
+    // {
+    //   show_text :"terminal",
 
-      title: "terminal",
-      Icon: <DYNAMICICONS.terminal color="#F1F6F2" />,
+    //   title: "terminal",
+    //   Icon: <DYNAMICICONS.terminal color="#F1F6F2" />,
 
-      activeIcone: <DYNAMICICONS.terminal color="#010101" />,
-    },
+    //   activeIcone: <DYNAMICICONS.terminal color="#010101" />,
+    // },
     // {
     //   show_text :"",
 
@@ -50,7 +50,7 @@ const Tabs = () => {
   const { setSidebarMenu, sidebarMenu } = useAppCtx();
 
   return (
-    <div className="gap-0  grid grid-cols-4 overflow-auto horizontalBar">
+    <div className="gap-0  grid grid-cols-3 overflow-auto horizontalBar">
       {types.map((tab) => (
         <Button
           className="uppercase   "

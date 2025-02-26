@@ -1,75 +1,34 @@
 import { ICONS, IMAGES } from "@/assets";
 import { useEffect, useState } from "react";
-import VideoGenertionPopup from "../Sidebar/VideoGenertionPopup";
-import StackPopup from "./StackPopup";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { Connection, PublicKey } from "@solana/web3.js";
-import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
-import { Program, Provider } from "@project-serum/anchor";
-import { formatBigNumber } from "@/lib/utils";
-// import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
+
+interface TokenData {
+  priceUsd: string;
+}
+
+const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
+const REFRESH_INTERVAL = 30000; // 30 seconds
 
 const Header = () => {
-  const [tokenData, setTokenData] = useState<any>(null);
-  const { connected } = useWallet();
-  const { connection } = useConnection();
-  const { setVisible } = useWalletModal();
-  const [totalStaked, setTotalStaked] = useState<number>(0);
-  const getTotalStakedBalance = async (
-    connection: Connection
-  ): Promise<number> => {
-    const programId = HOST_CONTRACT.PROGRAM_ID;
-    try {
-      // Create program instance
-      const program = new Program(HOST_CONTRACT.IDL, new PublicKey(programId), {
-        connection,
-      } as Provider);
-
-      // Get PlatformConfig PDA
-      const [platformConfigPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("platform_config")],
-        new PublicKey(programId)
-      );
-
-      // Get platform config data
-      await program.account.platformConfig.fetch(platformConfigPDA);
-
-      // Get platform mint token account PDA
-      const [platformMintTokenAccountPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("platform_mint_token_account")],
-        new PublicKey(programId)
-      );
-
-      // Get token balance
-      const tokenBalance = await connection.getTokenAccountBalance(
-        platformMintTokenAccountPDA
-      );
-      // Return the balance as a number
-      return (
-        Number(tokenBalance.value.amount) /
-        Math.pow(10, tokenBalance.value.decimals)
-      );
-    } catch (error) {
-      console.error("Error getting total staked balance:", error);
-      throw error;
-    }
-  };
-  // const [isHovered, setIsHovered] = useState(false);
-  const TOKEN_ADDRESS = "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL";
+  const [tokenData, setTokenData] = useState<TokenData | null>(null);
+  const navigate = useNavigate();
+  const {pathname} = useLocation();
   useEffect(() => {
     const fetchTokenData = async () => {
       try {
         const response = await fetch(
           `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`
         );
+        
         if (!response.ok) {
           throw new Error("Failed to fetch token data");
         }
+        
         const data = await response.json();
 
         if (data.pairs && data.pairs.length > 0) {
-          // Sort by volume and get the most liquid pair
+          // Sort by price and get the most liquid pair
           const mostLiquidPair = data.pairs.sort(
             (a: any, b: any) => parseFloat(b.priceUsd) - parseFloat(a.priceUsd)
           )[0];
@@ -78,207 +37,88 @@ const Header = () => {
           console.log("No trading pairs found");
         }
       } catch (err: any) {
-        console.log(err.message);
+        console.error("Error fetching token data:", err.message);
       }
     };
 
     fetchTokenData();
-    const interval = setInterval(fetchTokenData, 30000);
+    const interval = setInterval(fetchTokenData, REFRESH_INTERVAL);
+    
     return () => clearInterval(interval);
   }, []);
-  // const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchTotalStaked = async () => {
-      try {
-        const balance = await getTotalStakedBalance(connection);
-        setTotalStaked(balance);
-      } catch (err) {
-        console.log(
-          err instanceof Error
-            ? err.message
-            : "Unknown error occurred while fetching platform stake count!"
-        );
-      }
-    };
+  const handleExternalLink = (url: string) => {
+    window.open(url, "_blank");
+  };
 
-    fetchTotalStaked();
-  }, []);
-  console.log("total staked", totalStaked);
+  // Menu items data for better maintainability
+  const menuItems = [
+    { text: "> features <", clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",link:"/features" },
+    { text: "> experience Rogue <",link:"/rogue" },
+    { text: "> Create w/ Rogue <",link:"/create-with-rogue" },
+    { text: "> STAKE $ROGUE <",link:"/stake" },
+    { text: "> Terminal <", clipPath: "polygon(0 0, 82% 0%, 100% 100%, 0% 100%)",link:"/terminal" }
+  ];
+
+  // Social media links for better maintainability
+  const socialLinks = [
+    { icon: ICONS.icon_coingecko, url: "https://www.coingecko.com/en/coins/agent-rogue" },
+    { icon: ICONS.icon_cooki, url: "https://www.cookie.fun/en/agent/agent-rogue" },
+    { icon: ICONS.icon_telegram, url: "https://t.me/AgentRogue_Official" },
+    { icon: ICONS.icon_x, url: "https://x.com/0xRogueAgent" }
+  ];
+
   return (
-    <div className="flex justify-between  w-full bg-secondary border-b-[1px] border-primary">
+    <div className="flex justify-between w-full bg-secondary border-b-[1px] border-primary">
+      {/* Logo and navigation section */}
       <div className="flex gap-3">
-        {/* <img src={IMAGES.logo} alt="" className="w-[100px] lg:w-[200px]"/> */}
         <div
-          className="w-full h-full bg-primary p-[2px]  uppercase"
-          style={{
-            clipPath: "polygon(0 0, 95.5% 2%, 100% 100%, 0% 100%)",
-          }}
+          className="w-full h-full bg-primary p-[2px] uppercase"
+          style={{ clipPath: "polygon(0 0, 97.2% 2%, 100% 100%, 0% 100%)" }}
         >
-          <div className="flex h-full text-sm gap-[1px] ">
-            <div>
-              <img src={IMAGES.logo} alt="" className="min-w-[220px]" />
+          <div className="flex h-full">
+            <div className="cursor-pointer" onClick={() => navigate("/")}>
+              <img src={IMAGES.logo} alt="Logo" className="min-w-[200px]" />
             </div>
-            {/* <div
-              className="px-6 w-full h-full cursor-pointer bg-neutral-700 flex justify-center text-nowrap items-center overflow-hidden"
-              style={{
-                clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
-              }}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <span className="text-white relative transition-transform duration-300 ease-in-out">
-                <span
-                  className={`block transition-all duration-300 ${
-                    isHovered
-                      ? "opacity-0 translate-y-full"
-                      : "opacity-100 translate-y-0"
-                  }`}
-                >
-                  {"> Learn more <"}
-                </span>
-                <span
-                  className={`block absolute text-nowrap top-0 left-0  transition-all duration-300 ${
-                    isHovered
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 -translate-y-full"
-                  }`}
-                >
-                  {"> Coming soon <"}
-                </span>
-              </span>
-            </div> */}
-            {connected ? (
-              <StackPopup />
-            ) : (
-              <div
-                onClick={() => setVisible(true)}
-                className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-                style={{
-                  clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
-                }}
+            
+            {menuItems?.map((item, index) => (
+              <Button
+              variant={"ghost"}
+              onClick={() => navigate(item.link)}
+                key={index}
+                className={`w-full mr-[1px] px-4 font-700 cursor-pointer h-full  text-nowrap text-sm flex justify-center items-center ${pathname == item?.link ? "bg-[#010101] text-primary" : "bg-[#383838] text-[#F1F6F2"} `}
+                style={item.clipPath ? { clipPath: item.clipPath } : undefined}
               >
-                <span className="text-white relative transition-transform duration-300 ease-in-out">
-                  <span className="block transition-all duration-300 opacity-100 translate-y-0">
-                    {"> stake now <"}
-                  </span>
-                </span>
-              </div>
-            )}
-
-            {/* <div
-              className="px-6 text-nowrap w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-              onClick={() => navigate("/rogueagent")}
-            >
-              <span className="text-white relative transition-transform duration-300 ease-in-out">
-                {" > Leaderboard <"}
-              </span>
-            </div> */}
-
-            <VideoGenertionPopup />
+                {item.text}
+              </Button>
+            ))}
+            
           </div>
         </div>
-
-        {/* <Button
-          className="w-auto"
-          onClick={
-            () => ""
-            //   copy("27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL")
-          }
-          variant={"ghost"}
-        >
-          Learn more
-        </Button> */}
       </div>
+
+      {/* Price and social media section */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <div className="flex  gap-1 text-md pt-1">
-            <p className="text-primary">STAKED:</p>
-            <p>
-              {`${formatBigNumber(totalStaked) ?? 0}`}
-              <span className="text-xs font-medium">{` $ROGUE`}</span>
-            </p>
-          </div>
-          <div className="flex  gap-1 text-md pt-1">
-            <p className="text-primary">$ROGUE:</p>
-            <p>
-              {" "}
-              {tokenData?.priceUsd
-                ? parseFloat(tokenData?.priceUsd).toFixed(6)
-                : 0.0}
-            </p>
-          </div>
+        <div className="flex gap-2 text-xs pt-1">
+          <p className="text-primary">$ROGUE:</p>
+          <p>
+            {tokenData?.priceUsd
+              ? parseFloat(tokenData.priceUsd).toFixed(6)
+              : "0.000000"}
+          </p>
         </div>
+        
         <div className="h-full flex uppercase">
-          <div
-            onClick={() =>
-              open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
-            }
-            className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center"
-          >
-            <img src={ICONS.icon_coingecko} alt="" className="w-[37px]" />
-          </div>
-          <div
-            onClick={() =>
-              open("https://www.cookie.fun/en/agent/agent-rogue", "_brace")
-            }
-            className="border-x-[1px] border-primary cursor-pointer h-full px-6 flex items-center"
-          >
-            <img src={ICONS.icon_cooki} alt="" className="w-[41px]" />
-          </div>
-          <div
-            onClick={() => open("https://t.me/AgentRogue_Official", "_brace")}
-            className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center"
-          >
-            telegram
-          </div>
-          <div
-            onClick={() => open("https://x.com/0xRogueAgent", "_brace")}
-            className="border-x-[1px] border-primary cursor-pointer h-full px-10 flex items-center"
-          >
-            Twitter
-          </div>
+          {socialLinks.map((link, index) => (
+            <div
+              key={index}
+              onClick={() => handleExternalLink(link.url)}
+              className="border-x-[1px] border-primary cursor-pointer h-full px-4 flex items-center"
+            >
+              <img src={link.icon} alt="" className="w-[27px]" />
+            </div>
+          ))}
         </div>
-
-        {/* <Button
-          onClick={() =>
-            open("https://www.coingecko.com/en/coins/agent-rogue", "_brace")
-          }
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-        </Button>
-        <Button
-          onClick={() =>
-            open(
-              "https://dexscreener.com/solana/bgzm2era3ifpkcmb4w49of3cj9ruverxzhe2pzbbp8tv",
-              "_brace"
-            )
-          }
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-          <img
-            src={ICONS.icon_PIXELS_decscrenner}
-            alt=""
-            className="w-[50px]"
-          />
-        </Button>
-
-        <Button
-          onClick={() => open("https://x.com/0xRogueAgent", "_brace")}
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-          <img src={ICONS.icon_PIXELS_X} alt="" className="w-[50px]" />
-        </Button>
-        <Button
-          onClick={() => open("https://t.me/AgentRogue_Official", "_brace")}
-          className=" uppercase rounded-[40px] p-0"
-          variant={"ghost"}
-        >
-          <img src={ICONS.PIXELS_Telegram} alt="" className="w-[50px]" />
-        </Button> */}
       </div>
     </div>
   );

@@ -39,8 +39,8 @@ const StakersTable = ({ data, isLoading }: StakersTableProps) => {
   }
 
   return (
-    <Table>
-      <TableHeader>
+    <Table >
+      <TableHeader className="sticky top-0">
         <TableRow>
           <TableHead className="w-[300px] text-white">Wallet Address</TableHead>
           <TableHead className="text-white">Staked Amount</TableHead>
@@ -48,7 +48,7 @@ const StakersTable = ({ data, isLoading }: StakersTableProps) => {
           <TableHead className="text-white">Last Withdrawal Time</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody className="">
         {data.map((staker, index) => (
           <TableRow key={index}>
             <TableCell className="font-mono">
@@ -129,7 +129,7 @@ const StakersDashboard = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4 space-y-4 overflow-auto">
+    <div className="container mx-auto p-4 space-y-4  h-full ">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <h3>Total Value Locked</h3>
@@ -142,7 +142,10 @@ const StakersDashboard = () => {
           <p className="text-2xl font-bold">{stakers.length}</p>
         </div>
       </div>
+      <div className="h-[100%] overflow-y-scroll">
+
       <StakersTable data={stakers} isLoading={isLoading} />
+      </div>
     </div>
   );
 };

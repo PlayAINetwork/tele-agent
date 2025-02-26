@@ -8,20 +8,14 @@ import {
   getOrCreateAssociatedTokenAccount,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTrigger,
-  DialogClose,
-} from "../ui/dialog";
-import { ChevronRight, X } from "lucide-react";
+
+import { ChevronRight } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useToast } from "@/hooks/use-toast";
 import { HOST_CONTRACT } from "@/contracts/host.contract.abi";
-import { handleUserTx } from "@/axios";
+import { handleUserTx } from "@/axios/axios";
 
 const TOKEN_MINT = new PublicKey(
   "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL"
@@ -55,7 +49,7 @@ const StakePopup = () => {
   const [vaultBalanceofUser, setVaultBalanceofUser] = useState(0);
   const [balance, setBalance] = useState(0);
   const [error, setError] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
   const fetchBalance = async (wallet: any) => {
     try {
       setLoading(true);
@@ -322,91 +316,68 @@ const StakePopup = () => {
     }
   };
 
-  useEffect(() => {
-    // Function to check if screen width is mobile
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+  // useEffect(() => {
+  //   // Function to check if screen width is mobile
+  //   const checkIsMobile = () => {
+  //     setIsMobile(window.innerWidth <= 768);
+  //   };
 
-    // Check initially
-    checkIsMobile();
+  //   // Check initially
+  //   checkIsMobile();
 
-    // Add event listener for window resize
-    window.addEventListener("resize", checkIsMobile);
+  //   // Add event listener for window resize
+  //   window.addEventListener("resize", checkIsMobile);
 
-    // Cleanup
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
+  //   // Cleanup
+  //   return () => window.removeEventListener("resize", checkIsMobile);
+  // }, []);
 
   return (
-    <Dialog
-      onOpenChange={() => {
-        setDepositAmount("");
-        setWithdrawAmount("");
-      }}
-    >
-      <DialogTrigger asChild>
-        <div
-          className="px-12 w-full h-full cursor-pointer bg-neutral-700 flex justify-center items-center overflow-hidden"
-          style={{
-            clipPath: isMobile
-              ? ""
-              : "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
-          }}
-        >
-          <span className="text-white relative transition-transform duration-300 ease-in-out">
-            <span className="block uppercase transition-all duration-300 opacity-100 translate-y-0">
-              {"> stake now <"}
-            </span>
-          </span>
-        </div>
-      </DialogTrigger>
-      <DialogContent
-        className="flex flex-col sm:max-w-md md:max-w-[500px] gap-0 border-2 border-primary binaria bg-[#181818] p-0 pt-0 overflow-auto"
-        onPointerDownOutside={(e) => e.preventDefault()}
-      >
-        <div className="flex justify-between">
-          <DialogDescription
-            onClick={async () => {
-              setStake(true);
-              setDepositAmount("");
-              fetchBalance(wallet);
-            }}
-            className={`px-4 w-full uppercase text-sm md:text-md text-gray-200 py-2 cursor-pointer ${
-              isStake ? "bg-primary text-[#010101]" : "bg-[#181818] text-[#fff]"
-            }`}
-          >
-            {">> stake_$rogue"}
-          </DialogDescription>
-          <DialogDescription
-            onClick={async () => {
-              setStake(false);
-              setWithdrawAmount("");
-              getUserBalance(wallet);
-            }}
-            className={`px-4 w-full uppercase text-sm md:text-md text-gray-200 py-2 cursor-pointer ${
-              isStake ? "bg-[#181818] text-[#fff]" : "bg-primary text-[#010101]"
-            }`}
-          >
-            {">> unstake_$rogue"}
-          </DialogDescription>
-          <DialogClose className="min-w-[40px] flex justify-center items-center bg-primary z-10">
-            <X className="text-black" />
-          </DialogClose>
-        </div>
+    <div className=" relative md:max-w-[70%] md:w-[70%]  gap-0 border-2 border-primary  bg-[#181818] p-0 pt-0">
+      <div className="absolute w-4 h-4 bg-primary left-[-10px] top-[-10px]"></div>
+      <div className="absolute w-4 h-4 bg-primary right-[-10px] top-[-10px]"></div>
+      <div className="absolute w-4 h-4 bg-primary left-[-10px] bottom-[-10px]"></div>
+      <div className="absolute w-4 h-4 bg-primary right-[-10px] bottom-[-10px]"></div>
 
-        <div className="flex-1 h-full overflow-auto w-full">
-          <div className="flex flex-col h-full py-6 px-6 w-full border-primary border-[1px] justify-center items-center gap-4 bg-[#131314]">
-            <div className="flex gap-3 w-full flex-wrap">
-              <div className="flex w-full flex-col gap-2 text-[#F1F6F2]">
-                {/* {error && (
+      <div className="flex justify-between w-full ">
+        <div
+          onClick={async () => {
+            setStake(true);
+            setDepositAmount("");
+            fetchBalance(wallet);
+          }}
+          className={`px-4 w-full uppercase text-sm md:text-md py-2 text-center font-semibold cursor-pointer ${
+            isStake ? "bg-primary text-[#010101]" : "bg-[#181818] text-[#fff]"
+          }`}
+        >
+          {">> stake_$rogue"}
+        </div>
+        <div
+          onClick={async () => {
+            setStake(false);
+            setWithdrawAmount("");
+            getUserBalance(wallet);
+          }}
+          className={`px-4 w-full uppercase text-sm md:text-md  text-center font-semibold py-2 cursor-pointer ${
+            isStake ? "bg-[#181818] text-[#fff]" : "bg-primary text-[#010101]"
+          }`}
+        >
+          {">> unstake_$rogue"}
+        </div>
+      </div>
+
+      <div className="flex-1   w-full pb-6">
+        <div className="flex flex-col h-full py-6 px-6 w-full border-primary border-t-[1px] justify-center items-center gap-4 ]">
+          <div className="flex gap-3 w-full flex-wrap">
+            <div className="flex w-full flex-col gap-2 text-[#F1F6F2]">
+              {/* {error && (
                   <Alert variant="destructive">
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
                  */}
-                <div className="flex w-full justify-between">
-                  {isStake ? (
+              <div className="flex w-full justify-between uppercase">
+                {/* {isStake ? (
                     <div>
                       Available Balance: {balance?.toFixed(5) ?? 0} ROGUE
                     </div>
@@ -414,82 +385,109 @@ const StakePopup = () => {
                     <div>
                       Staked Balance: {vaultBalanceofUser.toFixed(5)} ROGUE
                     </div>
-                  )}
-                </div>
+                  )} */}
 
-                <div className="flex w-full border-[1px] border-primary">
-                  <Input
-                    className="binaria border-none uppercase hover:bg-[#303030]"
-                    value={isStake ? depositAmount : withdrawAmount}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (isStake) {
-                        setDepositAmount(value);
-                      } else {
-                        setWithdrawAmount(value);
-                      }
-                    }}
-                    type="number"
-                    step="0.000000001"
-                    min="0"
-                    placeholder={
-                      isStake
-                        ? "input_$ROGUE_TO_STAKE"
-                        : "input_$ROGUE_TO_UNSTAKE"
-                    }
-                    disabled={loading}
-                  />
-                  <Button
-                    onClick={() =>
-                      isStake
-                        ? setDepositAmount(String(balance))
-                        : setWithdrawAmount(String(vaultBalanceofUser))
-                    }
-                  >
-                    Max
-                  </Button>
-                </div>
+                <div className="text-sm md:text-md ">enter amount of $ROGUE to unstake</div>
               </div>
-              <div className="text-[#B6B6B6] text-xs uppercase">
+
+              <div className="flex w-full border-[1px] border-primary">
+                <Input
+                  className=" border-none uppercase text-sm md:text-md  hover:bg-[#303030]"
+                  value={isStake ? depositAmount : withdrawAmount}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (isStake) {
+                      setDepositAmount(value);
+                    } else {
+                      setWithdrawAmount(value);
+                    }
+                  }}
+                  type="number"
+                  step="0.000000001"
+                  min="0"
+                  placeholder={
+                    isStake
+                      ? "input_$ROGUE_TO_STAKE"
+                      : "input_$ROGUE_TO_UNSTAKE"
+                  }
+                  disabled={loading}
+                />
+                <Button
+                  onClick={() =>
+                    isStake
+                      ? setDepositAmount(String(balance))
+                      : setWithdrawAmount(String(vaultBalanceofUser))
+                  }
+                >
+                  Max
+                </Button>
+              </div>
+            </div>
+            <div className="flex flex-col items-end w-full">
+              <div className="text-sm md:text-md ">
+                <span className="text-[#B6B6B6] "> Available Balance:</span>{" "}
+                {balance?.toFixed(5) ?? 0} ROGUE
+              </div>
+              <div className="text-sm md:text-md ">
+                <span className="text-[#B6B6B6]"> Staked Balance:</span>{" "}
+                {vaultBalanceofUser.toFixed(5)} ROGUE
+              </div>
+            </div>
+            {/* <div className="text-[#B6B6B6] text-xs uppercase">
                 DISCLAIMER: Staking allows you to earn airdrops while supporting
                 the project. Please note, there will not be any active yields on
                 your deposits. Rest assured, you can withdraw at any time.
-              </div>
-            </div>
-          </div>
-
-          <div className="flex w-full gap-0">
-            {wallet.connected ? (
-              <>
-                <Button
-                  className="uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
-                  disabled={loading}
-                >
-                  cancel
-                </Button>
-                <Button
-                  className="uppercase w-full"
-                  onClick={isStake ? depositTokens : withdrawTokens}
-                  disabled={loading}
-                >
-                  <ChevronRight className="w-4 h-4" color="#000" />
-                  {loading ? "Wait..." : isStake ? "stake" : "unstake"}
-                </Button>
-              </>
-            ) : (
-              <>
-                <CustomSolanaButton
-                  connectText="Connect Wallet"
-                  disconnectText="Disconnect Wallet"
-                  buttonStyle="primary"
-                  size="medium"
-                />
-              </>
-            )}
+              </div> */}
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+        <div>
+
+
+
+        <div className="flex w-full   justify-center gap-2  md:gap-0">
+          {wallet.connected ? (
+            <>
+              {/* <Button
+                className="uppercase w-full bg-[#181818] text-[#fff] hover:text-[#fff] hover:bg-[#171717]"
+                disabled={loading}
+                >
+                cancel
+                </Button> */}
+              <Button
+                className="uppercase  px-10 h-auto !font-semibold"
+                onClick={isStake ? depositTokens : withdrawTokens}
+                disabled={loading}
+                >
+                <ChevronRight className="w-4 h-4" color="#000" />
+                {loading ? "Wait..." : isStake ? "stake" : "unstake"}
+              </Button>
+            </>
+          ) : (
+            <div>
+              <CustomSolanaButton
+                connectText="Connect Wallet"
+                disconnectText="Disconnect Wallet"
+                buttonStyle="primary"
+                size="medium"
+                />
+            </div>
+          )}
+        </div>
+
+        {/* <div className="flex md:justify-end justify-center mt-3 md:mt-0">
+        <Button
+        variant={"ghost"}
+                className="uppercase  px-10 h-auto py-0 !font-semibold"
+                onClick={isStake ? depositTokens : withdrawTokens}
+                disabled={loading}
+              >
+                {">> see staking history <<"}
+              </Button>
+        </div> */}
+        
+          </div>
+      </div>
+    </div>
   );
 };
 

@@ -17,12 +17,21 @@ import notshow from "./images/noshow.png";
 import disbg from "./images/bg-dis.png";
 import mobile from "./images/mobile.png";
 
+import ROGUE_V from "./images/$ROGUE.png";
+import homebgLine from "./images/homebg-line.png";
+import homehero from "./images/rougehero.png";
+
+
+
 
 
 
 
 
 export const IMAGES = {
+  ROGUE_V,
+  homebgLine,
+  homehero,
   mobile,
   disbg,
   img_balaji,
@@ -74,8 +83,40 @@ import icon_sound from"./icons/sound.svg";
 import icon_mute from"./icons/mute.svg";
 
 
+import icon_clock from"./icons/clock-check-svgrepo-com.svg";
+import icon_customize from"./icons/customize-svgrepo-com 1.svg";
+import icon_headphones from"./icons/headphones-round-sound-svgrepo-com 1.svg";
+import icon_key from"./icons/key-svgrepo-com 1.svg";
+import icon_microphone from"./icons/microphone-svgrepo-com.svg";
+import icon_robot from"./icons/robot-arm-1-svgrepo-com 1.svg";
+import icon_rocket from"./icons/rocket-svgrepo-com 1.svg";
+import icon_speech from"./icons/speech-bubble-svgrepo-com (3).svg";
+import icon_tag from"./icons/tag-price-svgrepo-com 1.svg";
+import icon_translate from"./icons/translate-svgrepo-com 1.svg";
+import icon_up from"./icons/up.svg";
+
+import icon_x from"./icons/x-twitter.svg";
+import icon_telegram from"./icons/telegram.svg";
+
+
+
+
+
 
 export const ICONS = {
+  icon_x,
+  icon_telegram,
+  icon_clock,
+  icon_customize,
+  icon_headphones,
+  icon_key,
+  icon_microphone,
+  icon_robot,
+  icon_rocket,
+  icon_speech,
+  icon_tag,
+  icon_translate,
+  icon_up,
   icon_coingecko,
   icon_cooki,
   icon_reco,

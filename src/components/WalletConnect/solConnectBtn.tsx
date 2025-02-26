@@ -1,8 +1,9 @@
-import { useState } from "react";
+import  { useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Button } from "../ui/button";
 import DYNAMICICONS from "@/assets/DynamicIcon";
+import { trimAddress } from "@/lib/utils";
 
 const CustomSolanaButton = ({
   connectText = "Connect Wallet",
@@ -33,14 +34,16 @@ const CustomSolanaButton = ({
     ${styles[buttonStyle]}
   `;
 
-  const shortenAddress = (address: any) => {
-    setLoading(false);
-    return `${address.slice(0, 4)}...${address.slice(-4)}`;
-  };
+  // const shortenAddress = (address:any) => {
+  //   setLoading(false)
+  //   return `${address.slice(0, 4)}...${address.slice(-4)}`;
+  // };
 
   const handleClick = async () => {
     if (connected) {
       try {
+    setLoading(false)
+
         await disconnect();
       } catch (error) {
         console.error("Failed to disconnect:", error);
@@ -48,11 +51,15 @@ const CustomSolanaButton = ({
     }
   };
 
-  const buttonText = connected
-    ? `${shortenAddress(publicKey?.toString())} (${disconnectText})`
+  const adderss:any = publicKey?.toString()
+  const buttonText :any= connected
+    ? `${trimAddress(adderss, 4)} (${disconnectText})`
     : connectText;
+
+
   return (
-    <Button className="w-full px-0 binaria">
+   <Button className="w-full px-0 binaria">
+
       <WalletMultiButton
         className={`${baseStyle} flex bg-transparent gap-2${loading ? "opacity-75 cursor-not-allowed w-full" : "min-w-full "}`}
         onClick={handleClick}
@@ -80,7 +87,8 @@ const CustomSolanaButton = ({
         </div>
         {buttonText}
       </WalletMultiButton>
-    </Button>
+      </Button>
+
   );
 };
 

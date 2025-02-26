@@ -1,41 +1,62 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from 'react-router-dom'
 // import { AppLayout } from "../layouts/app.layout";
-import { ROUTES } from "./router";
-import Home from "@/pages/Home";
-import AdminGenrate from "@/pages/AdminGenrate";
-import LeaderBoard from "@/pages/LeaderBoard";
-import AppLayout from "@/layouts/AppLayout";
-import Agent from "@/pages/Agent";
-import StakersDashboard from "@/components/app/GetStakingInfo";
+import { ROUTES } from './router'
+import Home from '@/pages/Home'
+import AdminGenrate from '@/pages/AdminGenrate'
+import AppLayout from '@/layouts/AppLayout'
+import CreateWithRogue from '@/pages/CreateWithRogue'
+import Features from '@/pages/Features'
+import { Staking } from '@/pages/Staking'
+import Terminal from '@/pages/Terminal'
+import RoguePage from '@/pages/RoguePage'
+import CreateRogueVedio from '@/pages/CreateRogueVedio'
+import StakersDashboard from '@/components/app/GetStakingInfo'
+import ErrorBoundary from '@/components/app/ErrorBoundary'
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <AppLayout />,
-    errorElement: <Home />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: ROUTES.nodes.global,
         element: <Home />,
       },
       {
-        path: ROUTES.nodes.info,
-        element: <StakersDashboard />,
-      },
-      {
         path: ROUTES.nodes.adminGenerate,
         element: <AdminGenrate />,
       },
       {
-        path: ROUTES.nodes.rogueagent,
-        element: <LeaderBoard />,
+        path: ROUTES.nodes.createWithRogue,
+        element: <CreateWithRogue />,
       },
       {
-        path: ROUTES.nodes.agent,
-        element: <Agent />,
+        path: ROUTES.nodes.features,
+        element: <Features />,
+      },
+      {
+        path: ROUTES.nodes.staking,
+        element: <Staking />,
+      },
+      {
+        path: ROUTES.nodes.terminal,
+        element: <Terminal />,
+      },
+      {
+        path: ROUTES.nodes.rogue,
+        element: <RoguePage />,
+      },
+      {
+        path: ROUTES.nodes.createVedio,
+        element: <CreateRogueVedio />,
+      },
+      {
+        path: ROUTES.nodes.info,
+        element: <StakersDashboard />,
       },
     ],
   },
-]);
+])
 
-export default router;
+export default router
