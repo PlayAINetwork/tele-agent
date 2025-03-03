@@ -10,7 +10,7 @@ const CreateWithRogue = () => {
       description: "Pick your agent and create videos based on simple prompts.",
       icon: <DYNAMICICONS.robot/>,
       isActive: <DYNAMICICONS.robot color="#010101"/>,
-      link:"/create-vedio"
+      link:"/create-video"
     },
     {
       title: "Create a Podcast",

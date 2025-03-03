@@ -6,7 +6,7 @@ export const ROUTES = {
         createWithRogue: "/create-with-rogue",
         features: "/features",
         terminal: "/terminal",
-        createVedio: "/create-vedio",
+        createVedio: "/create-video",
         info: "/info",
         adminGenerate: "/admin-generate",
     },
