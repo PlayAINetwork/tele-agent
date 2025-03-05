@@ -40,7 +40,7 @@ const Features = () => {
       >
         <p>{">> Main Pillars of ROGUE <<"}</p>
       </div>
-      <div className="w-full h-full flex flex-col md:hidden ">
+      <div className="w-full h-full flex flex-col md:hidden pb-6 ">
         <div className="flex justify-between mb-4  ">
           <div className="w-[100%] flex flex-col gap-3 relative">
             {

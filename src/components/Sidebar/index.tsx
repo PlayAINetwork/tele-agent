@@ -21,7 +21,7 @@ const Sidebar = () => {
  
   return (
     <aside
-      className="relative overflow-hidden border-[1px] border-primary bg-card  max-w-[430px] md:min-w-[430px] h-[400px] md:h-full "
+      className="relative overflow-hidden border-[1px] border-primary bg-card  max-w-[430px] md:min-w-[430px]  h-full"
       // className={cn(
       //   "m-10 h-full gap-4  px-4  py-2 flex md:bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col md:border-l",
       //   "transition-all duration-300 ease-in-out",
