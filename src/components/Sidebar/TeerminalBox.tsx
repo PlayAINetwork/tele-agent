@@ -359,7 +359,7 @@ const TeerminalBox = () => {
               placeholder="Inject your topic here"
             /> */}
             <Input
-              className="pr-[40px] binaria border-none  uppercase hover:bg-[#303030]"
+              className="pr-[40px] text-sm  md:text-md  binaria border-none  uppercase hover:bg-[#303030]"
               value={topic}
               type="text"
               placeholder="type_your_topic_here"

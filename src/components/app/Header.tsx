@@ -74,11 +74,11 @@ const Header = () => {
       <div className="flex gap-3">
         <div
           className="w-full h-full bg-primary p-[2px] uppercase"
-          style={{ clipPath: "polygon(0 0, 97.2% 2%, 100% 100%, 0% 100%)" }}
+          style={{ clipPath: "polygon(0 0, 97.5% 2%, 100% 100%, 0% 100%)" }}
         >
           <div className="flex h-full">
             <div className="cursor-pointer" onClick={() => navigate("/")}>
-              <img src={IMAGES.logo} alt="Logo" className="min-w-[200px]" />
+              <img src={IMAGES.logo} alt="Logo" className="w-[120px] md:min-w-[200px]" />
             </div>
             
             {menuItems?.map((item, index) => (
@@ -86,7 +86,7 @@ const Header = () => {
               variant={"ghost"}
               onClick={() => navigate(item.link)}
                 key={index}
-                className={`w-full mr-[1px] px-4 font-700 cursor-pointer h-full  text-nowrap text-sm flex justify-center items-center ${pathname == item?.link ? "bg-[#010101] text-primary" : "bg-[#383838] text-[#F1F6F2"} `}
+                className={`hidden md:flex w-full mr-[1px] px-4 font-700 cursor-pointer h-full  text-nowrap text-sm  justify-center items-center ${pathname == item?.link ? "bg-[#010101] text-primary" : "bg-[#383838] text-[#F1F6F2"} `}
                 style={item.clipPath ? { clipPath: item.clipPath } : undefined}
               >
                 {item.text}
@@ -99,7 +99,7 @@ const Header = () => {
 
       {/* Price and social media section */}
       <div className="flex items-center gap-4">
-        <div className="flex gap-2 text-xs pt-1">
+        <div className="flex gap-2 text-[8px] md:text-xs md:pt-1">
           <p className="text-primary">$ROGUE:</p>
           <p>
             {tokenData?.priceUsd
@@ -113,9 +113,9 @@ const Header = () => {
             <div
               key={index}
               onClick={() => handleExternalLink(link.url)}
-              className="border-x-[1px] border-primary cursor-pointer h-full px-4 flex items-center"
+              className="border-x-[1px] border-primary cursor-pointer h-full px-3 md:px-4 flex items-center"
             >
-              <img src={link.icon} alt="" className="w-[27px]" />
+              <img src={link.icon} alt="" className="w-[15px] md:w-[27px]" />
             </div>
           ))}
         </div>

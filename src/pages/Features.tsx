@@ -33,7 +33,7 @@ const Features = () => {
     },
   ];
   return (
-    <div className="flex flex-col   md:gap-10 gap-6 justify-start items-center h-full w-full py-4 md:py-0">
+    <div className="flex flex-col   gap-10 justify-start items-center h-full w-full  md:py-0">
       <div
         className="md:text-lg uppercase  bg-primary md:w-[570px] px-10 font-semibold py-2 flex justify-center items-center text-black
         "
@@ -116,7 +116,7 @@ const {isMobile} = useAppCtx()
   return (
     <div className="w-full max-w-lg mx-auto overflow-hidden transition-transform duration-500 ease-out hover:scale-[1.02]">
       {/* Border Container */}
-      <div className="relative w-full  aspect-[2/1]">
+      <div className="relative w-full  aspect-[3/1] md:aspect-[2/1]">
         {/* Border Layer */}
         <div
           className={`absolute inset-[1px]  ${borderClass}`}
@@ -137,7 +137,7 @@ const {isMobile} = useAppCtx()
           }}
         >
           {/* Content Wrapper */}
-          <div className="w-full h-full flex flex-col items-center justify-center px-8 py-4">
+          <div className="w-full h-full flex md:flex-col gap-4 items-center md:justify-center px-8 py-4">
             {/* Icon */}
             <div className="bg-[#89FC961A] rounded-full p-3 mb-4">
               <img src={icon} alt="" />
@@ -145,13 +145,17 @@ const {isMobile} = useAppCtx()
             </div>
 
             {/* Text */}
-            <h2 className="text-md md:text-2xl  mb-2 tracking-wider text-center">
+            <div>
+
+            <h2 className="text-md md:text-2xl  mb-2 tracking-wider md:text-center">
               {title}
             </h2>
 
-            <p className="text-[12px] md:text-xs text-gray-400 md:max-w-[80%] tracking-wide uppercase text-center">
+            <p className="text-[12px] md:text-xs text-gray-400 md:max-w-[80%] tracking-wide uppercase md:text-center">
               {description}
             </p>
+            </div>
+
           </div>
         </div>
       </div>

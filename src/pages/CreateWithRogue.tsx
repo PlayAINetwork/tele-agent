@@ -30,7 +30,7 @@ const CreateWithRogue = () => {
   ];
 
   return (
-    <div className="flex flex-col justify-center gap-6 relative h-full ">
+    <div className="flex flex-col justify-center items-center gap-6 relative h-full ">
 
       <div className="h-full absolute right-4 flex items-center">
         <img src={IMAGES.ROGUE_V} alt="" className={"h-[80%]"}/>
@@ -70,7 +70,7 @@ const Card = ({
 
   return (
     <div 
-      className="w-full md:max-w-[900px] cursor-pointer mx-auto overflow-hidden group md:px-4"
+      className="w-full md:max-w-[900px] cursor-pointer r mx-auto overflow-hidden group md:px-4"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() => link && !commingSoon ? navigate(link) : null}

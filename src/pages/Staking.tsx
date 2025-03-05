@@ -31,8 +31,42 @@ export const Staking = () => {
    
 
       <div className='w-full flex flex-col justify-center items-center gap-10 md:px-20'>
-        <div className="text-primary border-2 border-primary py-1 px-20 transform transition-transform  pt-2" >WHY STAKE ROGUE?</div>
-        <div className="grid grid-cols-1 md:grid-cols-4 w-[100%]  md:gap-0 gap-3">
+        <div className="text-primary border-2 border-primary py-1 px-20 transform transition-transform  pt-2 text-sm  md:text-md" >WHY STAKE ROGUE?</div>
+        <div className=" md:hidden w-full h-full flex flex-col gap-0 ">
+        
+        <div className="flex w-full justify-center mb-4 h-[115px]">
+          <div className="w-1/2   relative">
+            <div className="absolute w-full left-0 ">
+            <Card {...list[0]} />
+            </div>
+          </div>
+
+          <div className="w-1/2  relative">
+            <div className="absolute w-full left-0 ">
+            <Card {...list[1]} />
+            </div>
+          </div>
+
+         
+        </div>
+        <div className="flex w-full justify-center mb-4 h-[115px]">
+          <div className="w-1/2   relative">
+            <div className="absolute w-full left-0 ">
+            <Card {...list[0]} />
+            </div>
+          </div>
+
+          <div className="w-1/2  relative">
+            <div className="absolute w-full left-0 ">
+            <Card {...list[1]} />
+            </div>
+          </div>
+
+         
+        </div>
+
+        </div>
+        <div className=" hidden md:grid grid-cols-1 md:grid-cols-4 w-[100%]  md:gap-0 gap-3">
 
             <Card {...list[0]} />
             <Card {...list[1]} />
@@ -65,7 +99,7 @@ const Card = ({
     return (
       <div className="w-full md:max-w-lg mx-auto overflow-hidden transition-transform duration-500 ease-out hover:scale-[1.02]">
         {/* Border Container */}
-        <div className="relative w-full h-[150px]  md:aspect-[2/1]">
+        <div className="relative w-full h-[120px]  md:h-[150px]  md:aspect-[2/1]">
           {/* Border Layer */}
           <div
             className={`absolute inset-[1px]  ${borderClass}`}
@@ -85,12 +119,12 @@ const Card = ({
             <div className="w-full h-full flex flex-col bg-[#89FC960D] items-center justify-center px-8 py-4">
               {/* Icon */}
               <div className="bg-[#89FC961A] rounded-full p-3 mb-4">
-                <img src={icon} alt="" className='w-7 h-7' />
+                <img src={icon} alt="" className='md:w-7 md:h-7 w-5 h-5' />
                 {/* <Icon className="w-6 h-6 text-green-500 sm:w-8 sm:h-8" /> */}
               </div>
   
               {/* Text */}
-              <h2 className="text-md md:text-md uppercase  tracking-wider text-center max-w-[80%] text-[#F1F6F2CC]">
+              <h2 className="text-xs md:text-md uppercase  tracking-wider text-center md:max-w-[80%] text-[#F1F6F2CC]">
                 {title}
               </h2>
   

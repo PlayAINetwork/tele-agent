@@ -94,7 +94,7 @@ const GlobelBox = () => {
           <div className="flex gap-0">
             <div className="relative w-full  border-t-[1px] border-primary">
               <Input
-                className="pr-[40px] binaria border-none  hover:bg-[#303030]"
+                className="pr-[40px] binaria text-sm  md:text-md  border-none  hover:bg-[#303030]"
                 value={message}
                 type="text"
                 placeholder="Start typing…"
@@ -107,7 +107,7 @@ const GlobelBox = () => {
               disabled={disableAction}
               onClick={handleSend}
               // variant={"ghost"}
-              className="bg-primary text-md items-center text-[#010101]"
+              className="bg-primary text-sm  md:text-md items-center text-[#010101]"
             >
               <SendHorizontalIcon />
               send_msg

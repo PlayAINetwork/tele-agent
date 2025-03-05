@@ -15,13 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 
 import { trimAddress, truncateText } from "@/lib/utils";
-import {
-  Play,
-  Square,
-  Voicemail,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+import { Play, Square, Voicemail, Volume2, VolumeX } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -61,14 +55,12 @@ const CreateRogueVedio = () => {
         "https://render-video.agentexperience.live/get-all-files-in-bucket"
       );
       // Filter out items with "0x" address
-      const validVideos = response.data.filter(
-        (item: any) => item[3] !== "0x"
-      );
+      const validVideos = response.data.filter((item: any) => item[3] !== "0x");
 
-       // Separate videos into two lists
-       const userVideos: any[] = [];
-       const otherVideos: any[] = [];
-       validVideos.forEach((item: any) => {
+      // Separate videos into two lists
+      const userVideos: any[] = [];
+      const otherVideos: any[] = [];
+      validVideos.forEach((item: any) => {
         // const videoItem = {
         //   id: item[0],
         //   name: item[1],
@@ -249,31 +241,28 @@ const CreateRogueVedio = () => {
     <div className=" h-full  flex flex-col gap-4     ">
       <div>
         <Button
-          className="bg-[#383838] text-white"
+          className="bg-[#383838] text-white text-xs md:text-md h-auto "
           onClick={() => navigator(-1)}
         >
           ← go back
         </Button>
       </div>
       <div className="flex flex-col flex-1  gap-3    ">
-        <div className=" px-4 uppercase text-md font-semibold py-2   border-[1px] border-primary text-primary">
+        <div className=" px-4 uppercase text-sm md:text-md font-semibold py-2   border-[1px] border-primary text-primary">
           {">> recent community creations <<"}
         </div>
 
         <div className="flex flex-col flex-1     overflow-auto h-full ">
           {recentlist?.length > 0 ? null : (
             <div className="flex gap-2 flex-wrap w-[100%] animate-pulse">
-            <div className="grid grid-cols-5 w-[100%]  gap-2">
-              <div className="h-[150px]  w-[100%]  bg-foreground"></div>
-              <div className="h-[150px] w-[100%] bg-foreground"></div>
-              <div className="h-[150px]  w-[100%] bg-foreground"></div>
-              <div className="h-[150px]  w-[100%] bg-foreground"></div>
-              <div className="h-[150px]  w-[100%] bg-foreground"></div>
-
-           
-              
+              <div className="flex gap-4 overflow-x-auto w-[100%]  ">
+                <div className="h-[150px]  min-w-64  bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
+              </div>
             </div>
-          </div>
           )}
 
           <div className="flex gap-4 overflow-x-auto">
@@ -365,36 +354,31 @@ const CreateRogueVedio = () => {
         <div className="flex gap-3 flex-wrap"></div>
       </div>
 
-      
-
       <div className="flex flex-col flex-1  gap-3    ">
-        <div className=" px-4 uppercase text-md font-semibold py-2   border-[1px] bg-primary text-black">
+        <div className=" px-4 uppercase text-sm md:text-md font-semibold py-2   border-[1px] bg-primary text-black">
           {">> your requests <<"}
         </div>
 
         <div className="flex flex-col flex-1     overflow-auto h-full ">
-          {videoGeneraing? null : myCreatedVideos?.length >= 0 ? 
-          <div className=" px-4 uppercase text-md font-semibold py-2  text-center  text-white">
-          {">> not Found  any Videos  <<"}
-        </div>
-          : (
+          {videoGeneraing ? null : myCreatedVideos?.length >= 0 ? (
+            <div className=" px-4 uppercase text-sm md:text-mdfont-semibold py-2  text-center  text-white">
+              {">> not Found  any Videos  <<"}
+            </div>
+          ) : (
             <div className="flex gap-2 flex-wrap w-[100%] animate-pulse">
-                <div className="grid grid-cols-5 w-[100%]  gap-2">
-                  <div className="h-[150px]  w-[100%]  bg-foreground"></div>
-                  <div className="h-[150px] w-[100%] bg-foreground"></div>
-                  <div className="h-[150px]  w-[100%] bg-foreground"></div>
-                  <div className="h-[150px]  w-[100%] bg-foreground"></div>
-                  <div className="h-[150px]  w-[100%] bg-foreground"></div>
-
-               
-                  
-                </div>
+              <div className="grid grid-cols-5 w-[100%]  gap-2">
+                <div className="h-[150px]  min-w-64  bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
+                <div className="h-[150px]  min-w-64 bg-foreground"></div>
               </div>
+            </div>
           )}
 
           <div className="flex gap-4 overflow-x-auto">
             {videoGeneraing ? (
-                <div className="h-60  w-64 bg-foreground"></div>
+              <div className="h-60  w-64 bg-foreground"></div>
             ) : null}
 
             {myCreatedVideos?.map((recent: any) => (
@@ -480,53 +464,57 @@ const CreateRogueVedio = () => {
 
         <div className="flex gap-3 flex-wrap"></div>
       </div>
+      <div className="pb-5 md:pb-0">
 
-      
+
       {connected ? (
-          <div className="border-[1px] border-primary  uppercase  md:w-[60%] mx-auto">
-            <div className=" py-2 px-2 flex uppercase justify-end w-full">
-              <p className="text-[10px] md:text-[14px] text-[#B6B6B6]">
-                video_generation_takes a bout_2-3
-                mins_once_payment_is_validated.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex w-full  border-t-[1px] border-primary flex-col md:flex-row">
-                {/* <Textarea
+        <div className="border-[1px] border-primary  uppercase w-full md:w-[60%] mx-auto ">
+          <div className=" py-2 px-2 flex uppercase justify-end w-full">
+            <p className="text-[10px] md:text-[14px] text-[#B6B6B6]">
+              video_generation_takes a bout_2-3 mins_once_payment_is_validated.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex w-full  border-t-[1px] border-primary flex-col md:flex-row">
+              {/* <Textarea
               className="h-[50px]  binaria uppercase placeholder-white"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="Inject your topic here"
             /> */}
-                <Input
-                  className="pr-[40px] binaria border-none  uppercase hover:bg-[#303030]"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  type="text"
-                  placeholder="type_your_request_here"
-                  disabled={disableAction}
-                  // onKeyPress={handleKeyPress}
-                />
-                <Button
-                  className=" uppercase "
-                  onClick={transferTokens}
-                  disabled={videoGeneraing || !connected || disableAction}
-                >
-                  {videoGeneraing
-                    ? status || "Generating Video..."
-                    : `Create with 30k $ROGUE`}
-                </Button>
-              </div>
+              <Input
+                className="pr-[40px] binaria border-none text-xs md:text-md uppercase hover:bg-[#303030]"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                type="text"
+                placeholder="type_your_request_here"
+                disabled={disableAction}
+                // onKeyPress={handleKeyPress}
+              />
+              <Button
+                className=" uppercase "
+                onClick={transferTokens}
+                disabled={videoGeneraing || !connected || disableAction}
+              >
+                {videoGeneraing
+                  ? status || "Generating Video..."
+                  : `Create with 30k $ROGUE`}
+              </Button>
             </div>
           </div>
-        ) : 
-        <div className="flex justify-center">
-
-        <Button 
-         onClick={() => setVisible(true)}
-        className="uppercase !font-semibold px-20">connect to start creating</Button>
         </div>
-        }
+      ) : (
+        <div className="flex justify-center">
+          <Button
+            onClick={() => setVisible(true)}
+            className="uppercase  !font-semibold px-20"
+          >
+            connect to start creating
+          </Button>
+        </div>
+      )}
+      </div>
+
     </div>
   );
 };

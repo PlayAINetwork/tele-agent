@@ -507,7 +507,7 @@ const TvConsole = () => {
         <div className="h-full grid grid-rows-[30px_1fr_40px] gap-0">
           <div className="w-full uppercase top-0">
             <div className="w-full px-2 py-1 gap-2 text-[#000000] bg-primary flex items-center">
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="md:w-4 md:h-4 w-3 h-3" />
               {currentChannel?.title}
             </div>
           </div>
@@ -527,48 +527,48 @@ const TvConsole = () => {
           </div>
 
           <div className="flex font-[500] items-center justify-between py-0 border-t border-primary">
-            <div className="flex gap-0 h-full text-sm">
-              <div className="bg-primary px-3 gap-3 flex items-center">
+            <div className="flex gap-0 h-full text-[10px] md:text-sm">
+              <div className="bg-primary md:px-3 px-2 gap-3 flex items-center">
                 {currentChannel?.type === "live" ? (
                   <div className="flex text-black gap-1 items-center">
-                    <Radio className="w-4 h-4" />
+                    <Radio className="md:w-4 md:h-4 w-3 h-3" />
                     LIVE
                   </div>
                 ) : (
                   <div className="flex text-black gap-1 items-center">
-                    <Video className="w-4 h-4" />
+                    <Video className="md:w-4 md:h-4 w-3 h-3" />
                     REC
                   </div>
                 )}
               </div>
 
               <button
-                className="border-primary border-r px-3"
+                className="border-primary border-r md:px-3 px-2"
                 onClick={handleNextChannel}
                 disabled={!power || channel === Object.keys(channels).length}
               >
-                <SkipForward className="w-4 h-4 text-primary" />
+                <SkipForward className="md:w-4 md:h-4 w-3 h-3 text-primary" />
               </button>
               {channel == 2 && (
                 <button
-                  className="border-primary border-r px-3"
+                  className="border-primary border-r md:px-3 px-2"
                   onClick={() => handleTimeSkip(-10)}
                   disabled={!power}
                 >
-                  <Rewind className="w-4 h-4 text-primary" />
+                  <Rewind className="md:w-4 md:h-4 w-3 h-3 text-primary" />
                 </button>
               )}
 
               <button
-                className="border-primary border-r px-3"
+                className="border-primary border-r md:px-3 px-2"
                 onClick={handlePlayPause}
                 disabled={!power}
               >
                 <div className="flex gap-2 items-center text-primary">
                   {isPlaying ? (
-                    <Square className="w-4 h-4" />
+                    <Square className="md:w-4 md:h-4 w-3 h-3" />
                   ) : (
-                    <Play className="w-4 h-4" />
+                    <Play className="md:w-4 md:h-4 w-3 h-3" />
                   )}
                   {isPlaying ? "STOP" : "PLAY"}
                 </div>
@@ -576,38 +576,38 @@ const TvConsole = () => {
 
               {channel == 2 && (
                 <button
-                  className="border-primary border-r px-3"
+                  className="border-primary border-r md:px-3 px-2"
                   onClick={() => handleTimeSkip(10)}
                   disabled={!power}
                 >
-                  <FastForward className="w-4 h-4 text-primary" />
+                  <FastForward className="md:w-4 md:h-4 w-3 h-3 text-primary" />
                 </button>
               )}
 
               <button
-                className="border-primary border-r px-3"
+                className="border-primary border-r md:px-3 px-2"
                 onClick={handlePrevChannel}
                 disabled={!power || channel === 1}
               >
-                <SkipBack className="w-4 h-4 text-primary" />
+                <SkipBack className="md:w-4 md:h-4 w-3 h-3 text-primary" />
               </button>
 
               <button
-                className="border-primary border-r px-3"
+                className="border-primary border-r md:px-3 px-2"
                 onClick={handleMuteUnmute}
                 disabled={!power}
               >
                 {isMuted ? (
-                  <VolumeX className="w-5 h-5 text-primary" />
+                  <VolumeX className="md:w-5 md:h-5 h-3 w-3 text-primary" />
                 ) : (
-                  <Volume2 className="w-5 h-5 text-primary" />
+                  <Volume2 className="md:w-5 md:h-5 h-3 w-3 text-primary" />
                 )}
               </button>
             </div>
 
             <div className="h-full flex">
-              <div className="h-full flex items-center gap-2 text-primary uppercase px-3 border-l border-primary">
-                <ChevronRight className="w-4 h-4" color="#89FC96" />
+              <div className="h-full flex text-[10px] md:text-sm items-center gap-2 text-primary uppercase md:px-3 px-2 border-l border-primary">
+                <ChevronRight className="md:w-4 md:h-4 w-3 h-3" color="#89FC96" />
                 {channel === 1 ?
                 "live right now"
                 :
