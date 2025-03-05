@@ -78,7 +78,7 @@ const Header = () => {
         >
           <div className="flex h-full">
             <div className="cursor-pointer" onClick={() => navigate("/")}>
-              <img src={IMAGES.logo} alt="Logo" className="w-[120px] md:min-w-[200px]" />
+              <img src={IMAGES.logo} alt="Logo" className="w-[130px] md:min-w-[200px]" />
             </div>
             
             {menuItems?.map((item, index) => (
@@ -99,7 +99,7 @@ const Header = () => {
 
       {/* Price and social media section */}
       <div className="flex items-center gap-4">
-        <div className="flex gap-2 text-[8px] md:text-xs md:pt-1">
+        <div className="flex  md:gap-2 text-[10px] md:text-xs md:pt-1">
           <p className="text-primary">$ROGUE:</p>
           <p>
             {tokenData?.priceUsd
